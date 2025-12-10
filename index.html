@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Moon Casino - Crypto Arcade</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.3.0"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
@@ -352,8 +352,23 @@
         </div>
     </div>
 
-    <script src="firebase-config.js"></script>
     <script>
+        // FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyBLmhwz-ocTNaZwWchcpWl3N0hJMlsskts",
+            authDomain: "nebula-48dbd.firebaseapp.com",
+            databaseURL: "https://nebula-48dbd-default-rtdb.firebaseio.com",
+            projectId: "nebula-48dbd",
+            storageBucket: "nebula-48dbd.firebasestorage.app",
+            messagingSenderId: "259199297883",
+            appId: "1:259199297883:web:f84fe6b2fc2ca70015d27e",
+            measurementId: "G-38CB3Y2T56"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
         // Sound effects
         const sounds = {
             card: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-card-game-shuffle-283.mp3'),
@@ -1765,40 +1780,6 @@
                 
                 this.rainJoined = true;
                 this.showToast('Joined the rain! Wait for it to end.', 'success');
-            }
-            
-            // This should be called when rain ends (you'll need to implement a server-side function or use Firebase Cloud Functions)
-            // For now, we'll simulate it manually
-            async endRain(rainId){
-                const rainRef = database.ref('activeRain');
-                const rainSnapshot = await rainRef.once('value');
-                const rain = rainSnapshot.val();
-                
-                if(!rain || !rain.active) return;
-                
-                const participants = Object.keys(rain.participants || {});
-                if(participants.length === 0){
-                    // Return coins to host if no participants
-                    await database.ref(`users/${rain.hostId}/balance`).transaction(current => (current || 0) + rain.amount);
-                    await rainRef.remove();
-                    return;
-                }
-                
-                // Split amount among participants
-                const splitAmount = rain.amount / participants.length;
-                
-                // Update each participant's balance
-                for(const userId of participants){
-                    await database.ref(`users/${userId}/balance`).transaction(current => (current || 0) + splitAmount);
-                }
-                
-                // Add chat message
-                this.addChatMessage('System', 
-                    `Rain ended! ${rain.amount} coins split among ${participants.length} participants. Each got ${splitAmount.toFixed(2)} coins!`, 
-                    'text-[#38bdf8]');
-                
-                // Remove active rain
-                await rainRef.remove();
             }
         }
         
