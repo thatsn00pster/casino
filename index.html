@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moon Casino - Fun Arcade</title>
+    <title>Moon Casino Fun</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,6 +23,9 @@
         
         :root {
             --primary: #8b5cf6;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
             --bg-dark: #0b0e14;
             --bg-panel: #161b26;
             --border: #2a3042;
@@ -73,58 +76,146 @@
             100% { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
         }
         
+        /* Enhanced Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+        }
+        
+        @keyframes slide-in-right {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slide-in-left {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes scale-in {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes card-deal {
+            0% { transform: translateY(-100px) rotate(-10deg) scale(0.5); opacity: 0; }
+            60% { transform: translateY(10px) rotate(2deg) scale(1.05); opacity: 1; }
+            100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes coin-flip {
+            0% { transform: rotateY(0deg) scale(1); }
+            25% { transform: rotateY(90deg) scale(1.1); }
+            50% { transform: rotateY(180deg) scale(1); }
+            75% { transform: rotateY(270deg) scale(1.1); }
+            100% { transform: rotateY(360deg) scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: calc(200px + 100%) 0; }
+        }
+        
+        @keyframes fade-in-up {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
         }
         
         ::-webkit-scrollbar-track {
-            background: #0b0e14;
+            background: rgba(11, 14, 20, 0.5);
+            border-radius: 4px;
         }
         
         ::-webkit-scrollbar-thumb {
-            background: #2a3042;
-            border-radius: 3px;
+            background: linear-gradient(135deg, #8b5cf6, #10b981);
+            border-radius: 4px;
+            transition: all 0.3s;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: #3a4259;
+            background: linear-gradient(135deg, #7c3aed, #059669);
         }
         
         /* Button Styles */
         .btn-primary {
             background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
             color: white;
-            transition: all 0.18s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 600;
-            border: 1px solid #8b5cf6;
+            border: none;
             text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
         }
         
         .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 0 20px rgba(139,92,246,0.35);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(139,92,246,0.4);
+        }
+        
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.7s;
+        }
+        
+        .btn-primary:hover::after {
+            left: 100%;
         }
         
         /* Game Card */
         .game-card {
-            transition: all 0.28s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             background: linear-gradient(145deg, #161b26, #11141c);
             border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #8b5cf6, #10b981, #8b5cf6);
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
         }
         
         .game-card:hover {
-            transform: translateY(-6px) scale(1.02);
+            transform: translateY(-10px) scale(1.03);
             border-color: #8b5cf6;
-            box-shadow: 0 0 25px rgba(110,86,207,0.25);
+            box-shadow: 0 25px 50px -12px rgba(110,86,207,0.4);
         }
         
         /* Mines Grid */
         .mines-grid-container {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 12px;
             width: 100%;
             max-width: 500px;
             margin: 0 auto;
@@ -132,233 +223,201 @@
         
         .mine-tile-modern {
             aspect-ratio: 1;
-            background: #1f2937;
-            border-radius: 8px;
+            background: linear-gradient(145deg, #1f2937, #111827);
+            border-radius: 12px;
             cursor: pointer;
             position: relative;
-            transition: all .18s;
-            box-shadow: 0 4px 0 #111827;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 0 #0f172a;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-top: 1px solid rgba(255,255,255,0.03);
+            border: 2px solid transparent;
+        }
+        
+        .mine-tile-modern:hover:not(.revealed) {
+            transform: translateY(-3px);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
         }
         
         .mine-tile-modern.revealed {
-            transform: translateY(4px);
-            box-shadow: none;
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #0f172a;
             cursor: default;
         }
         
         .mine-tile-modern.gem {
-            background: #064e3b;
+            background: linear-gradient(145deg, #065f46, #064e3b);
             border: 2px solid #10b981;
+            animation: pulse-glow 2s infinite;
         }
         
         .mine-tile-modern.mine {
-            background: #7f1d1d;
+            background: linear-gradient(145deg, #7f1d1d, #450a0a);
             border: 2px solid #ef4444;
+            animation: shake 0.5s;
         }
         
-        /* Plinko Styles */
-        .plinko-board {
-            position: relative;
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Blackjack Cards */
+        .card-container {
+            width: 100px;
+            height: 146px;
+            perspective: 1200px;
+            margin: 0 8px;
+        }
+        
+        .game-card-item {
             width: 100%;
-            height: 600px;
-            background: linear-gradient(135deg, #1a237e, #0d0f25);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 3px solid #3949ab;
-        }
-        
-        .plinko-pegs-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 100px;
-            display: grid;
-            grid-template-columns: repeat(15, 1fr);
-            gap: 4px;
-            padding: 20px;
-        }
-        
-        .plinko-peg {
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle at 30% 30%, #ffeb3b, #f57f17);
-            border-radius: 50%;
-            margin: 0 auto;
-            box-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
-        }
-        
-        .plinko-ball {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: radial-gradient(circle at 30% 30%, #ff5252, #d32f2f);
-            border-radius: 50%;
-            z-index: 10;
-            box-shadow: 0 0 15px rgba(255, 82, 82, 0.7);
-            transition: transform 0.1s linear;
-        }
-        
-        .plinko-slots {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 100px;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-        }
-        
-        .plinko-slot {
-            width: 60px;
-            background: rgba(0, 0, 0, 0.3);
-            border-top: 3px solid;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        /* Towers Game */
-        .towers-game {
-            background: linear-gradient(135deg, #1b5e20, #0a2e0a);
-            border-radius: 20px;
-            padding: 30px;
-            border: 3px solid #4caf50;
+            height: 100%;
             position: relative;
-            min-height: 500px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.2);
         }
         
-        .tower-row {
+        .game-card-item.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-face, .card-back {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fdfdfd;
+            border: 3px solid #1e293b;
+            box-sizing: border-box;
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 8px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
         }
         
-        .tower-block {
-            width: 80px;
-            height: 40px;
-            background: linear-gradient(135deg, #795548, #5d4037);
-            border-radius: 5px;
-            border: 2px solid #3e2723;
+        .card-back {
+            background: linear-gradient(135deg, #1e40af, #1e3a8a);
+            transform: rotateY(180deg);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+        }
+        
+        .card-back::before {
+            content: '◆';
+            font-size: 80px;
+            color: rgba(255,255,255,0.3);
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .card-face .text-red-500 {
+            color: #ef4444 !important;
+        }
+        
+        .card-face > div:first-child,
+        .card-face > div:last-child {
+            font-size: 16px;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+        
+        .card-face .card-value {
+            font-size: 56px;
+            align-self: center;
+            margin-top: -15px;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+        
+        .card-face::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.5), transparent 60%);
+            pointer-events: none;
+        }
+        
+        /* CoinFlip Game */
+        .coinflip-container {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 24px;
+            padding: 30px;
+            border: 2px solid #334155;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .coinflip-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            animation: float 10s linear infinite;
+        }
+        
+        .coin {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 52px;
             font-weight: bold;
-            font-size: 20px;
+            color: white;
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.4);
+            margin: 0 auto;
+            position: relative;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 0 #3e2723;
         }
         
-        .tower-block:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 #3e2723;
+        .coin:hover:not(.flipping) {
+            transform: scale(1.05);
+            box-shadow: 0 20px 45px rgba(245, 158, 11, 0.6);
         }
         
-        .tower-block.selected {
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-            border-color: #ff9800;
-            animation: pulse 1s infinite;
-        }
-        
-        /* Crossy Road Game */
-        .crossy-road-game {
-            background: linear-gradient(135deg, #1976d2, #0d47a1);
-            border-radius: 20px;
-            padding: 20px;
-            border: 3px solid #2196f3;
-            position: relative;
-            overflow: hidden;
-            min-height: 500px;
-        }
-        
-        .crossy-road-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-template-rows: repeat(10, 1fr);
-            gap: 2px;
-            width: 400px;
-            height: 400px;
-            margin: 0 auto;
-            background: #1e88e5;
-            border: 2px solid #1565c0;
-        }
-        
-        .crossy-road-cell {
-            background: #64b5f6;
-            border: 1px solid #42a5f5;
-            position: relative;
-        }
-        
-        .crossy-road-cell.road {
-            background: #546e7a;
-        }
-        
-        .crossy-road-cell.grass {
-            background: #43a047;
-        }
-        
-        .crossy-road-cell.water {
-            background: #0288d1;
-        }
-        
-        .crossy-road-player {
+        .coin::before {
+            content: '';
             position: absolute;
-            width: 80%;
-            height: 80%;
-            background: #ff5722;
+            inset: -4px;
             border-radius: 50%;
-            top: 10%;
-            left: 10%;
-            z-index: 10;
-            box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
+            background: linear-gradient(45deg, #fbbf24, #f59e0b, #fbbf24);
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         
-        .crossy-road-obstacle {
-            position: absolute;
-            width: 90%;
-            height: 90%;
-            background: #f44336;
-            top: 5%;
-            left: 5%;
-            z-index: 5;
-            border-radius: 3px;
+        .coin:hover:not(.flipping)::before {
+            opacity: 0.6;
         }
         
-        /* Animations */
-        @keyframes bounce-in {
-            0% { transform: scale(.9); opacity: 0; }
-            60% { transform: scale(1.02); opacity: 1; }
-            100% { transform: scale(1); }
+        .coin.flipping {
+            animation: coin-flip 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
-        .animate-bounce-in {
-            animation: bounce-in .35s cubic-bezier(.175,.885,.32,1.275) forwards;
+        .coin-heads {
+            background: linear-gradient(45deg, #f59e0b, #b45309);
         }
         
-        @keyframes slide-up {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .animate-slide-up {
-            animation: slide-up .28s ease-out forwards;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .coin-tails {
+            background: linear-gradient(45deg, #6b7280, #4b5563);
         }
         
         /* Sound Toggle */
@@ -367,28 +426,31 @@
             bottom: 20px;
             left: 20px;
             background: #1e293b;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
             z-index: 1000;
             border: 2px solid #334155;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: bounce 2s infinite;
         }
         
         .sound-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 15px 35px rgba(56, 189, 248, 0.5);
+            background: linear-gradient(135deg, #1e293b, #0f172a);
         }
         
         .sound-toggle.muted {
             background: #ef4444;
+            animation: none;
         }
         
         /* Modal */
@@ -399,33 +461,29 @@
             display: none;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease-out;
         }
         
         .modal.active {
             display: flex;
-            animation: fadeIn 0.3s ease-out;
         }
         
         .modal-content {
             background: #161b26;
-            border-radius: 1rem;
+            border-radius: 20px;
             border: 1px solid #2a3042;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8);
             max-width: 90%;
-            width: 400px;
-            animation: slideIn 0.3s ease-out;
+            width: 420px;
+            animation: scale-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: center;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from { opacity: 0; backdrop-filter: blur(0); }
+            to { opacity: 1; backdrop-filter: blur(10px); }
         }
         
         /* Toast */
@@ -433,83 +491,227 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 16px 24px;
+            padding: 20px 28px;
             background: #1e293b;
-            border-radius: 12px;
+            border-radius: 16px;
             border: 1px solid #334155;
             color: white;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             z-index: 1001;
-            transform: translateY(100px);
+            transform: translateX(100px) scale(0.8);
             opacity: 0;
-            transition: all 0.3s ease-out;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
         .toast.show {
-            transform: translateY(0);
+            transform: translateX(0) scale(1);
             opacity: 1;
         }
         
         .toast.success {
             border-color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), #1e293b);
         }
         
         .toast.error {
             border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), #1e293b);
         }
         
-        /* Win/Loss Notification in Chat */
+        .toast.warning {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), #1e293b);
+        }
+        
+        /* Win/Loss Notification */
         .big-win-notification {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1));
             border: 2px solid #f59e0b;
-            border-radius: 10px;
-            padding: 12px;
-            margin: 10px 0;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
             text-align: center;
-            animation: pulse 2s infinite;
+            animation: pulse-glow 1.5s infinite, scale-in 0.3s ease-out;
         }
         
         .big-win-notification .username {
             color: #fbbf24;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .big-win-notification .amount {
             color: #10b981;
             font-weight: bold;
-            font-size: 20px;
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+            font-size: 24px;
+            text-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+            margin: 8px 0;
+        }
+        
+        /* Floating Animation for Game Icons */
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .float-delay-1 {
+            animation-delay: 0.5s;
+        }
+        
+        .float-delay-2 {
+            animation-delay: 1s;
+        }
+        
+        /* Stats Cards */
+        .stats-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            border-color: #8b5cf6;
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2);
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8b5cf6, #10b981);
+        }
+        
+        /* Leaderboard Item */
+        .leaderboard-item {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+            animation: fade-in-up 0.3s ease-out;
+        }
+        
+        .leaderboard-item:hover {
+            transform: translateX(5px);
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, rgba(44, 58, 83, 0.8), rgba(25, 35, 58, 0.8));
         }
         
         /* Responsive */
         @media (max-width: 768px) {
             .mines-grid-container {
-                gap: 8px;
-                max-width: 300px;
+                gap: 10px;
+                max-width: 320px;
             }
             
             .card-container {
                 width: 70px;
+                height: 102px;
+                margin: 0 4px;
+            }
+            
+            .coin {
+                width: 100px;
                 height: 100px;
+                font-size: 36px;
             }
             
-            .plinko-board {
-                height: 400px;
+            .sound-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+                bottom: 15px;
+                left: 15px;
             }
             
-            .crossy-road-grid {
-                width: 300px;
-                height: 300px;
+            .modal-content {
+                width: 95%;
+                padding: 20px;
             }
-            
-            .tower-block {
-                width: 60px;
-                height: 30px;
-                font-size: 16px;
-            }
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(139, 92, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #8b5cf6;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #2a3042;
+            padding-bottom: 10px;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn:hover {
+            color: #b1bad3;
+            background: rgba(30, 41, 59, 0.5);
+        }
+        
+        .tab-btn.active {
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            border-bottom: 3px solid #8b5cf6;
+        }
+        
+        /* Blackjack Table */
+        .blackjack-table {
+            background: linear-gradient(135deg, #064e3b, #022c22);
+            border-radius: 24px;
+            border: 8px solid #3f2c22;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .blackjack-table::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 1px, transparent 1px),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+        
+        /* Game Controls */
+        .game-controls {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 16px;
+            border: 1px solid #334155;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -520,40 +722,42 @@
     </div>
 
     <!-- Navbar -->
-    <nav class="h-16 bg-[#161b26]/90 backdrop-blur-xl flex items-center justify-between px-4 md:px-6 shadow-xl border-b border-[#2a3042] sticky top-0 z-40">
+    <nav class="h-16 bg-[#161b26]/95 backdrop-blur-xl flex items-center justify-between px-4 md:px-8 shadow-2xl border-b border-[#2a3042] sticky top-0 z-40">
         <div class="flex items-center gap-4">
-            <button class="text-gray-400 hover:text-white md:hidden" onclick="app.toggleSidebar()">
+            <button class="text-gray-400 hover:text-white md:hidden transition-all duration-300 hover:scale-110" onclick="app.toggleSidebar()">
                 <i class="fa-solid fa-bars text-xl"></i>
             </button>
-            <div class="flex items-center gap-2 cursor-pointer" onclick="app.loadGame('home')">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#4c1d95] flex items-center justify-center shadow-lg">
-                    <i class="fa-solid fa-moon text-white text-sm"></i>
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="app.loadGame('home')">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#4c1d95] flex items-center justify-center shadow-lg relative overflow-hidden float-animation">
+                    <i class="fa-solid fa-moon text-white text-lg relative z-10"></i>
+                    <div class="absolute inset-0 bg-white/10 animate-pulse"></div>
                 </div>
-                <div class="text-xl md:text-2xl font-bold text-white">
+                <div class="text-2xl md:text-3xl font-bold text-white tracking-tight">
                     Moon<span class="text-[#8b5cf6]">Casino</span>
                 </div>
             </div>
         </div>
-        <div class="flex items-center gap-3">
-            <div class="hidden md:flex bg-[#0b0e14] rounded-full px-1 py-1 items-center gap-2 border border-[#2a3042]">
-                <div class="bg-[#1e2533] rounded-full px-4 py-1.5 flex items-center gap-2 min-w-[140px] justify-between cursor-pointer hover:bg-[#2a3042]" onclick="app.openDepositModal()">
-                    <span class="text-[#8b5cf6] text-xs font-bold">COINS</span>
-                    <span class="text-white font-mono font-bold" id="balanceDisplay">500</span>
+        <div class="flex items-center gap-4">
+            <div class="hidden md:flex bg-gradient-to-r from-[#0b0e14] to-[#1e2533] rounded-full px-2 py-1 items-center gap-3 border border-[#2a3042] shadow-lg">
+                <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-full px-5 py-2.5 flex items-center gap-3 min-w-[160px] justify-between cursor-pointer hover:from-[#2a3042] hover:to-[#1e293b] transition-all duration-300 group" onclick="app.openDepositModal()">
+                    <span class="text-[#8b5cf6] text-sm font-bold tracking-wider">COINS</span>
+                    <span class="text-white font-mono font-bold text-lg tracking-wider" id="balanceDisplay">500</span>
+                    <i class="fa-solid fa-coins text-yellow-400 opacity-0 group-hover:opacity-100 transition-all duration-300"></i>
                 </div>
-                <button onclick="app.openDepositModal()" class="bg-[#8b5cf6] hover:bg-[#7c3aed] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg">
-                    Wallet
+                <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] hover:from-[#7c3aed] hover:to-[#6d28d9] text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-purple-900/30 transition-all duration-300 hover:scale-105">
+                    <i class="fa-solid fa-wallet mr-2"></i> Wallet
                 </button>
             </div>
-            <button class="md:hidden text-white bg-[#1e2533] p-2 rounded-lg border border-[#2a3042]" onclick="app.openDepositModal()">
-                <i class="fa-solid fa-wallet text-[#8b5cf6]"></i>
+            <button class="md:hidden text-white bg-gradient-to-r from-[#1e293b] to-[#0f172a] p-2.5 rounded-xl border border-[#2a3042] shadow-lg hover:scale-110 transition-all duration-300" onclick="app.openDepositModal()">
+                <i class="fa-solid fa-wallet text-[#8b5cf6] text-lg"></i>
             </button>
-            <button class="text-gray-400 hover:text-white ml-2" onclick="app.toggleChat()">
-                <i class="fa-solid fa-message text-lg"></i>
+            <button class="text-gray-400 hover:text-white ml-2 transition-all duration-300 hover:scale-110" onclick="app.toggleChat()">
+                <i class="fa-solid fa-message text-xl"></i>
             </button>
-            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-teal-400 flex items-center justify-center text-white font-bold text-xs border-2 border-[#161b26]" id="userAvatar">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-r from-blue-500 to-teal-400 flex items-center justify-center text-white font-bold text-sm border-2 border-[#161b26] shadow-lg hover:scale-110 transition-all duration-300 cursor-pointer" id="userAvatar">
                 U
             </div>
-            <button onclick="app.logout()" class="text-gray-400 hover:text-white ml-2">
+            <button onclick="app.logout()" class="text-gray-400 hover:text-white ml-2 transition-all duration-300 hover:scale-110">
                 <i class="fa-solid fa-right-from-bracket"></i>
             </button>
         </div>
@@ -562,63 +766,64 @@
     <!-- Layout -->
     <div class="flex flex-1 overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="absolute md:relative inset-y-0 left-0 z-30 w-64 bg-[#161b26]/90 backdrop-blur-xl border-r border-[#2a3042] transform -translate-x-full md:translate-x-0 flex flex-col transition-transform duration-300">
-            <div class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
-                <div class="text-xs font-bold text-[#555d70] mb-4 px-2">Casino</div>
-                <button onclick="app.loadGame('home')" id="nav-home" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-house w-5"></i> Home
+        <aside id="sidebar" class="absolute md:relative inset-y-0 left-0 z-30 w-64 bg-[#161b26]/95 backdrop-blur-xl border-r border-[#2a3042] transform -translate-x-full md:translate-x-0 flex flex-col transition-transform duration-500 ease-out shadow-2xl md:shadow-none">
+            <div class="flex-1 overflow-y-auto py-8 px-5 space-y-2">
+                <div class="text-xs font-bold text-[#8b5cf6] mb-6 px-3 tracking-wider uppercase">Premium Games</div>
+                <button onclick="app.loadGame('home')" id="nav-home" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group animate-slide-in-left">
+                    <i class="fa-solid fa-house w-5 text-center group-hover:text-[#8b5cf6] transition-all duration-300"></i> 
+                    <span>Home</span>
+                    <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <div class="h-px bg-[#2a3042] my-2 mx-2"></div>
-                <button onclick="app.loadGame('mines')" id="nav-mines" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-bomb text-[#f59e0b] w-5"></i> Mines
+                <div class="h-px bg-gradient-to-r from-transparent via-[#2a3042] to-transparent my-3 mx-3"></div>
+                <button onclick="app.loadGame('mines')" id="nav-mines" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group animate-slide-in-left" style="animation-delay: 0.1s">
+                    <i class="fa-solid fa-bomb text-[#f59e0b] w-5 text-center group-hover:scale-110 transition-all duration-300"></i> 
+                    <span>Mines</span>
+                    <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <button onclick="app.loadGame('blackjack')" id="nav-blackjack" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-diamond text-[#10b981] w-5"></i> Blackjack
+                <button onclick="app.loadGame('blackjack')" id="nav-blackjack" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group animate-slide-in-left" style="animation-delay: 0.2s">
+                    <i class="fa-solid fa-diamond text-[#10b981] w-5 text-center group-hover:scale-110 transition-all duration-300"></i> 
+                    <span>Blackjack</span>
+                    <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <button onclick="app.loadGame('plinko')" id="nav-plinko" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-bullseye text-[#ef4444] w-5"></i> Plinko
+                <button onclick="app.loadGame('coinflip')" id="nav-coinflip" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group animate-slide-in-left" style="animation-delay: 0.3s">
+                    <i class="fa-solid fa-coins text-yellow-500 w-5 text-center group-hover:scale-110 transition-all duration-300"></i> 
+                    <span>CoinFlip</span>
+                    <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <button onclick="app.loadGame('towers')" id="nav-towers" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-layer-group text-[#8b5cf6] w-5"></i> Towers
-                </button>
-                <button onclick="app.loadGame('crossyroad')" id="nav-crossyroad" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-frog text-[#10b981] w-5"></i> Crossy Road
-                </button>
-                <button onclick="app.loadGame('activewins')" id="nav-activewins" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-chart-line text-[#f59e0b] w-5"></i> Active Wins
-                </button>
-                <button onclick="app.loadGame('leaderboard')" id="nav-leaderboard" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-trophy text-[#f59e0b] w-5"></i> Leaderboard
+                <button onclick="app.loadGame('leaderboard')" id="nav-leaderboard" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group animate-slide-in-left" style="animation-delay: 0.4s">
+                    <i class="fa-solid fa-trophy text-[#f59e0b] w-5 text-center group-hover:scale-110 transition-all duration-300"></i> 
+                    <span>Leaderboard</span>
+                    <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
             </div>
-            <div class="p-4 bg-[#11141c] border-t border-[#2a3042]">
-                <div class="flex justify-between text-xs text-[#6b7280] mb-1">
+            <div class="p-5 bg-gradient-to-t from-[#11141c] to-transparent border-t border-[#2a3042]">
+                <div class="flex justify-between text-xs text-[#6b7280] mb-2">
                     <span>Logged in as</span>
-                    <span id="loggedUsername" class="text-[#10b981]">Guest</span>
+                    <span id="loggedUsername" class="text-[#10b981] font-bold">Guest</span>
                 </div>
-                <div class="text-[10px] text-center text-[#555d70] font-mono bg-[#0b0e14] p-1 rounded border border-[#2a3042] truncate">
+                <div class="text-[11px] text-center text-[#555d70] font-mono bg-gradient-to-r from-[#0b0e14] to-[#1e293b] p-2.5 rounded-lg border border-[#2a3042] truncate shadow-inner">
                     <span id="userIdDisplay">Not logged in</span>
                 </div>
             </div>
         </aside>
         
         <!-- Main Content -->
-        <main id="mainContent" class="flex-1 overflow-y-auto p-4 md:p-6"></main>
+        <main id="mainContent" class="flex-1 overflow-y-auto p-4 md:p-8"></main>
         
         <!-- Chat -->
-        <aside id="chatSidebar" class="hidden md:flex flex-col w-72 bg-[#161b26]/90 backdrop-blur-xl border-l border-[#2a3042]">
-            <div class="p-4 border-b border-[#2a3042] flex justify-between items-center bg-[#11141c]/80">
-                <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 bg-[#10b981] rounded-full"></div>
-                    <span class="text-white font-bold text-sm">Global Chat</span>
+        <aside id="chatSidebar" class="hidden md:flex flex-col w-80 bg-[#161b26]/95 backdrop-blur-xl border-l border-[#2a3042] shadow-2xl">
+            <div class="p-5 border-b border-[#2a3042] flex justify-between items-center bg-gradient-to-r from-[#11141c] to-transparent">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 bg-[#10b981] rounded-full animate-pulse"></div>
+                    <span class="text-white font-bold text-sm tracking-wider">Global Chat</span>
                 </div>
-                <div class="text-xs text-[#6b7280]" id="onlineCount">0 Online</div>
+                <div class="text-xs text-[#6b7280] bg-[#0b0e14] px-3 py-1.5 rounded-full border border-[#2a3042]" id="onlineCount">0 Online</div>
             </div>
-            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm bg-[#0b0e14]/50"></div>
-            <div class="p-3 bg-[#161b26] border-t border-[#2a3042]">
+            <div id="chatMessages" class="flex-1 overflow-y-auto p-5 space-y-4 text-sm bg-gradient-to-b from-[#0b0e14]/50 to-transparent"></div>
+            <div class="p-4 bg-gradient-to-t from-[#161b26] to-transparent border-t border-[#2a3042]">
                 <form onsubmit="app.sendChatMessage(event)" class="relative">
-                    <input type="text" id="chatInput" placeholder="Type a message..." class="w-full bg-[#0b0e14] text-white pl-4 pr-10 py-3 rounded-lg border border-[#2a3042] text-sm">
-                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-[#8b5cf6] p-1">
+                    <input type="text" id="chatInput" placeholder="Type a message..." class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] text-white pl-5 pr-12 py-3.5 rounded-xl border border-[#2a3042] text-sm focus:outline-none focus:border-[#8b5cf6] transition-all duration-300">
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-[#8b5cf6] hover:text-white p-2 transition-all duration-300 hover:scale-110">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
@@ -630,147 +835,105 @@
     <div id="authModal" class="modal active">
         <div class="modal-content p-8">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#4c1d95] flex items-center justify-center mx-auto mb-4">
-                    <i class="fa-solid fa-moon text-white text-2xl"></i>
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#4c1d95] flex items-center justify-center mx-auto mb-6 relative overflow-hidden float-animation">
+                    <i class="fa-solid fa-moon text-white text-3xl relative z-10"></i>
+                    <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
                 </div>
-                <h2 class="text-2xl font-bold text-white mb-2">Moon Casino</h2>
+                <h2 class="text-3xl font-bold text-white mb-3">Moon Casino</h2>
                 <p class="text-[#6b7280]">Please login or sign up to play</p>
             </div>
             
-            <div id="loginForm" class="space-y-4">
+            <div id="loginForm" class="space-y-5">
                 <div>
-                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Email</label>
-                    <input type="email" id="loginEmail" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white" placeholder="Enter your email">
+                    <label class="text-xs text-[#6b7280] font-bold mb-2 block tracking-wider">Email</label>
+                    <input type="email" id="loginEmail" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-5 py-3.5 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300" placeholder="Enter your email">
                 </div>
                 <div>
-                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Password</label>
-                    <input type="password" id="loginPassword" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white" placeholder="Enter your password">
+                    <label class="text-xs text-[#6b7280] font-bold mb-2 block tracking-wider">Password</label>
+                    <input type="password" id="loginPassword" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-5 py-3.5 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300" placeholder="Enter your password">
                 </div>
-                <button onclick="app.login()" class="w-full btn-primary py-3 rounded-xl font-bold">Login</button>
+                <button onclick="app.login()" class="w-full btn-primary py-3.5 rounded-xl font-bold text-lg tracking-wider">Login</button>
                 <p class="text-center text-[#6b7280] text-sm">
                     Don't have an account? 
-                    <button onclick="app.showSignup()" class="text-[#8b5cf6]">Sign up</button>
+                    <button onclick="app.showSignup()" class="text-[#8b5cf6] hover:text-[#7c3aed] transition-all duration-300 font-bold">Sign up</button>
                 </p>
             </div>
             
-            <div id="signupForm" class="space-y-4 hidden">
+            <div id="signupForm" class="space-y-5 hidden">
                 <div>
-                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Username</label>
-                    <input type="text" id="signupUsername" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white" placeholder="Choose a username">
+                    <label class="text-xs text-[#6b7280] font-bold mb-2 block tracking-wider">Username</label>
+                    <input type="text" id="signupUsername" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-5 py-3.5 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300" placeholder="Choose a username">
                 </div>
                 <div>
-                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Email</label>
-                    <input type="email" id="signupEmail" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white" placeholder="Enter your email">
+                    <label class="text-xs text-[#6b7280] font-bold mb-2 block tracking-wider">Email</label>
+                    <input type="email" id="signupEmail" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-5 py-3.5 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300" placeholder="Enter your email">
                 </div>
                 <div>
-                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Password</label>
-                    <input type="password" id="signupPassword" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white" placeholder="Create a password">
+                    <label class="text-xs text-[#6b7280] font-bold mb-2 block tracking-wider">Password</label>
+                    <input type="password" id="signupPassword" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-5 py-3.5 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300" placeholder="Create a password">
                 </div>
-                <button onclick="app.signup()" class="w-full btn-primary py-3 rounded-xl font-bold">Sign Up</button>
+                <button onclick="app.signup()" class="w-full btn-primary py-3.5 rounded-xl font-bold text-lg tracking-wider">Sign Up</button>
                 <p class="text-center text-[#6b7280] text-sm">
                     Already have an account? 
-                    <button onclick="app.showLogin()" class="text-[#8b5cf6]">Login</button>
+                    <button onclick="app.showLogin()" class="text-[#8b5cf6] hover:text-[#7c3aed] transition-all duration-300 font-bold">Login</button>
                 </p>
             </div>
         </div>
     </div>
     
-    <!-- Wallet Modal with Rain Section -->
+    <!-- Wallet Modal - REMOVED ADD COINS BUTTONS -->
     <div id="depositModal" class="modal">
-        <div class="modal-content p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-white">Wallet & Rain</h2>
-                <button onclick="app.closeDepositModal()" class="text-[#6b7280] hover:text-white">
+        <div class="modal-content p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-white">Wallet</h2>
+                <button onclick="app.closeDepositModal()" class="text-[#6b7280] hover:text-white transition-all duration-300 hover:scale-110">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
             
-            <div class="space-y-6">
+            <div class="space-y-8">
                 <!-- Balance Display -->
-                <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-xl p-4 border border-[#2a3042]">
-                    <div class="text-center">
-                        <div class="text-gray-400 text-sm mb-2">Your Balance</div>
-                        <div class="text-white font-bold text-3xl mb-4" id="modalBalance">500</div>
-                        <div class="flex gap-3">
-                            <button onclick="app.addCoins(100)" class="flex-1 bg-[#1e293b] hover:bg-[#2a3042] text-white py-2 rounded-lg font-bold text-sm border border-[#2a3042]">
-                                +100
-                            </button>
-                            <button onclick="app.addCoins(500)" class="flex-1 bg-[#1e293b] hover:bg-[#2a3042] text-white py-2 rounded-lg font-bold text-sm border border-[#2a3042]">
-                                +500
-                            </button>
-                            <button onclick="app.addCoins(1000)" class="flex-1 bg-[#1e293b] hover:bg-[#2a3042] text-white py-2 rounded-lg font-bold text-sm border border-[#2a3042]">
-                                +1000
-                            </button>
+                <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-2xl p-6 border border-[#2a3042] relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#8b5cf6] rounded-full -mr-16 -mt-16 opacity-10"></div>
+                    <div class="relative z-10">
+                        <div class="text-center mb-2">
+                            <div class="text-gray-400 text-sm mb-2 tracking-wider">Your Balance</div>
+                            <div class="text-white font-bold text-4xl mb-6" id="modalBalance">500</div>
+                            <div class="text-gray-500 text-xs">Play games to earn more coins!</div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Free Coins Section -->
-                <div class="text-center mb-4">
-                    <i class="fa-solid fa-gift text-[#8b5cf6] text-5xl mb-4"></i>
-                    <h3 class="text-white font-bold text-lg">Free Coins</h3>
-                    <p class="text-[#6b7280] text-sm mt-2">Claim 500 free coins every hour</p>
-                    <div class="mt-4 p-4 bg-[#11141c] rounded-lg border border-[#2a3042]">
-                        <div class="text-white font-bold text-2xl mb-2" id="freeCoinsTimer">00:00:00</div>
-                        <button id="claimCoinsBtn" onclick="app.claimFreeCoins()" class="w-full btn-primary py-3 rounded-xl font-bold disabled:opacity-50">
+                <div class="text-center">
+                    <i class="fa-solid fa-gift text-[#8b5cf6] text-5xl mb-4 float-animation"></i>
+                    <h3 class="text-white font-bold text-xl mb-2">Free Coins</h3>
+                    <p class="text-[#6b7280] text-sm mb-6">Claim 500 free coins every hour when balance is low</p>
+                    <div class="bg-gradient-to-r from-[#11141c] to-[#0b0e14] rounded-2xl p-6 border border-[#2a3042]">
+                        <div class="text-white font-bold text-3xl mb-4" id="freeCoinsTimer">00:00:00</div>
+                        <button id="claimCoinsBtn" onclick="app.claimFreeCoins()" class="w-full btn-primary py-4 rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300">
                             Claim 500 Coins
                         </button>
                     </div>
                 </div>
                 
-                <!-- Rain Section -->
-                <div class="border-t border-[#2a3042] pt-6">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fa-solid fa-cloud-rain text-blue-400 text-xl"></i>
-                        <h3 class="text-white font-bold text-lg">Rain System</h3>
-                    </div>
-                    
-                    <div id="rainJoinSection" class="hidden mb-6">
-                        <div class="text-center mb-4">
-                            <div class="text-blue-300 text-sm mb-2">ACTIVE RAIN</div>
-                            <div class="text-white font-bold text-2xl mb-1" id="rainAmount">0</div>
-                            <div class="text-gray-400 text-xs">coins to be split</div>
-                        </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <div class="text-gray-400 text-xs">Joined</div>
-                                <div class="text-white font-bold" id="rainJoinedCount">0</div>
-                            </div>
-                            <div>
-                                <div class="text-gray-400 text-xs">Time Left</div>
-                                <div class="text-white font-bold" id="rainTimer">07:00</div>
-                            </div>
-                        </div>
-                        <button onclick="app.joinRain()" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-bold">
-                            Join Rain
-                        </button>
-                    </div>
-                    
-                    <div id="rainCreateSection">
-                        <div class="mb-4">
-                            <label class="text-xs text-gray-400 font-bold mb-2 block">Rain Amount (Min 250)</label>
-                            <input type="number" id="rainAmountInput" value="250" min="250" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white">
-                        </div>
-                        <button onclick="app.createRain()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold">
-                            Start Rain (7 min)
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Send Money -->
-                <div class="border-t border-[#2a3042] pt-6">
-                    <h3 class="text-white font-bold text-lg mb-4">Send Money</h3>
-                    <div class="space-y-4">
+                <!-- Send Money Section -->
+                <div class="border-t border-[#2a3042] pt-8">
+                    <h3 class="text-white font-bold text-xl mb-6 flex items-center gap-3">
+                        <i class="fa-solid fa-money-bill-transfer text-[#10b981]"></i>
+                        Send Money
+                    </h3>
+                    <div class="space-y-5">
                         <div>
-                            <label class="text-xs text-[#6b7280] font-bold mb-2 block">Recipient Username</label>
-                            <input type="text" id="sendToUsername" placeholder="Enter username" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white">
+                            <label class="text-xs text-[#6b7280] font-bold mb-3 block tracking-wider">Recipient Username</label>
+                            <input type="text" id="sendToUsername" placeholder="Enter username" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-5 py-3.5 text-white focus:outline-none focus:border-[#10b981] transition-all duration-300">
                         </div>
                         <div>
-                            <label class="text-xs text-[#6b7280] font-bold mb-2 block">Amount to Send</label>
-                            <input type="number" id="sendAmount" placeholder="0" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white">
+                            <label class="text-xs text-[#6b7280] font-bold mb-3 block tracking-wider">Amount to Send</label>
+                            <input type="number" id="sendAmount" placeholder="0" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-5 py-3.5 text-white focus:outline-none focus:border-[#10b981] transition-all duration-300">
                         </div>
-                        <button onclick="app.sendMoney()" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-xl font-bold">
-                            Send Money
+                        <button onclick="app.sendMoney()" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 rounded-xl font-bold text-lg tracking-wider transition-all duration-300 hover:scale-[1.02]">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> Send Money
                         </button>
                     </div>
                 </div>
@@ -790,11 +953,7 @@
             mine: new Audio('sounds/explosion.wav'),
             gem: new Audio('sounds/win.wav'),
             click: new Audio('sounds/click.wav'),
-            rain: new Audio('sounds/rain.wav'),
-            coin: new Audio('sounds/coin.wav'),
-            plinko: new Audio('sounds/click.wav'),
-            tower: new Audio('sounds/click.wav'),
-            crossy: new Audio('sounds/click.wav')
+            coin: new Audio('sounds/coin.wav')
         };
 
         // Set volume for all sounds
@@ -835,7 +994,9 @@
                 this.minesActive = false;
                 this.bjInProgress = false;
                 this.lastFreeCoinsClaim = 0;
-                this.bigWinThreshold = 1000; // Announce wins over 1000 coins
+                this.bigWinThreshold = 1000;
+                this.coinflipActive = false;
+                this.coinflipSide = null;
                 
                 // Initialize app
                 this.init();
@@ -844,7 +1005,6 @@
             init() {
                 this.checkAuth();
                 this.initChat();
-                this.initRain();
                 this.setupFreeCoinsTimer();
                 this.listenForBigWins();
                 
@@ -869,19 +1029,18 @@
                 if (this.soundEnabled) {
                     toggleBtn.classList.remove('muted');
                     icon.className = 'fa-solid fa-volume-high';
+                    this.showToast('Sound enabled', 'success');
                 } else {
                     toggleBtn.classList.add('muted');
                     icon.className = 'fa-solid fa-volume-xmark';
+                    this.showToast('Sound muted', 'warning');
                 }
-                
-                this.showToast(`Sound ${this.soundEnabled ? 'enabled' : 'muted'}`, this.soundEnabled ? 'success' : 'error');
             }
 
             playSound(soundName) {
                 if (!this.soundEnabled || !sounds[soundName]) return;
                 
                 try {
-                    // Clone the audio to allow overlapping sounds
                     const soundClone = sounds[soundName].cloneNode();
                     soundClone.volume = sounds[soundName].volume;
                     soundClone.play().catch(e => console.log('Audio play failed:', e));
@@ -901,15 +1060,16 @@
 
             toggleChat() {
                 this.chatSidebar.classList.toggle('hidden');
+                this.playSound('click');
             }
 
             showToast(message, type = 'success') {
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
                 toast.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                        <span>${message}</span>
+                    <div class="flex items-center gap-4">
+                        <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-exclamation-triangle'} text-xl"></i>
+                        <span class="font-medium">${message}</span>
                     </div>
                 `;
                 
@@ -929,17 +1089,17 @@
                 if (this.balanceDisplay) {
                     this.balanceDisplay.textContent = this.balance.toLocaleString();
                     
-                    // Update modal balance
+                    // Update modal balance display
                     const modalBalance = document.getElementById('modalBalance');
                     if (modalBalance) {
                         modalBalance.textContent = this.balance.toLocaleString();
                     }
                     
                     // Animation effect
-                    this.balanceDisplay.classList.add('text-[#10b981]');
+                    this.balanceDisplay.classList.add('text-[#10b981]', 'scale-110');
                     setTimeout(() => {
-                        this.balanceDisplay.classList.remove('text-[#10b981]');
-                    }, 300);
+                        this.balanceDisplay.classList.remove('text-[#10b981]', 'scale-110');
+                    }, 500);
                 }
                 
                 // Save to localStorage
@@ -983,11 +1143,13 @@
             showSignup() {
                 document.getElementById('loginForm').classList.add('hidden');
                 document.getElementById('signupForm').classList.remove('hidden');
+                this.playSound('click');
             }
 
             showLogin() {
                 document.getElementById('signupForm').classList.add('hidden');
                 document.getElementById('loginForm').classList.remove('hidden');
+                this.playSound('click');
             }
 
             async signup() {
@@ -1018,13 +1180,18 @@
                     userId,
                     username,
                     email,
-                    password: btoa(password), // Simple encoding
+                    password: btoa(password),
                     balance: 500,
                     createdAt: Date.now(),
                     lastFreeCoins: 0,
                     totalWins: 0,
                     totalLosses: 0,
-                    biggestWin: 0
+                    biggestWin: 0,
+                    wageredToday: 0,
+                    wageredWeek: 0,
+                    wageredLifetime: 0,
+                    wonToday: 0,
+                    lastWagered: Date.now()
                 };
 
                 await database.ref('users/' + userId).set(userData);
@@ -1040,8 +1207,16 @@
 
                 this.updateUI();
                 this.hideAuthModal();
-                this.showToast('Welcome to Moon Casino!', 'success');
+                this.showToast('Welcome to Moon Casino! You received 500 starting coins!', 'success');
+                this.playSound('win');
                 this.updateOnlineStatus();
+                
+                // Confetti for new user
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
             }
 
             async login() {
@@ -1083,7 +1258,8 @@
 
                 this.updateUI();
                 this.hideAuthModal();
-                this.showToast('Welcome back!', 'success');
+                this.showToast(`Welcome back ${this.username}!`, 'success');
+                this.playSound('win');
                 this.updateOnlineStatus();
             }
 
@@ -1100,6 +1276,8 @@
                 if (this.userId) {
                     database.ref('online/' + this.userId).remove();
                 }
+                
+                this.showToast('Logged out successfully', 'warning');
             }
 
             updateUI() {
@@ -1141,22 +1319,12 @@
                 
                 // Update modal balance display
                 document.getElementById('modalBalance').textContent = this.balance.toLocaleString();
+                this.playSound('click');
             }
 
             closeDepositModal() {
                 document.getElementById('depositModal').classList.remove('active');
-            }
-
-            addCoins(amount) {
-                if (!this.userId) {
-                    this.showToast('Please login first', 'error');
-                    return;
-                }
-                
-                this.balance += amount;
-                this.updateBalance();
-                this.showToast(`Added ${amount} coins!`, 'success');
-                this.playSound('coin');
+                this.playSound('click');
             }
 
             setupFreeCoinsTimer() {
@@ -1189,6 +1357,9 @@
                     const canClaim = this.balance < 100 && timeSinceLastClaim >= oneHour;
                     claimButton.disabled = !canClaim;
                     claimButton.textContent = canClaim ? 'Claim 500 Coins' : 'Not Available';
+                    claimButton.className = canClaim ? 
+                        'w-full btn-primary py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-[1.02]' :
+                        'w-full bg-gray-700 text-gray-400 py-4 rounded-xl font-bold text-lg cursor-not-allowed';
                 }
             }
 
@@ -1288,7 +1459,7 @@
 
                 this.updateBalance();
                 this.showToast(`Sent ${amount} coins to ${recipientUsername}`, 'success');
-                this.playSound('click');
+                this.playSound('coin');
 
                 // Clear form
                 document.getElementById('sendToUsername').value = '';
@@ -1326,8 +1497,11 @@
             addChatMessage(user, msg, color = 'text-white', saveToDB = true) {
                 const messages = document.getElementById('chatMessages');
                 const div = document.createElement('div');
-                div.className = `flex gap-2 ${color}`;
-                div.innerHTML = `<span class="font-bold">${user}:</span> <span>${msg}</span>`;
+                div.className = `flex gap-3 ${color} animate-fade-in-up`;
+                div.innerHTML = `
+                    <span class="font-bold min-w-[80px]">${user}:</span> 
+                    <span class="flex-1">${msg}</span>
+                `;
                 messages.appendChild(div);
                 messages.scrollTop = messages.scrollHeight;
 
@@ -1370,10 +1544,42 @@
                     const msg = input.value.trim();
                     this.addChatMessage(this.username, msg, 'text-[#8b5cf6]');
                     input.value = '';
+                    this.playSound('click');
                 }
             }
 
-            // Big Win Announcements
+            // Record Wager for Leaderboard
+            async recordWager(amount) {
+                if (!this.userId || amount <= 0) return;
+
+                const now = Date.now();
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const weekAgo = now - (7 * 24 * 60 * 60 * 1000);
+
+                const userRef = database.ref('users/' + this.userId);
+                const snapshot = await userRef.once('value');
+                const user = snapshot.val();
+
+                let wageredToday = user.wageredToday || 0;
+                let wageredWeek = user.wageredWeek || 0;
+                
+                // Reset today's wager if it's a new day
+                if (user.lastWagered && user.lastWagered < today.getTime()) {
+                    wageredToday = 0;
+                }
+
+                const updates = {
+                    wageredToday: wageredToday + amount,
+                    wageredWeek: wageredWeek + amount,
+                    wageredLifetime: (user.wageredLifetime || 0) + amount,
+                    lastWagered: now
+                };
+
+                await userRef.update(updates);
+            }
+
+            // Record Win/Loss
             async recordWin(amount, game) {
                 if (!this.userId || amount <= 0) return;
 
@@ -1382,9 +1588,20 @@
                 const snapshot = await userRef.once('value');
                 const user = snapshot.val();
 
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                let wonToday = user.wonToday || 0;
+                
+                // Reset today's win if it's a new day
+                if (user.lastWin && user.lastWin < today.getTime()) {
+                    wonToday = 0;
+                }
+
                 const updates = {
                     totalWins: (user.totalWins || 0) + 1,
-                    biggestWin: Math.max(user.biggestWin || 0, amount)
+                    biggestWin: Math.max(user.biggestWin || 0, amount),
+                    wonToday: wonToday + amount,
+                    lastWin: Date.now()
                 };
 
                 await userRef.update(updates);
@@ -1465,10 +1682,12 @@
 
                 // Update active nav
                 document.querySelectorAll('#sidebar button').forEach(b => {
-                    b.classList.remove('bg-[#2a3042]', 'text-white');
+                    b.classList.remove('bg-gradient-to-r', 'from-[#2a3042]', 'to-[#1e293b]', 'text-white');
                 });
                 const navBtn = document.getElementById(`nav-${gameName}`);
-                if (navBtn) navBtn.classList.add('bg-[#2a3042]', 'text-white');
+                if (navBtn) {
+                    navBtn.classList.add('bg-gradient-to-r', 'from-[#2a3042]', 'to-[#1e293b]', 'text-white');
+                }
 
                 this.activeGame = gameName;
                 this.mainContent.innerHTML = '';
@@ -1484,17 +1703,8 @@
                     case 'blackjack':
                         this.renderBlackjack();
                         break;
-                    case 'plinko':
-                        this.renderPlinko();
-                        break;
-                    case 'towers':
-                        this.renderTowers();
-                        break;
-                    case 'crossyroad':
-                        this.renderCrossyRoad();
-                        break;
-                    case 'activewins':
-                        this.renderActiveWins();
+                    case 'coinflip':
+                        this.renderCoinflip();
                         break;
                     case 'leaderboard':
                         this.renderLeaderboard();
@@ -1502,60 +1712,62 @@
                     default:
                         this.renderHome();
                 }
+                
+                this.playSound('click');
             }
 
             renderHome() {
                 this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto space-y-8 animate-slide-up">
-                        <div class="rounded-2xl bg-gradient-to-r from-[#4c1d95] to-[#2e1065] p-8 md:p-12 relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-96 h-96 bg-[#8b5cf6] rounded-full mix-blend-overlay filter blur-[100px] opacity-30"></div>
+                    <div class="max-w-6xl mx-auto space-y-8 animate-slide-in-right">
+                        <div class="rounded-3xl bg-gradient-to-r from-[#4c1d95] to-[#2e1065] p-8 md:p-12 relative overflow-hidden border border-[#8b5cf6]/30 shadow-2xl">
+                            <div class="absolute top-0 right-0 w-96 h-96 bg-[#8b5cf6] rounded-full mix-blend-overlay filter blur-[100px] opacity-30 animate-pulse"></div>
                             <div class="relative z-10">
-                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-white mb-4">
-                                    <span class="w-2 h-2 bg-[#10b981] rounded-full"></span> LIVE CASINO
+                                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-bold text-white mb-6 tracking-wider">
+                                    <span class="w-2.5 h-2.5 bg-[#10b981] rounded-full animate-pulse"></span> PREMIUM CASINO
                                 </div>
-                                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Welcome, <span class="text-[#a78bfa]">${this.username || 'Guest'}</span>!</h1>
-                                <p class="text-[#d8b4fe] text-lg max-w-xl mb-8">The ultimate crypto gambling simulation. Experience fair gaming with zero risk.</p>
-                                <div class="flex flex-wrap gap-4">
-                                    <button onclick="app.loadGame('plinko')" class="btn-primary px-8 py-3.5 rounded-xl font-bold text-lg">
-                                        <i class="fa-solid fa-bullseye mr-2"></i> Play Plinko
+                                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">Welcome, <span class="text-[#a78bfa]">${this.username || 'Guest'}</span>!</h1>
+                                <p class="text-[#d8b4fe] text-xl max-w-2xl mb-10">Experience the ultimate crypto casino with fair games, stunning animations, and real-time multiplayer features.</p>
+                                <div class="flex flex-wrap gap-6">
+                                    <button onclick="app.loadGame('blackjack')" class="btn-primary px-10 py-4 rounded-2xl font-bold text-xl shadow-xl hover:scale-105 transition-all duration-300">
+                                        <i class="fa-solid fa-diamond mr-3"></i> Play Blackjack
                                     </button>
-                                    <button onclick="app.openDepositModal()" class="bg-[#1f2937] hover:bg-[#374151] text-white px-8 py-3.5 rounded-xl font-bold text-lg border border-[#374151]">
-                                        Claim Free Coins
+                                    <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#1f2937] to-[#374151] hover:from-[#374151] hover:to-[#4b5563] text-white px-10 py-4 rounded-2xl font-bold text-xl border border-[#374151] transition-all duration-300 hover:scale-105">
+                                        <i class="fa-solid fa-gift mr-3"></i> Free Coins
                                     </button>
                                 </div>
                             </div>
                         </div>
                         
-                        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <h2 class="text-3xl font-bold text-white flex items-center gap-3">
                             <i class="fa-solid fa-gamepad text-[#8b5cf6]"></i> Featured Games
                         </h2>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs')}
-                            ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer')}
-                            ${this.getGameCard('plinko', 'Plinko', 'fa-bullseye', 'from-[#1a237e] to-[#0d0f25]', 'Drop balls for big wins')}
-                            ${this.getGameCard('towers', 'Towers', 'fa-layer-group', 'from-[#1b5e20] to-[#0a2e0a]', 'Build towers, win rewards')}
-                            ${this.getGameCard('crossyroad', 'Crossy Road', 'fa-frog', 'from-[#1976d2] to-[#0d47a1]', 'Navigate obstacles')}
-                            ${this.getGameCard('activewins', 'Active Wins', 'fa-chart-line', 'from-[#7c2d12] to-[#431407]', 'Live win tracker')}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs', '#f59e0b')}
+                            ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer', '#10b981')}
+                            ${this.getGameCard('coinflip', 'CoinFlip', 'fa-coins', 'from-[#7c2d12] to-[#431407]', 'Heads or Tails?', '#f59e0b')}
                         </div>
                     </div>
                 `;
             }
 
-            getGameCard(id, name, icon, gradient, desc) {
+            getGameCard(id, name, icon, gradient, desc, color) {
                 return `
-                    <div onclick="app.loadGame('${id}')" class="game-card cursor-pointer rounded-xl overflow-hidden group relative h-48">
-                        <div class="absolute inset-0 bg-gradient-to-br ${gradient} opacity-80 transition-opacity group-hover:opacity-100"></div>
-                        <div class="absolute inset-0 p-6 flex flex-col justify-between z-10">
+                    <div onclick="app.loadGame('${id}')" class="game-card cursor-pointer rounded-2xl overflow-hidden group relative h-56">
+                        <div class="absolute inset-0 bg-gradient-to-br ${gradient} opacity-90 transition-all duration-500 group-hover:opacity-100"></div>
+                        <div class="absolute inset-0 p-8 flex flex-col justify-between z-10">
                             <div class="flex justify-between items-start">
-                                <div class="bg-black/20 p-3 rounded-xl">
-                                    <i class="fa-solid ${icon} text-2xl text-white"></i>
+                                <div class="bg-black/30 p-4 rounded-2xl backdrop-blur-sm">
+                                    <i class="fa-solid ${icon} text-3xl text-white"></i>
                                 </div>
-                                <i class="fa-solid fa-arrow-right text-white/50 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all"></i>
+                                <i class="fa-solid fa-arrow-right text-white/50 -translate-x-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-xl"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-white mb-1">${name}</h3>
-                                <p class="text-white/60 text-xs">${desc}</p>
+                                <h3 class="text-2xl font-bold text-white mb-2">${name}</h3>
+                                <p class="text-white/70 text-sm">${desc}</p>
+                                <div class="mt-4">
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold" style="background: ${color}20; color: ${color}">PLAY NOW</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1565,41 +1777,44 @@
             // MINES GAME
             renderMines() {
                 this.mainContent.innerHTML = `
-                    <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 min-h-[600px] items-start animate-bounce-in">
-                        <div class="w-full md:w-80 bg-[#161b26] p-6 rounded-2xl border border-[#2a3042] sticky top-6">
-                            <div class="mb-6">
-                                <label class="text-xs text-[#6b7280] font-bold mb-2 block">Bet Amount</label>
-                                <div class="flex bg-[#0b0e14] rounded-lg border border-[#2a3042]">
-                                    <div class="pl-4 py-3 text-[#6b7280] font-bold">$</div>
-                                    <input type="number" id="minesBetInput" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-2 font-bold outline-none">
-                                    <div class="flex pr-1">
-                                        <button onclick="document.getElementById('minesBetInput').value = Math.min(${this.balance}, document.getElementById('minesBetInput').value * 2)" class="px-3 text-xs font-bold text-[#6b7280]">2x</button>
-                                        <button onclick="document.getElementById('minesBetInput').value = Math.max(1, document.getElementById('minesBetInput').value / 2)" class="px-3 text-xs font-bold text-[#6b7280]">½</button>
+                    <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 min-h-[600px] items-start animate-scale-in">
+                        <div class="w-full md:w-80 bg-gradient-to-b from-[#161b26] to-[#11141c] p-8 rounded-3xl border border-[#2a3042] shadow-2xl sticky top-8">
+                            <div class="mb-8">
+                                <label class="text-sm text-[#8b5cf6] font-bold mb-3 block tracking-wider">Bet Amount</label>
+                                <div class="flex bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-xl border border-[#2a3042] p-1">
+                                    <div class="pl-4 py-3.5 text-[#8b5cf6] font-bold"><i class="fa-solid fa-coins"></i></div>
+                                    <input type="number" id="minesBetInput" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-4 font-bold text-lg outline-none">
+                                    <div class="flex pr-2">
+                                        <button onclick="document.getElementById('minesBetInput').value = Math.min(${this.balance}, document.getElementById('minesBetInput').value * 2)" class="px-4 text-sm font-bold text-[#8b5cf6] hover:text-white transition-all duration-300">2x</button>
+                                        <button onclick="document.getElementById('minesBetInput').value = Math.max(1, document.getElementById('minesBetInput').value / 2)" class="px-4 text-sm font-bold text-[#8b5cf6] hover:text-white transition-all duration-300">½</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-8">
-                                <label class="text-xs text-[#6b7280] font-bold mb-2 block">Mines (1-24)</label>
-                                <div class="grid grid-cols-5 gap-2">
+                                <label class="text-sm text-[#8b5cf6] font-bold mb-3 block tracking-wider">Mines Count</label>
+                                <div class="grid grid-cols-5 gap-3">
                                     ${[1,3,5,10,24].map(n => `
-                                        <button onclick="app.setMinesCount(${n})" class="bg-[#0b0e14] border border-[#2a3042] text-[#b1bad3] rounded-lg py-2 font-bold text-sm ${n===3?'border-[#8b5cf6] text-white':''}" data-val="${n}">${n}</button>
+                                        <button onclick="app.setMinesCount(${n})" class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] text-[#b1bad3] rounded-xl py-3 font-bold hover:border-[#8b5cf6] hover:text-white transition-all duration-300 ${n===3?'border-[#8b5cf6] text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]':''}" data-val="${n}">${n}</button>
                                     `).join('')}
                                 </div>
                                 <input type="hidden" id="minesCountInput" value="3">
                             </div>
-                            <div class="bg-[#0b0e14] rounded-xl p-4 mb-6 border border-[#2a3042] flex justify-between items-center">
+                            <div class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-2xl p-6 mb-8 border border-[#2a3042] flex justify-between items-center">
                                 <div>
-                                    <div class="text-[10px] text-[#6b7280]">Next Tile</div>
-                                    <div class="text-[#10b981] font-bold text-xl" id="minesNextMult">1.13x</div>
+                                    <div class="text-xs text-[#6b7280] tracking-wider">Next Tile</div>
+                                    <div class="text-[#10b981] font-bold text-2xl" id="minesNextMult">1.13x</div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-[10px] text-[#6b7280]">Total Profit</div>
-                                    <div class="text-white font-bold text-xl" id="minesProfit">0</div>
+                                    <div class="text-xs text-[#6b7280] tracking-wider">Profit</div>
+                                    <div class="text-white font-bold text-2xl" id="minesProfit">0</div>
                                 </div>
                             </div>
-                            <button id="minesBtn" onclick="app.playMines()" class="w-full btn-primary py-4 rounded-xl font-bold text-lg">Bet</button>
+                            <button id="minesBtn" onclick="app.playMines()" class="w-full btn-primary py-5 rounded-2xl font-bold text-xl tracking-wider hover:scale-[1.02] transition-all duration-300">
+                                <i class="fa-solid fa-play mr-2"></i> Start Game
+                            </button>
                         </div>
-                        <div class="flex-1 w-full bg-[#161b26] rounded-2xl p-8 border border-[#2a3042] flex items-center justify-center relative overflow-hidden">
+                        <div class="flex-1 w-full bg-gradient-to-b from-[#161b26] to-[#11141c] rounded-3xl p-10 border border-[#2a3042] shadow-2xl flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8b5cf6] via-[#10b981] to-[#8b5cf6] animate-shimmer"></div>
                             <div class="mines-grid-container" id="minesGrid">
                                 ${Array(25).fill(0).map((_,i)=>`
                                     <div id="tile-${i}" onclick="app.clickMineTile(${i})" class="mine-tile-modern"></div>
@@ -1615,11 +1830,14 @@
             setMinesCount(n) {
                 if (this.minesActive) return;
                 document.getElementById('minesCountInput').value = n;
-                document.querySelectorAll('.mine-opt-btn').forEach(b => {
-                    b.classList.remove('border-[#8b5cf6]', 'text-white');
-                    if (parseInt(b.dataset.val) === n) b.classList.add('border-[#8b5cf6]', 'text-white');
+                document.querySelectorAll('[data-val]').forEach(b => {
+                    b.classList.remove('border-[#8b5cf6]', 'text-white', 'shadow-[0_0_20px_rgba(139,92,246,0.3)]');
+                    if (parseInt(b.dataset.val) === n) {
+                        b.classList.add('border-[#8b5cf6]', 'text-white', 'shadow-[0_0_20px_rgba(139,92,246,0.3)]');
+                    }
                 });
                 this.updateMinesNextMult();
+                this.playSound('click');
             }
 
             updateMinesNextMult() {
@@ -1665,6 +1883,7 @@
                 this.playSound('click');
                 this.balance -= bet;
                 this.updateBalance();
+                this.recordWager(bet);
 
                 this.minesBet = bet;
                 this.minesCount = mines;
@@ -1682,8 +1901,8 @@
                 }
 
                 const btn = document.getElementById('minesBtn');
-                btn.innerHTML = 'Cash Out <span id="minesCashoutVal" class="ml-2 bg-white/20 px-2 rounded text-sm">0</span>';
-                btn.className = 'w-full bg-[#10b981] text-white py-4 rounded-xl font-bold text-lg';
+                btn.innerHTML = '<i class="fa-solid fa-money-bill-wave mr-2"></i> Cash Out <span id="minesCashoutVal" class="ml-2 bg-white/20 px-3 py-1 rounded-lg text-sm">0</span>';
+                btn.className = 'w-full bg-gradient-to-r from-[#10b981] to-[#059669] text-white py-5 rounded-2xl font-bold text-xl tracking-wider hover:scale-[1.02] transition-all duration-300';
 
                 document.querySelectorAll('.mine-tile-modern').forEach(el => {
                     el.className = 'mine-tile-modern';
@@ -1703,13 +1922,13 @@
 
                 if (this.minesGrid[idx] === 'mine') {
                     tile.classList.add('mine');
-                    tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-3xl"></i>';
+                    tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-4xl animate-bounce"></i>';
                     this.playSound('mine');
                     this.recordLoss(this.minesBet, 'Mines');
                     this.endMines(false, idx);
                 } else {
                     tile.classList.add('gem');
-                    tile.innerHTML = '<i class="fa-solid fa-gem text-[#10b981] text-2xl"></i>';
+                    tile.innerHTML = '<i class="fa-solid fa-gem text-[#10b981] text-3xl animate-pulse"></i>';
                     this.playSound('gem');
                     this.minesRevealedCount++;
 
@@ -1732,8 +1951,8 @@
                 this.minesActive = false;
                 const btn = document.getElementById('minesBtn');
                 if (btn) {
-                    btn.innerText = 'Bet';
-                    btn.className = 'w-full btn-primary py-4 rounded-xl font-bold text-lg';
+                    btn.innerHTML = '<i class="fa-solid fa-play mr-2"></i> Start Game';
+                    btn.className = 'w-full btn-primary py-5 rounded-2xl font-bold text-xl tracking-wider hover:scale-[1.02] transition-all duration-300';
                 }
 
                 this.minesGrid.forEach((type, idx) => {
@@ -1741,7 +1960,7 @@
                     if (!tile.classList.contains('revealed')) {
                         tile.classList.add('revealed');
                         if (type === 'mine') {
-                            tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-xl opacity-50"></i>';
+                            tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-xl opacity-30"></i>';
                             tile.classList.add('mine-hidden');
                         } else {
                             tile.innerHTML = '<i class="fa-solid fa-gem text-white/10 text-xl"></i>';
@@ -1751,7 +1970,7 @@
                 });
 
                 if (!win) {
-                    this.showToast('Boom! You hit a mine', 'error');
+                    this.showToast('Boom! You hit a mine!', 'error');
                 }
             }
 
@@ -1761,1027 +1980,879 @@
                 this.balance += win;
                 this.updateBalance();
                 this.playSound('win');
-                this.showToast(`Cashed out ${win.toFixed(2)} coins`, 'success');
+                this.showToast(`Cashed out ${win.toFixed(2)} coins! (${mult.toFixed(2)}x)`, 'success');
                 this.recordWin(win - this.minesBet, 'Mines');
                 this.endMines(true, -1);
             }
 
-            // PLINKO GAME
-            renderPlinko() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto animate-slide-up">
-                        <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold text-white mb-2">Plinko</h2>
-                            <p class="text-gray-400">Drop the ball and watch it bounce to big wins!</p>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            <div class="lg:col-span-2">
-                                <div class="plinko-board" id="plinkoBoard">
-                                    <div class="plinko-pegs-container" id="plinkoPegs"></div>
-                                    <div class="plinko-slots" id="plinkoSlots"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-[#161b26] p-6 rounded-2xl border border-[#2a3042]">
-                                <div class="mb-6">
-                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Bet Amount</label>
-                                    <div class="flex bg-[#0b0e14] rounded-lg border border-[#2a3042]">
-                                        <div class="pl-4 py-3 text-[#6b7280] font-bold">$</div>
-                                        <input type="number" id="plinkoBet" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-2 font-bold outline-none">
-                                        <div class="flex pr-1">
-                                            <button onclick="document.getElementById('plinkoBet').value = Math.min(${this.balance}, document.getElementById('plinkoBet').value * 2)" class="px-3 text-xs font-bold text-[#6b7280]">2x</button>
-                                            <button onclick="document.getElementById('plinkoBet').value = Math.max(1, document.getElementById('plinkoBet').value / 2)" class="px-3 text-xs font-bold text-[#6b7280]">½</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-6">
-                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Risk Level</label>
-                                    <div class="grid grid-cols-3 gap-2 mb-4">
-                                        <button onclick="app.setPlinkoRisk('low')" class="bg-[#0b0e14] border border-[#2a3042] text-[#10b981] rounded-lg py-2 font-bold text-sm">Low</button>
-                                        <button onclick="app.setPlinkoRisk('medium')" class="bg-[#0b0e14] border border-[#8b5cf6] text-white rounded-lg py-2 font-bold text-sm">Medium</button>
-                                        <button onclick="app.setPlinkoRisk('high')" class="bg-[#0b0e14] border border-[#2a3042] text-[#ef4444] rounded-lg py-2 font-bold text-sm">High</button>
-                                    </div>
-                                    <div class="text-center">
-                                        <div class="text-gray-400 text-sm">Multiplier Range</div>
-                                        <div class="text-white font-bold text-xl" id="plinkoMultiplierRange">1.1x - 5x</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-[#0b0e14] rounded-xl p-4 mb-6 border border-[#2a3042]">
-                                    <div class="text-center">
-                                        <div class="text-[10px] text-[#6b7280]">Last Win</div>
-                                        <div class="text-white font-bold text-xl" id="plinkoLastWin">0</div>
-                                    </div>
-                                </div>
-                                
-                                <button onclick="app.playPlinko()" class="w-full btn-primary py-4 rounded-xl font-bold text-lg">Drop Ball</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                this.initPlinkoBoard();
-                this.setPlinkoRisk('medium');
-            }
-
-            initPlinkoBoard() {
-                const pegsContainer = document.getElementById('plinkoPegs');
-                const slotsContainer = document.getElementById('plinkoSlots');
-                
-                // Create pegs
-                for (let row = 0; row < 12; row++) {
-                    for (let col = 0; col < 15; col++) {
-                        const peg = document.createElement('div');
-                        peg.className = 'plinko-peg';
-                        pegsContainer.appendChild(peg);
-                    }
-                }
-                
-                // Create slots with multipliers
-                const multipliers = [0.2, 0.5, 1, 2, 5, 2, 1, 0.5, 0.2];
-                const colors = ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#10b981', '#0ea5e9', '#8b5cf6', '#ec4899'];
-                
-                for (let i = 0; i < 9; i++) {
-                    const slot = document.createElement('div');
-                    slot.className = 'plinko-slot';
-                    slot.style.borderTopColor = colors[i];
-                    slot.textContent = multipliers[i] + 'x';
-                    slot.dataset.multiplier = multipliers[i];
-                    slotsContainer.appendChild(slot);
-                }
-            }
-
-            setPlinkoRisk(risk) {
-                this.plinkoRisk = risk;
-                let minMult, maxMult;
-                
-                switch(risk) {
-                    case 'low':
-                        minMult = 1.1;
-                        maxMult = 3;
-                        break;
-                    case 'medium':
-                        minMult = 0.5;
-                        maxMult = 5;
-                        break;
-                    case 'high':
-                        minMult = 0.2;
-                        maxMult = 10;
-                        break;
-                }
-                
-                document.getElementById('plinkoMultiplierRange').textContent = `${minMult}x - ${maxMult}x`;
-            }
-
-            async playPlinko() {
-                if (!this.userId) {
-                    this.showToast('Please login to play', 'error');
-                    return;
-                }
-
-                const bet = parseFloat(document.getElementById('plinkoBet').value);
-                if (isNaN(bet) || bet <= 0) return;
-                if (bet > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                this.playSound('plinko');
-                this.balance -= bet;
-                this.updateBalance();
-
-                // Create ball
-                const board = document.getElementById('plinkoBoard');
-                const ball = document.createElement('div');
-                ball.className = 'plinko-ball';
-                ball.style.left = '50%';
-                ball.style.top = '20px';
-                ball.style.transform = 'translateX(-50%)';
-                board.appendChild(ball);
-
-                // Animate ball falling
-                let x = 50; // percentage
-                let y = 20;
-                const gravity = 0.5;
-                let velocityY = 0;
-                let velocityX = (Math.random() - 0.5) * 2;
-
-                const animate = () => {
-                    velocityY += gravity;
-                    y += velocityY;
-                    x += velocityX;
-
-                    // Bounce off walls
-                    if (x < 5) {
-                        x = 5;
-                        velocityX = Math.abs(velocityX) * 0.8;
-                    } else if (x > 95) {
-                        x = 95;
-                        velocityX = -Math.abs(velocityX) * 0.8;
-                    }
-
-                    // Bounce off bottom
-                    if (y > board.clientHeight - 120) {
-                        y = board.clientHeight - 120;
-                        velocityY = -Math.abs(velocityY) * 0.7;
-                        velocityX *= 0.9;
-                        
-                        // If slow enough, stop
-                        if (Math.abs(velocityY) < 1 && Math.abs(velocityX) < 0.5) {
-                            ball.remove();
-                            this.calculatePlinkoWin(bet, x);
-                            return;
-                        }
-                    }
-
-                    ball.style.left = x + '%';
-                    ball.style.top = y + 'px';
-
-                    requestAnimationFrame(animate);
-                };
-
-                animate();
-            }
-
-            calculatePlinkoWin(bet, finalX) {
-                // Determine which slot based on final position
-                const slotIndex = Math.floor((finalX / 100) * 9);
-                const slots = document.querySelectorAll('.plinko-slot');
-                const multiplier = parseFloat(slots[slotIndex].dataset.multiplier);
-                
-                const win = bet * multiplier;
-                this.balance += win;
-                this.updateBalance();
-                
-                document.getElementById('plinkoLastWin').textContent = win.toFixed(2);
-                
-                if (win > bet) {
-                    this.showToast(`Won ${win.toFixed(2)} coins! (${multiplier}x)`, 'success');
-                    this.recordWin(win - bet, 'Plinko');
-                } else {
-                    this.showToast(`Lost ${(bet - win).toFixed(2)} coins`, 'error');
-                    this.recordLoss(bet - win, 'Plinko');
-                }
-            }
-
-            // TOWERS GAME
-            renderTowers() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto animate-slide-up">
-                        <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold text-white mb-2">Towers</h2>
-                            <p class="text-gray-400">Build towers and avoid the bomb to win big!</p>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            <div class="lg:col-span-2">
-                                <div class="towers-game">
-                                    <div id="towersGrid" class="flex flex-col items-center">
-                                        ${Array(8).fill(0).map((_, row) => `
-                                            <div class="tower-row">
-                                                ${Array(5).fill(0).map((_, col) => `
-                                                    <div id="tower-${row}-${col}" onclick="app.selectTowerBlock(${row}, ${col})" class="tower-block">
-                                                        ${row === 7 ? '1' : ''}
-                                                    </div>
-                                                `).join('')}
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-[#161b26] p-6 rounded-2xl border border-[#2a3042]">
-                                <div class="mb-6">
-                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Bet Amount</label>
-                                    <div class="flex bg-[#0b0e14] rounded-lg border border-[#2a3042]">
-                                        <div class="pl-4 py-3 text-[#6b7280] font-bold">$</div>
-                                        <input type="number" id="towersBet" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-2 font-bold outline-none">
-                                        <div class="flex pr-1">
-                                            <button onclick="document.getElementById('towersBet').value = Math.min(${this.balance}, document.getElementById('towersBet').value * 2)" class="px-3 text-xs font-bold text-[#6b7280]">2x</button>
-                                            <button onclick="document.getElementById('towersBet').value = Math.max(1, document.getElementById('towersBet').value / 2)" class="px-3 text-xs font-bold text-[#6b7280]">½</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-6">
-                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Tower Height</label>
-                                    <div class="text-center mb-4">
-                                        <div class="text-white font-bold text-3xl" id="towerHeight">0/8</div>
-                                        <div class="text-gray-400 text-sm">Blocks placed</div>
-                                    </div>
-                                    <div class="grid grid-cols-3 gap-2">
-                                        <button onclick="app.setTowersHeight(4)" class="bg-[#0b0e14] border border-[#2a3042] text-[#10b981] rounded-lg py-2 font-bold text-sm">4 Blocks</button>
-                                        <button onclick="app.setTowersHeight(6)" class="bg-[#0b0e14] border border-[#8b5cf6] text-white rounded-lg py-2 font-bold text-sm">6 Blocks</button>
-                                        <button onclick="app.setTowersHeight(8)" class="bg-[#0b0e14] border border-[#2a3042] text-[#ef4444] rounded-lg py-2 font-bold text-sm">8 Blocks</button>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-[#0b0e14] rounded-xl p-4 mb-6 border border-[#2a3042]">
-                                    <div class="flex justify-between">
-                                        <div>
-                                            <div class="text-[10px] text-[#6b7280]">Multiplier</div>
-                                            <div class="text-white font-bold text-xl" id="towersMultiplier">1.00x</div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-[10px] text-[#6b7280]">Potential Win</div>
-                                            <div class="text-white font-bold text-xl" id="towersPotentialWin">0</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <button id="towersBtn" onclick="app.playTowers()" class="w-full btn-primary py-4 rounded-xl font-bold text-lg">Start Game</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                this.towersActive = false;
-                this.towerHeight = 6;
-                this.towerBlocksPlaced = 0;
-                this.setTowersHeight(6);
-            }
-
-            setTowersHeight(height) {
-                this.towerHeight = height;
-                document.getElementById('towerHeight').textContent = `0/${height}`;
-                
-                // Calculate multiplier
-                const multiplier = 1 + (height * 0.5);
-                document.getElementById('towersMultiplier').textContent = multiplier.toFixed(2) + 'x';
-                
-                const bet = parseFloat(document.getElementById('towersBet').value) || 10;
-                document.getElementById('towersPotentialWin').textContent = (bet * multiplier).toFixed(2);
-            }
-
-            playTowers() {
-                if (!this.userId) {
-                    this.showToast('Please login to play', 'error');
-                    return;
-                }
-
-                if (this.towersActive) {
-                    // Game in progress, cash out
-                    this.cashOutTowers();
-                    return;
-                }
-
-                const bet = parseFloat(document.getElementById('towersBet').value);
-                if (isNaN(bet) || bet <= 0) return;
-                if (bet > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                this.playSound('tower');
-                this.balance -= bet;
-                this.updateBalance();
-
-                this.towersActive = true;
-                this.towersBet = bet;
-                this.towerBlocksPlaced = 0;
-                this.towerBombPosition = Math.floor(Math.random() * 5);
-
-                // Reset grid
-                for (let row = 0; row < 8; row++) {
-                    for (let col = 0; col < 5; col++) {
-                        const block = document.getElementById(`tower-${row}-${col}`);
-                        block.className = 'tower-block';
-                        block.textContent = row === 7 ? '1' : '';
-                        block.onclick = () => this.selectTowerBlock(row, col);
-                    }
-                }
-
-                document.getElementById('towersBtn').textContent = 'Cash Out';
-                document.getElementById('towersBtn').className = 'w-full bg-[#10b981] text-white py-4 rounded-xl font-bold text-lg';
-            }
-
-            selectTowerBlock(row, col) {
-                if (!this.towersActive) return;
-
-                const block = document.getElementById(`tower-${row}-${col}`);
-                if (block.classList.contains('selected')) return;
-
-                block.classList.add('selected');
-                this.towerBlocksPlaced++;
-                document.getElementById('towerHeight').textContent = `${this.towerBlocksPlaced}/${this.towerHeight}`;
-
-                this.playSound('click');
-
-                // Check if bomb
-                if (this.towerBlocksPlaced === this.towerHeight) {
-                    // Reached target height - win
-                    this.cashOutTowers();
-                } else if (col === this.towerBombPosition && row === (7 - this.towerBlocksPlaced + 1)) {
-                    // Hit bomb
-                    block.innerHTML = '<i class="fa-solid fa-bomb text-white"></i>';
-                    block.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-                    this.playSound('mine');
-                    this.endTowers(false);
-                    this.recordLoss(this.towersBet, 'Towers');
-                }
-            }
-
-            endTowers(win) {
-                this.towersActive = false;
-                document.getElementById('towersBtn').textContent = 'Start Game';
-                document.getElementById('towersBtn').className = 'w-full btn-primary py-4 rounded-xl font-bold text-lg';
-
-                if (!win) {
-                    this.showToast('Boom! You hit the bomb!', 'error');
-                }
-            }
-
-            cashOutTowers() {
-                if (!this.towersActive) return;
-
-                const multiplier = 1 + (this.towerHeight * 0.5);
-                const win = this.towersBet * multiplier;
-                this.balance += win;
-                this.updateBalance();
-                this.playSound('win');
-                this.showToast(`Won ${win.toFixed(2)} coins! (${multiplier.toFixed(2)}x)`, 'success');
-                this.recordWin(win - this.towersBet, 'Towers');
-                this.endTowers(true);
-            }
-
-            // CROSSY ROAD GAME
-            renderCrossyRoad() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto animate-slide-up">
-                        <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold text-white mb-2">Crossy Road</h2>
-                            <p class="text-gray-400">Navigate through obstacles to reach the other side!</p>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            <div class="lg:col-span-2">
-                                <div class="crossy-road-game">
-                                    <div class="crossy-road-grid" id="crossyRoadGrid">
-                                        ${Array(100).fill(0).map((_, i) => {
-                                            const row = Math.floor(i / 10);
-                                            const col = i % 10;
-                                            let className = 'crossy-road-cell';
-                                            
-                                            // Create pattern: roads, grass, water
-                                            if (row === 0 || row === 9) {
-                                                className += ' grass';
-                                            } else if (row >= 1 && row <= 3) {
-                                                className += ' road';
-                                            } else if (row >= 4 && row <= 6) {
-                                                className += ' water';
-                                            } else {
-                                                className += ' grass';
-                                            }
-                                            
-                                            return `<div id="cell-${row}-${col}" class="${className}"></div>`;
-                                        }).join('')}
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-[#161b26] p-6 rounded-2xl border border-[#2a3042]">
-                                <div class="mb-6">
-                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Bet Amount</label>
-                                    <div class="flex bg-[#0b0e14] rounded-lg border border-[#2a3042]">
-                                        <div class="pl-4 py-3 text-[#6b7280] font-bold">$</div>
-                                        <input type="number" id="crossyBet" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-2 font-bold outline-none">
-                                        <div class="flex pr-1">
-                                            <button onclick="document.getElementById('crossyBet').value = Math.min(${this.balance}, document.getElementById('crossyBet').value * 2)" class="px-3 text-xs font-bold text-[#6b7280]">2x</button>
-                                            <button onclick="document.getElementById('crossyBet').value = Math.max(1, document.getElementById('crossyBet').value / 2)" class="px-3 text-xs font-bold text-[#6b7280]">½</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-6">
-                                    <div class="text-center mb-4">
-                                        <div class="text-white font-bold text-3xl" id="crossyScore">0</div>
-                                        <div class="text-gray-400 text-sm">Steps taken</div>
-                                    </div>
-                                    <div class="grid grid-cols-4 gap-2 mb-4">
-                                        <button onclick="app.moveCrossy('up')" class="bg-[#0b0e14] border border-[#2a3042] text-white rounded-lg py-3 font-bold text-sm">
-                                            <i class="fa-solid fa-arrow-up"></i>
-                                        </button>
-                                        <button onclick="app.moveCrossy('left')" class="bg-[#0b0e14] border border-[#2a3042] text-white rounded-lg py-3 font-bold text-sm">
-                                            <i class="fa-solid fa-arrow-left"></i>
-                                        </button>
-                                        <button onclick="app.moveCrossy('down')" class="bg-[#0b0e14] border border-[#2a3042] text-white rounded-lg py-3 font-bold text-sm">
-                                            <i class="fa-solid fa-arrow-down"></i>
-                                        </button>
-                                        <button onclick="app.moveCrossy('right')" class="bg-[#0b0e14] border border-[#2a3042] text-white rounded-lg py-3 font-bold text-sm">
-                                            <i class="fa-solid fa-arrow-right"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-[#0b0e14] rounded-xl p-4 mb-6 border border-[#2a3042]">
-                                    <div class="flex justify-between">
-                                        <div>
-                                            <div class="text-[10px] text-[#6b7280]">Multiplier</div>
-                                            <div class="text-white font-bold text-xl" id="crossyMultiplier">1.00x</div>
-                                        </div>
-                                        <div class="text-right">
-                                            <div class="text-[10px] text-[#6b7280]">Potential Win</div>
-                                            <div class="text-white font-bold text-xl" id="crossyPotentialWin">0</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <button onclick="app.startCrossyRoad()" class="w-full btn-primary py-4 rounded-xl font-bold text-lg">Start Game</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                this.initCrossyRoad();
-            }
-
-            initCrossyRoad() {
-                this.crossyActive = false;
-                this.crossyScore = 0;
-                this.crossyPlayerPos = { row: 9, col: 4 }; // Start at bottom middle
-                this.crossyObstacles = [];
-                
-                // Initialize obstacles on roads
-                for (let row = 1; row <= 3; row++) {
-                    for (let col = 0; col < 10; col++) {
-                        if (Math.random() > 0.7) {
-                            this.crossyObstacles.push({ row, col });
-                        }
-                    }
-                }
-                
-                this.renderCrossyBoard();
-            }
-
-            renderCrossyBoard() {
-                const grid = document.getElementById('crossyRoadGrid');
-                
-                // Clear previous player and obstacles
-                document.querySelectorAll('.crossy-road-player, .crossy-road-obstacle').forEach(el => el.remove());
-                
-                // Add obstacles
-                this.crossyObstacles.forEach(obs => {
-                    const cell = document.getElementById(`cell-${obs.row}-${obs.col}`);
-                    if (cell) {
-                        const obstacle = document.createElement('div');
-                        obstacle.className = 'crossy-road-obstacle';
-                        cell.appendChild(obstacle);
-                    }
-                });
-                
-                // Add player
-                const playerCell = document.getElementById(`cell-${this.crossyPlayerPos.row}-${this.crossyPlayerPos.col}`);
-                if (playerCell) {
-                    const player = document.createElement('div');
-                    player.className = 'crossy-road-player';
-                    playerCell.appendChild(player);
-                }
-            }
-
-            startCrossyRoad() {
-                if (!this.userId) {
-                    this.showToast('Please login to play', 'error');
-                    return;
-                }
-
-                const bet = parseFloat(document.getElementById('crossyBet').value);
-                if (isNaN(bet) || bet <= 0) return;
-                if (bet > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                this.playSound('crossy');
-                this.balance -= bet;
-                this.updateBalance();
-
-                this.crossyActive = true;
-                this.crossyBet = bet;
-                this.crossyScore = 0;
-                this.crossyPlayerPos = { row: 9, col: 4 };
-                
-                document.getElementById('crossyScore').textContent = '0';
-                document.getElementById('crossyMultiplier').textContent = '1.00x';
-                document.getElementById('crossyPotentialWin').textContent = bet.toFixed(2);
-                
-                this.initCrossyRoad();
-            }
-
-            moveCrossy(direction) {
-                if (!this.crossyActive) return;
-
-                this.playSound('click');
-
-                let newRow = this.crossyPlayerPos.row;
-                let newCol = this.crossyPlayerPos.col;
-
-                switch(direction) {
-                    case 'up': newRow--; break;
-                    case 'down': newRow++; break;
-                    case 'left': newCol--; break;
-                    case 'right': newCol++; break;
-                }
-
-                // Check bounds
-                if (newRow < 0 || newRow > 9 || newCol < 0 || newCol > 9) {
-                    return;
-                }
-
-                // Check for obstacle collision
-                const hasObstacle = this.crossyObstacles.some(obs => obs.row === newRow && obs.col === newCol);
-                if (hasObstacle) {
-                    this.playSound('lose');
-                    this.showToast('Hit an obstacle!', 'error');
-                    this.recordLoss(this.crossyBet, 'Crossy Road');
-                    this.crossyActive = false;
-                    return;
-                }
-
-                // Update position and score
-                this.crossyPlayerPos = { row: newRow, col: newCol };
-                this.crossyScore++;
-
-                // Update display
-                document.getElementById('crossyScore').textContent = this.crossyScore;
-                const multiplier = 1 + (this.crossyScore * 0.1);
-                document.getElementById('crossyMultiplier').textContent = multiplier.toFixed(2) + 'x';
-                document.getElementById('crossyPotentialWin').textContent = (this.crossyBet * multiplier).toFixed(2);
-
-                this.renderCrossyBoard();
-
-                // Check for win (reached top)
-                if (newRow === 0) {
-                    this.winCrossyRoad();
-                }
-            }
-
-            winCrossyRoad() {
-                const multiplier = 1 + (this.crossyScore * 0.1);
-                const win = this.crossyBet * multiplier;
-                this.balance += win;
-                this.updateBalance();
-                this.playSound('win');
-                this.showToast(`Crossed safely! Won ${win.toFixed(2)} coins! (${multiplier.toFixed(2)}x)`, 'success');
-                this.recordWin(win - this.crossyBet, 'Crossy Road');
-                this.crossyActive = false;
-                
-                // Confetti celebration
-                confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-            }
-
-            // ACTIVE WINS/LOSSES PAGE
-            async renderActiveWins() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto animate-slide-up">
-                        <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-2xl border border-[#2a3042] p-8">
-                            <div class="flex items-center gap-3 mb-8">
-                                <i class="fa-solid fa-chart-line text-[#10b981] text-3xl"></i>
-                                <h2 class="text-3xl font-bold text-white">Live Wins & Losses</h2>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                                <div class="bg-[#0f172a] rounded-xl p-6 border border-[#2a3042]">
-                                    <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-2">Today's Total Wins</div>
-                                        <div class="text-[#10b981] font-bold text-3xl" id="todayWins">0</div>
-                                    </div>
-                                </div>
-                                <div class="bg-[#0f172a] rounded-xl p-6 border border-[#2a3042]">
-                                    <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-2">Today's Total Losses</div>
-                                        <div class="text-[#ef4444] font-bold text-3xl" id="todayLosses">0</div>
-                                    </div>
-                                </div>
-                                <div class="bg-[#0f172a] rounded-xl p-6 border border-[#2a3042]">
-                                    <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-2">Biggest Win Today</div>
-                                        <div class="text-[#f59e0b] font-bold text-3xl" id="biggestWin">0</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-8">
-                                <h3 class="text-xl font-bold text-white mb-4">Recent Activity</h3>
-                                <div id="recentActivity" class="space-y-3 max-h-[400px] overflow-y-auto">
-                                    <div class="text-center py-12">
-                                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8b5cf6] mx-auto mb-4"></div>
-                                        <p class="text-gray-400">Loading recent activity...</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                await this.loadActiveWins();
-            }
-
-            async loadActiveWins() {
-                // Get today's start timestamp
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const todayStart = today.getTime();
-
-                // Get transactions from today
-                const snapshot = await database.ref('transactions')
-                    .orderByChild('timestamp')
-                    .startAt(todayStart)
-                    .once('value');
-
-                const transactions = [];
-                let totalWins = 0;
-                let totalLosses = 0;
-                let biggestWin = 0;
-
-                snapshot.forEach(child => {
-                    const transaction = child.val();
-                    transactions.push(transaction);
-                    
-                    if (transaction.type === 'win') {
-                        totalWins += transaction.amount;
-                        if (transaction.amount > biggestWin) {
-                            biggestWin = transaction.amount;
-                        }
-                    } else if (transaction.type === 'loss') {
-                        totalLosses += transaction.amount;
-                    }
-                });
-
-                // Update stats
-                document.getElementById('todayWins').textContent = totalWins.toLocaleString();
-                document.getElementById('todayLosses').textContent = totalLosses.toLocaleString();
-                document.getElementById('biggestWin').textContent = biggestWin.toLocaleString();
-
-                // Display recent activity
-                const recentActivity = document.getElementById('recentActivity');
-                recentActivity.innerHTML = '';
-
-                transactions.sort((a, b) => b.timestamp - a.timestamp).slice(0, 20).forEach(transaction => {
-                    const div = document.createElement('div');
-                    div.className = `flex items-center justify-between p-4 rounded-lg border ${
-                        transaction.type === 'win' ? 'border-[#10b981] bg-[#064e3b]/20' : 'border-[#ef4444] bg-[#7f1d1d]/20'
-                    }`;
-                    
-                    const time = new Date(transaction.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    
-                    div.innerHTML = `
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full flex items-center justify-center ${
-                                transaction.type === 'win' ? 'bg-[#10b981]/20 text-[#10b981]' : 'bg-[#ef4444]/20 text-[#ef4444]'
-                            }">
-                                <i class="fa-solid ${transaction.type === 'win' ? 'fa-trophy' : 'fa-bomb'}"></i>
-                            </div>
-                            <div>
-                                <div class="text-white font-bold">${transaction.username}</div>
-                                <div class="text-gray-400 text-sm">${transaction.game} • ${time}</div>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-white font-bold text-xl ${
-                                transaction.type === 'win' ? 'text-[#10b981]' : 'text-[#ef4444]'
-                            }">
-                                ${transaction.type === 'win' ? '+' : '-'}${transaction.amount.toLocaleString()}
-                            </div>
-                            <div class="text-gray-400 text-sm">coins</div>
-                        </div>
-                    `;
-                    
-                    recentActivity.appendChild(div);
-                });
-
-                if (transactions.length === 0) {
-                    recentActivity.innerHTML = '<div class="text-center py-12 text-gray-400">No activity yet today</div>';
-                }
-            }
-
-            // BLACKJACK GAME (simplified for brevity - you already have this)
+            // BLACKJACK GAME - FIXED VERSION
             renderBlackjack() {
-                // Your existing blackjack code here
-                this.mainContent.innerHTML = `
-                    <div class="max-w-4xl mx-auto flex flex-col gap-6 h-full animate-slide-up">
-                        <div class="relative flex-1 bg-[#064e3b] rounded-[3rem] border-[8px] border-[#3f2c22] p-8 flex flex-col items-center justify-center overflow-hidden">
-                            <div class="absolute top-8 text-white/20 font-black text-5xl tracking-[1em] select-none">BLACKJACK</div>
-                            <div class="w-full max-w-2xl z-10 flex flex-col h-full justify-between py-8">
-                                <div class="flex flex-col items-center">
-                                    <div class="mb-2 text-[#a7f3d0] text-xs font-bold flex items-center gap-2">
-                                        <i class="fa-solid fa-user-tie"></i> Dealer
-                                        <span id="dealerScore" class="bg-black/30 px-2 py-0.5 rounded text-white">0</span>
-                                    </div>
-                                    <div id="dealerHand" class="flex justify-center h-36 relative gap-2"></div>
-                                </div>
-                                <div class="flex flex-col items-center">
-                                    <div id="playerHand" class="flex justify-center h-36 relative gap-2"></div>
-                                    <div class="mt-4 text-[#a7f3d0] text-xs font-bold flex items-center gap-2">
-                                        <i class="fa-solid fa-user"></i> You
-                                        <span id="playerScore" class="bg-black/30 px-2 py-0.5 rounded text-white">0</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="bjOverlay" class="absolute inset-0 bg-black/70 hidden z-20 flex-col items-center justify-center">
-                                <div id="bjMessage" class="text-7xl font-black text-white mb-8"></div>
-                                <div id="bjPayout" class="text-3xl font-bold text-yellow-300 mb-8">+0 coins</div>
-                                <button onclick="app.resetBlackjackUI()" class="px-10 py-4 bg-emerald-500 text-white text-xl rounded-full font-bold">Play Again</button>
-                            </div>
-                        </div>
-                        <div class="bg-[#161b26] p-6 rounded-2xl border border-[#2a3042] flex flex-col md:flex-row justify-between items-center gap-6">
-                            <div class="flex items-center gap-3 bg-[#0b0e14] px-4 py-3 rounded-xl border border-[#2a3042]">
-                                <span class="text-gray-400 font-bold text-sm">BET</span>
-                                <input type="number" id="bjBetInput" value="50" min="1" max="${this.balance}" class="bg-transparent text-white font-bold text-xl w-24 outline-none">
-                            </div>
-                            <div class="flex gap-4">
-                                <button id="btnDeal" onclick="app.bjDeal()" class="px-16 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black text-xl rounded-xl">DEAL</button>
-                                <div id="bjActions" class="hidden flex gap-4">
-                                    <button id="btnHit" onclick="app.bjHit()" class="px-10 py-4 bg-gray-700 text-white font-bold text-xl rounded-xl">HIT</button>
-                                    <button id="btnStand" onclick="app.bjStand()" class="px-10 py-4 bg-emerald-600 text-white font-black text-xl rounded-xl">STAND</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
                 this.bjInProgress = false;
                 this.bjSettled = false;
                 this.bjStandCalled = false;
-            }
+                this.bjDeck = [];
+                this.bjPlayerHand = [];
+                this.bjDealerHand = [];
 
-            // LEADERBOARD
-            async renderLeaderboard() {
                 this.mainContent.innerHTML = `
-                    <div class="max-w-4xl mx-auto animate-slide-up">
-                        <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-2xl border border-[#2a3042] p-8">
-                            <div class="flex items-center gap-3 mb-8">
-                                <i class="fa-solid fa-trophy text-yellow-400 text-3xl"></i>
-                                <h2 class="text-3xl font-bold text-white">Top Players</h2>
-                            </div>
-                            
-                            <div id="leaderboardContent" class="space-y-4">
-                                <div class="text-center py-12">
-                                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8b5cf6] mx-auto mb-4"></div>
-                                    <p class="text-gray-400">Loading leaderboard...</p>
+                    <div class="max-w-6xl mx-auto flex flex-col gap-8 animate-scale-in">
+                        <div class="text-center mb-4">
+                            <h2 class="text-4xl font-bold text-white mb-3">Blackjack</h2>
+                            <p class="text-gray-400 text-lg">Beat the dealer without going over 21</p>
+                        </div>
+                        
+                        <div class="blackjack-table p-8 md:p-12">
+                            <div class="flex flex-col items-center justify-between h-full">
+                                <!-- Dealer Section -->
+                                <div class="w-full mb-12">
+                                    <div class="flex items-center justify-center gap-3 mb-6">
+                                        <i class="fa-solid fa-user-tie text-2xl text-[#a7f3d0]"></i>
+                                        <div class="text-[#a7f3d0] text-lg font-bold tracking-wider">Dealer</div>
+                                        <div class="bg-black/40 px-4 py-2 rounded-full text-white font-bold text-lg" id="dealerScore">0</div>
+                                    </div>
+                                    <div id="dealerHand" class="flex justify-center items-center gap-4 min-h-[160px]"></div>
+                                </div>
+                                
+                                <!-- Game Status -->
+                                <div id="bjStatus" class="text-center my-8">
+                                    <div class="text-2xl font-bold text-white" id="bjGameStatus">Place your bet and deal!</div>
+                                </div>
+                                
+                                <!-- Player Section -->
+                                <div class="w-full mt-12">
+                                    <div id="playerHand" class="flex justify-center items-center gap-4 min-h-[160px] mb-8"></div>
+                                    <div class="flex items-center justify-center gap-3">
+                                        <i class="fa-solid fa-user text-2xl text-[#a7f3d0]"></i>
+                                        <div class="text-[#a7f3d0] text-lg font-bold tracking-wider">You</div>
+                                        <div class="bg-black/40 px-4 py-2 rounded-full text-white font-bold text-lg" id="playerScore">0</div>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="mt-12 p-6 bg-[#0f172a] rounded-xl border border-[#2a3042]">
-                                <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                                    <i class="fa-solid fa-user text-[#8b5cf6]"></i>
-                                    Your Position
-                                </h3>
-                                <div id="userPosition" class="text-center py-4">
-                                    <div class="text-gray-400">Loading...</div>
+                            <!-- Game Overlay -->
+                            <div id="bjOverlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm hidden z-20 flex-col items-center justify-center rounded-2xl">
+                                <div id="bjMessage" class="text-6xl font-black text-white mb-6 text-center"></div>
+                                <div id="bjPayout" class="text-4xl font-bold text-yellow-300 mb-8"></div>
+                                <button onclick="app.resetBlackjackUI()" class="px-12 py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-2xl rounded-2xl font-bold shadow-2xl hover:scale-110 transition-all duration-300">
+                                    <i class="fa-solid fa-rotate-right mr-3"></i> Play Again
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Game Controls -->
+                        <div class="game-controls">
+                            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                                <div class="flex items-center gap-4 bg-gradient-to-r from-[#0b0e14] to-[#1e293b] px-6 py-4 rounded-2xl border border-[#2a3042] min-w-[200px]">
+                                    <span class="text-gray-400 font-bold text-sm tracking-wider">BET</span>
+                                    <input type="number" id="bjBetInput" value="50" min="1" max="${this.balance}" class="bg-transparent text-white font-bold text-2xl w-32 outline-none text-center">
+                                    <div class="flex gap-2">
+                                        <button onclick="app.adjustBjBet(0.5)" class="text-xs text-[#8b5cf6] font-bold hover:text-white transition-all duration-300 hover:scale-110">½</button>
+                                        <button onclick="app.adjustBjBet(2)" class="text-xs text-[#8b5cf6] font-bold hover:text-white transition-all duration-300 hover:scale-110">2x</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-4">
+                                    <button id="btnDeal" onclick="app.bjDeal()" class="px-12 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black text-xl rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300">
+                                        <i class="fa-solid fa-play mr-3"></i> DEAL CARDS
+                                    </button>
+                                    <div id="bjActions" class="hidden flex gap-4">
+                                        <button id="btnHit" onclick="app.bjHit()" class="px-10 py-4 bg-gradient-to-r from-gray-700 to-gray-800 text-white font-bold text-xl rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+                                            <i class="fa-solid fa-plus mr-2"></i> HIT
+                                        </button>
+                                        <button id="btnStand" onclick="app.bjStand()" class="px-10 py-4 bg-gradient-to-r from-emerald-600 to-green-700 text-white font-black text-xl rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+                                            <i class="fa-solid fa-hand mr-2"></i> STAND
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
-                
-                await this.loadLeaderboard();
             }
 
-            async loadLeaderboard() {
+            adjustBjBet(multiplier) {
+                const betInput = document.getElementById('bjBetInput');
+                const currentBet = parseFloat(betInput.value) || 50;
+                let newBet = currentBet * multiplier;
+                
+                // Round to nearest whole number
+                newBet = Math.round(newBet);
+                
+                // Ensure within limits
+                newBet = Math.max(1, Math.min(newBet, this.balance));
+                
+                betInput.value = newBet;
+                this.playSound('click');
+            }
+
+            bjDeal() {
+                if (!this.userId) {
+                    this.showToast('Please login to play', 'error');
+                    return;
+                }
+
+                if (this.bjInProgress) return;
+
+                const betInput = document.getElementById('bjBetInput');
+                const bet = parseFloat(betInput.value);
+
+                if (isNaN(bet) || bet <= 0) return;
+                if (bet > this.balance) {
+                    this.showToast('Insufficient funds', 'error');
+                    return;
+                }
+
+                this.playSound('click');
+                this.balance -= bet;
+                this.updateBalance();
+                this.recordWager(bet);
+                this.bjBet = bet;
+
+                // Create and shuffle deck
+                const suits = ['♠', '♥', '♦', '♣'];
+                const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+                let deck = [];
+
+                for (let s of suits) {
+                    for (let v of values) {
+                        deck.push({
+                            suit: s,
+                            value: v,
+                            color: (s === '♥' || s === '♦') ? 'text-red-500' : 'text-black'
+                        });
+                    }
+                }
+
+                // Shuffle deck
+                for (let i = deck.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [deck[i], deck[j]] = [deck[j], deck[i]];
+                }
+
+                this.bjDeck = deck;
+                this.bjPlayerHand = [];
+                this.bjDealerHand = [];
+
+                // Clear hands
+                document.getElementById('dealerHand').innerHTML = '';
+                document.getElementById('playerHand').innerHTML = '';
+                document.getElementById('dealerScore').textContent = '0';
+                document.getElementById('playerScore').textContent = '0';
+                document.getElementById('bjGameStatus').textContent = 'Game in progress...';
+
+                // Update UI
+                document.getElementById('btnDeal').classList.add('hidden');
+                document.getElementById('bjActions').classList.remove('hidden');
+                document.getElementById('bjActions').classList.add('flex');
+                betInput.disabled = true;
+
+                this.bjInProgress = true;
+                this.bjSettled = false;
+                this.bjStandCalled = false;
+
+                // Deal initial cards with animation delays
+                setTimeout(() => {
+                    this.bjDealCardToPlayer();
+                    this.playSound('card');
+                }, 0);
+
+                setTimeout(() => {
+                    this.bjDealCardToDealer(true); // First dealer card face down
+                    this.playSound('card');
+                }, 400);
+
+                setTimeout(() => {
+                    this.bjDealCardToPlayer();
+                    this.playSound('card');
+                }, 800);
+
+                setTimeout(() => {
+                    this.bjDealCardToDealer(false); // Second dealer card face up
+                    this.playSound('card');
+                    
+                    // Update scores after all cards are dealt
+                    setTimeout(() => {
+                        this.bjUpdateScores(true);
+                        
+                        // Check for blackjack
+                        if (this.bjCalculateScore(this.bjPlayerHand) === 21) {
+                            this.bjStand();
+                        }
+                    }, 300);
+                }, 1200);
+            }
+
+            bjDealCardToPlayer(faceUp = true) {
+                if (this.bjDeck.length === 0) return;
+                
+                const card = this.bjDeck.pop();
+                this.bjPlayerHand.push(card);
+                
+                const handElement = document.getElementById('playerHand');
+                const cardElement = this.createCardElement(card, faceUp);
+                cardElement.style.animation = 'card-deal 0.5s ease-out forwards';
+                handElement.appendChild(cardElement);
+            }
+
+            bjDealCardToDealer(faceDown = false) {
+                if (this.bjDeck.length === 0) return;
+                
+                const card = this.bjDeck.pop();
+                this.bjDealerHand.push(card);
+                
+                const handElement = document.getElementById('dealerHand');
+                const cardElement = this.createCardElement(card, !faceDown);
+                if (faceDown) {
+                    cardElement.querySelector('.game-card-item').classList.add('flipped');
+                    cardElement.id = 'dealerHiddenCard';
+                }
+                cardElement.style.animation = 'card-deal 0.5s ease-out forwards';
+                handElement.appendChild(cardElement);
+            }
+
+            createCardElement(card, faceUp = true) {
+                const container = document.createElement('div');
+                container.className = 'card-container';
+                
+                const cardItem = document.createElement('div');
+                cardItem.className = `game-card-item ${!faceUp ? 'flipped' : ''}`;
+                
+                const cardFace = document.createElement('div');
+                cardFace.className = 'card-face';
+                cardFace.innerHTML = `
+                    <div class="text-lg font-bold leading-none ${card.color}">${card.value}<br><span class="text-sm">${card.suit}</span></div>
+                    <div class="card-value ${card.color}">${card.suit}</div>
+                    <div class="text-lg font-bold leading-none ${card.color} rotate-180">${card.value}<br><span class="text-sm">${card.suit}</span></div>
+                `;
+                
+                const cardBack = document.createElement('div');
+                cardBack.className = 'card-back';
+                
+                cardItem.appendChild(cardFace);
+                cardItem.appendChild(cardBack);
+                container.appendChild(cardItem);
+                
+                return container;
+            }
+
+            bjCalculateScore(hand) {
+                let score = 0;
+                let aces = 0;
+
+                hand.forEach(card => {
+                    if (['J', 'Q', 'K'].includes(card.value)) {
+                        score += 10;
+                    } else if (card.value === 'A') {
+                        score += 11;
+                        aces++;
+                    } else {
+                        score += parseInt(card.value);
+                    }
+                });
+
+                // Adjust for aces if over 21
+                while (score > 21 && aces > 0) {
+                    score -= 10;
+                    aces--;
+                }
+
+                return score;
+            }
+
+            bjUpdateScores(hideDealerScore = false) {
+                const playerScore = this.bjCalculateScore(this.bjPlayerHand);
+                document.getElementById('playerScore').textContent = playerScore;
+
+                if (hideDealerScore && this.bjDealerHand.length > 0) {
+                    // Only show first card's value for dealer
+                    const firstCard = this.bjDealerHand[0];
+                    let dealerVisibleScore = 0;
+                    
+                    if (['J', 'Q', 'K'].includes(firstCard.value)) {
+                        dealerVisibleScore = 10;
+                    } else if (firstCard.value === 'A') {
+                        dealerVisibleScore = 11;
+                    } else {
+                        dealerVisibleScore = parseInt(firstCard.value);
+                    }
+                    
+                    document.getElementById('dealerScore').textContent = dealerVisibleScore;
+                } else {
+                    const dealerScore = this.bjCalculateScore(this.bjDealerHand);
+                    document.getElementById('dealerScore').textContent = dealerScore;
+                }
+            }
+
+            bjHit() {
+                if (!this.bjInProgress || this.bjSettled || this.bjStandCalled) return;
+
+                this.playSound('card');
+                this.bjDealCardToPlayer();
+                
+                setTimeout(() => {
+                    this.bjUpdateScores(true);
+                    const playerScore = this.bjCalculateScore(this.bjPlayerHand);
+                    
+                    if (playerScore > 21) {
+                        this.bjEnd('BUSTED', 'loss');
+                    }
+                }, 300);
+            }
+
+            bjStand() {
+                if (!this.bjInProgress || this.bjSettled || this.bjStandCalled) return;
+
+                this.bjStandCalled = true;
+                document.getElementById('bjActions').classList.add('hidden');
+                document.getElementById('bjActions').classList.remove('flex');
+
+                // Reveal dealer's hidden card
+                const hiddenCard = document.getElementById('dealerHiddenCard');
+                if (hiddenCard) {
+                    setTimeout(() => {
+                        hiddenCard.querySelector('.game-card-item').classList.remove('flipped');
+                        this.playSound('card');
+                        this.bjUpdateScores(false);
+                        this.bjDealerPlay();
+                    }, 500);
+                }
+            }
+
+            bjDealerPlay() {
+                const dealerScore = this.bjCalculateScore(this.bjDealerHand);
+                
+                if (dealerScore >= 17) {
+                    setTimeout(() => {
+                        this.bjDetermineWinner();
+                    }, 1000);
+                } else {
+                    // Dealer hits
+                    setTimeout(() => {
+                        this.bjDealCardToDealer(false);
+                        this.playSound('card');
+                        
+                        setTimeout(() => {
+                            this.bjUpdateScores(false);
+                            this.bjDealerPlay();
+                        }, 500);
+                    }, 1000);
+                }
+            }
+
+            bjDetermineWinner() {
+                const playerScore = this.bjCalculateScore(this.bjPlayerHand);
+                const dealerScore = this.bjCalculateScore(this.bjDealerHand);
+
+                if (playerScore > 21) {
+                    this.bjEnd('BUSTED', 'loss');
+                } else if (dealerScore > 21) {
+                    this.bjEnd('DEALER BUSTED', 'win');
+                } else if (playerScore > dealerScore) {
+                    this.bjEnd('YOU WIN', 'win');
+                } else if (playerScore < dealerScore) {
+                    this.bjEnd('DEALER WINS', 'loss');
+                } else {
+                    this.bjEnd('PUSH', 'push');
+                }
+            }
+
+            bjEnd(message, result) {
+                this.bjSettled = true;
+                this.bjInProgress = false;
+
+                const overlay = document.getElementById('bjOverlay');
+                const messageEl = document.getElementById('bjMessage');
+                const payoutEl = document.getElementById('bjPayout');
+
+                setTimeout(() => {
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('flex');
+                    
+                    if (messageEl) {
+                        messageEl.textContent = message;
+                        
+                        switch(result) {
+                            case 'win':
+                                messageEl.style.color = '#10b981';
+                                break;
+                            case 'loss':
+                                messageEl.style.color = '#ef4444';
+                                break;
+                            case 'push':
+                                messageEl.style.color = '#f59e0b';
+                                break;
+                        }
+                    }
+
+                    let winAmount = 0;
+                    
+                    switch(result) {
+                        case 'win':
+                            winAmount = this.bjBet * 2;
+                            this.balance += winAmount;
+                            this.updateBalance();
+                            this.recordWin(this.bjBet, 'Blackjack');
+                            if (payoutEl) {
+                                payoutEl.textContent = `+${winAmount} coins`;
+                                payoutEl.style.color = '#10b981';
+                            }
+                            this.playSound('win');
+                            confetti({
+                                particleCount: 150,
+                                spread: 70,
+                                origin: { y: 0.6 }
+                            });
+                            break;
+                            
+                        case 'push':
+                            winAmount = this.bjBet;
+                            this.balance += winAmount;
+                            this.updateBalance();
+                            if (payoutEl) {
+                                payoutEl.textContent = 'Bet returned';
+                                payoutEl.style.color = '#f59e0b';
+                            }
+                            break;
+                            
+                        case 'loss':
+                            this.recordLoss(this.bjBet, 'Blackjack');
+                            if (payoutEl) {
+                                payoutEl.textContent = `-${this.bjBet} coins`;
+                                payoutEl.style.color = '#ef4444';
+                            }
+                            this.playSound('lose');
+                            break;
+                    }
+
+                    document.getElementById('bjGameStatus').textContent = message;
+                }, 1000);
+            }
+
+            resetBlackjackUI() {
+                const overlay = document.getElementById('bjOverlay');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('flex');
+
+                document.getElementById('dealerHand').innerHTML = '';
+                document.getElementById('playerHand').innerHTML = '';
+                document.getElementById('dealerScore').textContent = '0';
+                document.getElementById('playerScore').textContent = '0';
+                document.getElementById('bjGameStatus').textContent = 'Place your bet and deal!';
+
+                document.getElementById('btnDeal').classList.remove('hidden');
+                document.getElementById('bjActions').classList.add('hidden');
+                document.getElementById('bjActions').classList.remove('flex');
+
+                const betInput = document.getElementById('bjBetInput');
+                betInput.disabled = false;
+
+                this.bjInProgress = false;
+                this.bjSettled = false;
+                this.bjStandCalled = false;
+                this.playSound('click');
+            }
+
+            // COINFLIP GAME
+            renderCoinflip() {
+                this.coinflipActive = false;
+                this.coinflipSide = null;
+
+                this.mainContent.innerHTML = `
+                    <div class="max-w-4xl mx-auto animate-scale-in">
+                        <div class="text-center mb-10">
+                            <h2 class="text-4xl font-bold text-white mb-4">CoinFlip</h2>
+                            <p class="text-gray-400 text-lg">Heads or Tails? Double your money!</p>
+                        </div>
+                        
+                        <div class="coinflip-container p-10">
+                            <div class="text-center mb-12">
+                                <div class="coin" id="coin" onclick="app.flipCoin()">
+                                    <div class="text-5xl">🎲</div>
+                                </div>
+                                <div class="text-gray-400 text-sm mt-4">Click the coin to flip</div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                <div class="text-center">
+                                    <div class="text-gray-400 text-sm mb-3 tracking-wider">Select Side</div>
+                                    <div class="flex gap-6 justify-center">
+                                        <button onclick="app.selectCoinSide('heads')" id="btnHeads" class="w-32 h-32 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl border-4 border-yellow-400 flex flex-col items-center justify-center text-white font-bold text-xl shadow-2xl hover:scale-105 transition-all duration-300">
+                                            <i class="fa-solid fa-heading text-5xl mb-3"></i>
+                                            Heads
+                                            <div class="text-sm font-normal mt-2">2x Payout</div>
+                                        </button>
+                                        <button onclick="app.selectCoinSide('tails')" id="btnTails" class="w-32 h-32 bg-gradient-to-br from-gray-600 to-gray-800 rounded-2xl border-4 border-gray-500 flex flex-col items-center justify-center text-white font-bold text-xl shadow-2xl hover:scale-105 transition-all duration-300">
+                                            <i class="fa-solid fa-feather text-5xl mb-3"></i>
+                                            Tails
+                                            <div class="text-sm font-normal mt-2">2x Payout</div>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col justify-center">
+                                    <div class="mb-6">
+                                        <label class="text-gray-400 text-sm mb-3 block tracking-wider">Bet Amount</label>
+                                        <div class="flex bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-xl border border-[#2a3042] p-1">
+                                            <div class="pl-4 py-3.5 text-yellow-400 font-bold"><i class="fa-solid fa-coins"></i></div>
+                                            <input type="number" id="coinflipBet" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-4 font-bold text-lg outline-none">
+                                            <div class="flex pr-2">
+                                                <button onclick="document.getElementById('coinflipBet').value = Math.min(${this.balance}, document.getElementById('coinflipBet').value * 2)" class="px-4 text-sm font-bold text-yellow-400 hover:text-white transition-all duration-300">2x</button>
+                                                <button onclick="document.getElementById('coinflipBet').value = Math.max(1, document.getElementById('coinflipBet').value / 2)" class="px-4 text-sm font-bold text-yellow-400 hover:text-white transition-all duration-300">½</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-2xl p-6 border border-[#2a3042] mb-6">
+                                        <div class="text-center">
+                                            <div class="text-gray-400 text-sm mb-2">Potential Win</div>
+                                            <div class="text-white font-bold text-3xl" id="coinflipPotentialWin">20</div>
+                                            <div class="text-gray-500 text-xs mt-2">2x your bet</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button onclick="app.playCoinflip()" id="coinflipBtn" class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 text-white py-5 rounded-2xl font-bold text-xl tracking-wider hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <i class="fa-solid fa-play mr-3"></i> Flip Coin
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="coinflipResult" class="text-center hidden">
+                                <div class="text-3xl font-bold mb-4" id="coinflipResultText"></div>
+                                <div class="text-2xl font-bold" id="coinflipResultAmount"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.updateCoinflipPotentialWin();
+            }
+
+            selectCoinSide(side) {
+                if (this.coinflipActive) return;
+                
+                this.coinflipSide = side;
+                
+                // Update button styles
+                document.getElementById('btnHeads').classList.remove('border-yellow-400', 'scale-105');
+                document.getElementById('btnTails').classList.remove('border-gray-500', 'scale-105');
+                
+                if (side === 'heads') {
+                    document.getElementById('btnHeads').classList.add('border-yellow-400', 'scale-105');
+                    document.getElementById('btnHeads').style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                } else {
+                    document.getElementById('btnTails').classList.add('border-gray-500', 'scale-105');
+                    document.getElementById('btnTails').style.background = 'linear-gradient(135deg, #6b7280, #4b5563)';
+                }
+                
+                this.playSound('click');
+            }
+
+            updateCoinflipPotentialWin() {
+                const bet = parseFloat(document.getElementById('coinflipBet').value) || 10;
+                document.getElementById('coinflipPotentialWin').textContent = (bet * 2).toLocaleString();
+            }
+
+            playCoinflip() {
+                if (!this.userId) {
+                    this.showToast('Please login to play', 'error');
+                    return;
+                }
+
+                if (this.coinflipActive) return;
+                
+                if (!this.coinflipSide) {
+                    this.showToast('Please select heads or tails first', 'error');
+                    return;
+                }
+
+                const bet = parseFloat(document.getElementById('coinflipBet').value);
+                if (isNaN(bet) || bet <= 0) return;
+                if (bet > this.balance) {
+                    this.showToast('Insufficient funds', 'error');
+                    return;
+                }
+
+                this.playSound('click');
+                this.balance -= bet;
+                this.updateBalance();
+                this.recordWager(bet);
+                this.coinflipBet = bet;
+                this.coinflipActive = true;
+
+                // Disable button during flip
+                document.getElementById('coinflipBtn').disabled = true;
+                document.getElementById('coinflipBtn').innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-3"></i> Flipping...';
+
+                // Start the coin flip animation
+                this.flipCoin();
+            }
+
+            flipCoin() {
+                if (!this.coinflipActive) return;
+                
+                const coin = document.getElementById('coin');
+                coin.classList.add('flipping');
+                this.playSound('coin');
+
+                // Random result
+                const result = Math.random() < 0.5 ? 'heads' : 'tails';
+                const win = result === this.coinflipSide;
+
+                setTimeout(() => {
+                    coin.classList.remove('flipping');
+                    
+                    // Update coin appearance based on result
+                    coin.classList.remove('coin-heads', 'coin-tails');
+                    if (result === 'heads') {
+                        coin.classList.add('coin-heads');
+                        coin.innerHTML = '<div class="text-5xl">👑</div>';
+                    } else {
+                        coin.classList.add('coin-tails');
+                        coin.innerHTML = '<div class="text-5xl">🪙</div>';
+                    }
+
+                    // Show result
+                    const resultElement = document.getElementById('coinflipResult');
+                    const resultText = document.getElementById('coinflipResultText');
+                    const resultAmount = document.getElementById('coinflipResultAmount');
+                    
+                    resultElement.classList.remove('hidden');
+                    
+                    if (win) {
+                        const winAmount = this.coinflipBet * 2;
+                        this.balance += winAmount;
+                        this.updateBalance();
+                        this.recordWin(this.coinflipBet, 'CoinFlip');
+                        
+                        resultText.textContent = `You win! ${result.toUpperCase()}!`;
+                        resultText.style.color = '#10b981';
+                        resultAmount.textContent = `+${winAmount} coins`;
+                        resultAmount.style.color = '#10b981';
+                        
+                        this.showToast(`You won ${winAmount} coins!`, 'success');
+                        this.playSound('win');
+                        
+                        // Confetti for win
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    } else {
+                        this.recordLoss(this.coinflipBet, 'CoinFlip');
+                        
+                        resultText.textContent = `You lose! ${result.toUpperCase()}!`;
+                        resultText.style.color = '#ef4444';
+                        resultAmount.textContent = `-${this.coinflipBet} coins`;
+                        resultAmount.style.color = '#ef4444';
+                        
+                        this.showToast(`You lost ${this.coinflipBet} coins`, 'error');
+                        this.playSound('lose');
+                    }
+
+                    // Re-enable button
+                    setTimeout(() => {
+                        document.getElementById('coinflipBtn').disabled = false;
+                        document.getElementById('coinflipBtn').innerHTML = '<i class="fa-solid fa-play mr-3"></i> Flip Coin';
+                        this.coinflipActive = false;
+                        this.coinflipSide = null;
+                        
+                        // Reset button styles
+                        document.getElementById('btnHeads').classList.remove('border-yellow-400', 'scale-105');
+                        document.getElementById('btnTails').classList.remove('border-gray-500', 'scale-105');
+                        document.getElementById('btnHeads').style.background = '';
+                        document.getElementById('btnTails').style.background = '';
+                        
+                        // Update potential win for next round
+                        this.updateCoinflipPotentialWin();
+                    }, 2000);
+                }, 1000);
+            }
+
+            // LEADERBOARD with Enhanced Stats
+            async renderLeaderboard() {
+                this.mainContent.innerHTML = `
+                    <div class="max-w-6xl mx-auto animate-slide-in-right">
+                        <div class="text-center mb-10">
+                            <h2 class="text-4xl font-bold text-white mb-4">Leaderboard</h2>
+                            <p class="text-gray-400 text-lg">Top players and statistics</p>
+                        </div>
+                        
+                        <div class="tab-nav">
+                            <button onclick="app.showLeaderboardTab('balance')" class="tab-btn active" id="tabBalance">
+                                <i class="fa-solid fa-coins mr-2"></i> Richest Players
+                            </button>
+                            <button onclick="app.showLeaderboardTab('wageredToday')" class="tab-btn" id="tabWageredToday">
+                                <i class="fa-solid fa-calendar-day mr-2"></i> Today's Wagered
+                            </button>
+                            <button onclick="app.showLeaderboardTab('wageredWeek')" class="tab-btn" id="tabWageredWeek">
+                                <i class="fa-solid fa-calendar-week mr-2"></i> This Week's Wagered
+                            </button>
+                            <button onclick="app.showLeaderboardTab('wageredLifetime')" class="tab-btn" id="tabWageredLifetime">
+                                <i class="fa-solid fa-trophy mr-2"></i> Lifetime Wagered
+                            </button>
+                            <button onclick="app.showLeaderboardTab('wonToday')" class="tab-btn" id="tabWonToday">
+                                <i class="fa-solid fa-money-bill-wave mr-2"></i> Today's Wins
+                            </button>
+                        </div>
+                        
+                        <div id="leaderboardContent" class="space-y-4">
+                            <div class="text-center py-12">
+                                <div class="loading-spinner mx-auto mb-4"></div>
+                                <p class="text-gray-400">Loading leaderboard...</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                await this.loadLeaderboard('balance');
+            }
+
+            showLeaderboardTab(tab) {
+                // Update active tab
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
+                
+                // Load data for selected tab
+                this.loadLeaderboard(tab);
+                this.playSound('click');
+            }
+
+            async loadLeaderboard(sortBy = 'balance') {
                 const snapshot = await database.ref('users').once('value');
                 const users = [];
 
                 snapshot.forEach(child => {
                     const user = child.val();
-                    users.push({
-                        username: user.username,
-                        balance: user.balance || 0,
-                        userId: user.userId,
-                        totalWins: user.totalWins || 0,
-                        biggestWin: user.biggestWin || 0
-                    });
+                    if (user.username) { // Only include users with usernames
+                        users.push({
+                            username: user.username,
+                            balance: user.balance || 0,
+                            userId: user.userId,
+                            totalWins: user.totalWins || 0,
+                            biggestWin: user.biggestWin || 0,
+                            wageredToday: user.wageredToday || 0,
+                            wageredWeek: user.wageredWeek || 0,
+                            wageredLifetime: user.wageredLifetime || 0,
+                            wonToday: user.wonToday || 0,
+                            lastWagered: user.lastWagered || 0
+                        });
+                    }
                 });
 
-                // Sort by balance
-                users.sort((a, b) => b.balance - a.balance);
+                // Sort by selected criteria
+                let sortField = sortBy;
+                let sortDescending = true;
+                
+                switch(sortBy) {
+                    case 'balance':
+                        users.sort((a, b) => b.balance - a.balance);
+                        break;
+                    case 'wageredToday':
+                        users.sort((a, b) => b.wageredToday - a.wageredToday);
+                        break;
+                    case 'wageredWeek':
+                        users.sort((a, b) => b.wageredWeek - a.wageredWeek);
+                        break;
+                    case 'wageredLifetime':
+                        users.sort((a, b) => b.wageredLifetime - a.wageredLifetime);
+                        break;
+                    case 'wonToday':
+                        users.sort((a, b) => b.wonToday - a.wonToday);
+                        break;
+                }
 
-                // Display top 10
+                // Display leaderboard
                 const leaderboardContent = document.getElementById('leaderboardContent');
                 leaderboardContent.innerHTML = '';
 
-                const medals = ['🥇', '🥈', '🥉'];
+                const tabTitles = {
+                    'balance': 'Richest Players',
+                    'wageredToday': 'Most Wagered Today',
+                    'wageredWeek': 'Most Wagered This Week',
+                    'wageredLifetime': 'Most Wagered Lifetime',
+                    'wonToday': 'Most Won Today'
+                };
 
+                const tabIcons = {
+                    'balance': 'fa-coins',
+                    'wageredToday': 'fa-calendar-day',
+                    'wageredWeek': 'fa-calendar-week',
+                    'wageredLifetime': 'fa-trophy',
+                    'wonToday': 'fa-money-bill-wave'
+                };
+
+                const valueFormatters = {
+                    'balance': (value) => `${value.toLocaleString()} coins`,
+                    'wageredToday': (value) => `${value.toLocaleString()} coins`,
+                    'wageredWeek': (value) => `${value.toLocaleString()} coins`,
+                    'wageredLifetime': (value) => `${value.toLocaleString()} coins`,
+                    'wonToday': (value) => `${value.toLocaleString()} coins`
+                };
+
+                const colors = {
+                    'balance': '#10b981',
+                    'wageredToday': '#8b5cf6',
+                    'wageredWeek': '#f59e0b',
+                    'wageredLifetime': '#ef4444',
+                    'wonToday': '#10b981'
+                };
+
+                // Add header
+                const header = document.createElement('div');
+                header.className = 'flex items-center gap-3 mb-6';
+                header.innerHTML = `
+                    <i class="fa-solid ${tabIcons[sortBy]} text-2xl" style="color: ${colors[sortBy]}"></i>
+                    <h3 class="text-2xl font-bold text-white">${tabTitles[sortBy]}</h3>
+                `;
+                leaderboardContent.appendChild(header);
+
+                // Add top 10 users
+                const medals = ['🥇', '🥈', '🥉'];
+                
                 users.slice(0, 10).forEach((user, index) => {
-                    const medal = medals[index] || '';
+                    const medal = medals[index] || `${index + 1}.`;
+                    const value = user[sortBy] || 0;
+                    
                     const div = document.createElement('div');
                     div.className = 'leaderboard-item';
+                    div.style.animationDelay = `${index * 0.1}s`;
+                    
                     div.innerHTML = `
                         <div class="flex items-center gap-4 w-full">
-                            <div class="text-3xl font-bold">${medal}</div>
+                            <div class="text-3xl font-bold w-12">${medal}</div>
                             <div class="flex-1">
                                 <div class="text-white font-bold text-lg">${user.username}</div>
-                                <div class="text-gray-400 text-sm">Wins: ${user.totalWins} | Biggest: ${user.biggestWin || 0}</div>
+                                <div class="text-gray-400 text-sm">
+                                    ${sortBy === 'balance' ? `Wins: ${user.totalWins} | Biggest: ${user.biggestWin || 0}` : ''}
+                                    ${sortBy === 'wageredToday' ? `Balance: ${user.balance.toLocaleString()}` : ''}
+                                    ${sortBy === 'wageredWeek' ? `Today: ${user.wageredToday.toLocaleString()}` : ''}
+                                    ${sortBy === 'wageredLifetime' ? `Week: ${user.wageredWeek.toLocaleString()}` : ''}
+                                    ${sortBy === 'wonToday' ? `Balance: ${user.balance.toLocaleString()}` : ''}
+                                </div>
                             </div>
                             <div class="text-right">
-                                <div class="text-[#10b981] font-bold text-xl">${user.balance.toLocaleString()}</div>
-                                <div class="text-gray-400 text-xs">coins</div>
+                                <div class="text-xl font-bold" style="color: ${colors[sortBy]}">${valueFormatters[sortBy](value)}</div>
+                                <div class="text-gray-400 text-xs mt-1">${sortBy.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</div>
                             </div>
                         </div>
                     `;
+                    
+                    // Highlight current user
+                    if (user.userId === this.userId) {
+                        div.style.borderColor = '#8b5cf6';
+                        div.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05))';
+                        div.innerHTML += '<div class="absolute top-2 right-2 text-xs bg-[#8b5cf6] text-white px-2 py-1 rounded-full">YOU</div>';
+                    }
+                    
                     leaderboardContent.appendChild(div);
                 });
 
-                // Find user position
-                const userPosition = users.findIndex(u => u.userId === this.userId);
-                const userPositionDiv = document.getElementById('userPosition');
-
-                if (userPosition !== -1) {
-                    userPositionDiv.innerHTML = `
-                        <div class="flex justify-between items-center p-4 bg-[#1e293b] rounded-lg">
-                            <div class="text-left">
-                                <div class="text-white font-bold">${this.username}</div>
-                                <div class="text-gray-400 text-sm">You</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-bold text-white">#${userPosition + 1}</div>
-                                <div class="text-gray-400 text-xs">Rank</div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-[#10b981] font-bold">${this.balance.toLocaleString()}</div>
-                                <div class="text-gray-400 text-xs">coins</div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    userPositionDiv.innerHTML = '<div class="text-gray-400">Not ranked</div>';
+                if (users.length === 0) {
+                    leaderboardContent.innerHTML = '<div class="text-center py-12 text-gray-400">No data available</div>';
                 }
-            }
-
-            // RAIN SYSTEM (now in wallet modal)
-            initRain() {
-                // Listen for active rains
-                database.ref('activeRain').on('value', (snapshot) => {
-                    const rain = snapshot.val();
-                    if (rain && rain.active) {
-                        this.rainActive = true;
-                        this.currentRain = rain;
-                        this.showRainPanel(rain);
-                    } else {
-                        this.rainActive = false;
-                        this.hideRainPanel();
-                    }
-                });
-            }
-
-            showRainPanel(rain) {
-                document.getElementById('rainCreateSection').classList.add('hidden');
-                document.getElementById('rainJoinSection').classList.remove('hidden');
-
-                document.getElementById('rainAmount').textContent = rain.amount;
-                document.getElementById('rainJoinedCount').textContent = Object.keys(rain.participants || {}).length;
-
-                this.startRainTimer(rain.endTime);
-            }
-
-            hideRainPanel() {
-                document.getElementById('rainJoinSection').classList.add('hidden');
-                document.getElementById('rainCreateSection').classList.remove('hidden');
-            }
-
-            startRainTimer(endTime) {
-                const timerElement = document.getElementById('rainTimer');
-                const updateTimer = () => {
-                    const now = Date.now();
-                    const timeLeft = Math.max(0, endTime - now);
-                    const minutes = Math.floor(timeLeft / 60000);
-                    const seconds = Math.floor((timeLeft % 60000) / 1000);
-
-                    timerElement.textContent = 
-                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-                    if (timeLeft <= 0) {
-                        clearInterval(this.rainTimerInterval);
-                        timerElement.textContent = '00:00';
-                    }
-                };
-
-                updateTimer();
-                this.rainTimerInterval = setInterval(updateTimer, 1000);
-            }
-
-            async createRain() {
-                if (!this.userId) {
-                    this.showToast('Please login to create rain', 'error');
-                    return;
-                }
-
-                const amount = parseInt(document.getElementById('rainAmountInput').value);
-                if (amount < 250) {
-                    this.showToast('Minimum rain amount is 250 coins', 'error');
-                    return;
-                }
-
-                if (amount > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                // Check if rain already active
-                if (this.rainActive) {
-                    this.showToast('A rain is already active', 'error');
-                    return;
-                }
-
-                // Deduct amount
-                this.balance -= amount;
-                this.updateBalance();
-
-                // Create rain
-                const rainId = 'rain_' + Date.now();
-                const endTime = Date.now() + (7 * 60 * 1000); // 7 minutes
-
-                const rainData = {
-                    id: rainId,
-                    hostId: this.userId,
-                    hostUsername: this.username,
-                    amount: amount,
-                    participants: {},
-                    endTime: endTime,
-                    active: true,
-                    createdAt: Date.now()
-                };
-
-                await database.ref('activeRain').set(rainData);
-
-                this.showToast(`Rain started with ${amount} coins!`, 'success');
-                this.playSound('rain');
-
-                // Add to chat
-                this.addChatMessage('System', 
-                    `${this.username} started a rain with ${amount} coins! Join in the next 7 minutes!`, 
-                    'text-[#38bdf8]');
-            }
-
-            async joinRain() {
-                if (!this.userId) {
-                    this.showToast('Please login to join rain', 'error');
-                    return;
-                }
-
-                if (this.rainJoined) {
-                    this.showToast('You already joined this rain', 'error');
-                    return;
-                }
-
-                if (!this.rainActive || !this.currentRain) {
-                    this.showToast('No active rain', 'error');
-                    return;
-                }
-
-                // Add user to participants
-                await database.ref(`activeRain/participants/${this.userId}`).set({
-                    username: this.username,
-                    joinedAt: Date.now()
-                });
-
-                this.rainJoined = true;
-                this.showToast('Joined the rain! Wait for it to end.', 'success');
             }
         }
 
