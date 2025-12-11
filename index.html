@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moon Casino - Premium Crypto Casino</title>
+    <title>Moon Casino - Fun</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -106,14 +106,6 @@
             0% { transform: translateY(-100px) rotate(-10deg) scale(0.5); opacity: 0; }
             60% { transform: translateY(10px) rotate(2deg) scale(1.05); opacity: 1; }
             100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
-        }
-        
-        @keyframes coin-flip {
-            0% { transform: rotateY(0deg) scale(1); }
-            25% { transform: rotateY(90deg) scale(1.1); }
-            50% { transform: rotateY(180deg) scale(1); }
-            75% { transform: rotateY(270deg) scale(1.1); }
-            100% { transform: rotateY(360deg) scale(1); }
         }
         
         @keyframes bounce {
@@ -351,78 +343,6 @@
             pointer-events: none;
         }
         
-        /* CoinFlip Game */
-        .coinflip-container {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border-radius: 24px;
-            padding: 30px;
-            border: 2px solid #334155;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .coinflip-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
-            animation: float 10s linear infinite;
-        }
-        
-        .coin {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f59e0b, #d97706);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 52px;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.4);
-            margin: 0 auto;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .coin:hover:not(.flipping) {
-            transform: scale(1.05);
-            box-shadow: 0 20px 45px rgba(245, 158, 11, 0.6);
-        }
-        
-        .coin::before {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #fbbf24, #f59e0b, #fbbf24);
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .coin:hover:not(.flipping)::before {
-            opacity: 0.6;
-        }
-        
-        .coin.flipping {
-            animation: coin-flip 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .coin-heads {
-            background: linear-gradient(45deg, #f59e0b, #b45309);
-        }
-        
-        .coin-tails {
-            background: linear-gradient(45deg, #6b7280, #4b5563);
-        }
-        
         /* Sound Toggle */
         .sound-toggle {
             position: fixed;
@@ -552,19 +472,6 @@
             margin: 8px 0;
         }
         
-        /* Floating Animation for Game Icons */
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .float-delay-1 {
-            animation-delay: 0.5s;
-        }
-        
-        .float-delay-2 {
-            animation-delay: 1s;
-        }
-        
         /* Stats Cards */
         .stats-card {
             background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
@@ -622,12 +529,6 @@
                 margin: 0 4px;
             }
             
-            .coin {
-                width: 100px;
-                height: 100px;
-                font-size: 36px;
-            }
-            
             .sound-toggle {
                 width: 50px;
                 height: 50px;
@@ -663,10 +564,11 @@
             margin-bottom: 20px;
             border-bottom: 2px solid #2a3042;
             padding-bottom: 10px;
+            overflow-x: auto;
         }
         
         .tab-btn {
-            padding: 12px 24px;
+            padding: 12px 20px;
             background: transparent;
             border: none;
             color: #6b7280;
@@ -674,6 +576,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
+            white-space: nowrap;
         }
         
         .tab-btn:hover {
@@ -687,16 +590,19 @@
             border-bottom: 3px solid #8b5cf6;
         }
         
-        /* Blackjack Table */
+        /* Blackjack Table - FIXED */
         .blackjack-table {
             background: linear-gradient(135deg, #064e3b, #022c22);
-            border-radius: 24px;
-            border: 8px solid #3f2c22;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            border: 6px solid #3f2c22;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
-            max-height: 600px;
-            overflow-y: auto;
+            padding: 20px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
         .blackjack-table::before {
@@ -765,8 +671,37 @@
         
         /* Blackjack fit adjustment */
         .blackjack-fit-container {
-            max-height: calc(100vh - 200px);
+            max-height: calc(100vh - 180px);
             overflow-y: auto;
+        }
+        
+        /* Game Hand Containers */
+        .hand-container {
+            min-height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+        }
+        
+        /* Status Text */
+        .status-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Game Container */
+        .game-container {
+            padding: 1rem;
+            min-height: calc(100vh - 200px);
         }
     </style>
 </head>
@@ -847,11 +782,6 @@
                     <span>Blackjack</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <button onclick="app.loadGame('coinflip')" id="nav-coinflip" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group">
-                    <i class="fa-solid fa-coins text-yellow-500 w-5 text-center group-hover:scale-110 transition-all duration-300"></i> 
-                    <span>CoinFlip</span>
-                    <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
-                </button>
                 <button onclick="app.loadGame('leaderboard')" id="nav-leaderboard" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group">
                     <i class="fa-solid fa-trophy text-[#f59e0b] w-5 text-center group-hover:scale-110 transition-all duration-300"></i> 
                     <span>Leaderboard</span>
@@ -870,7 +800,7 @@
         </aside>
         
         <!-- Main Content -->
-        <main id="mainContent" class="flex-1 overflow-y-auto p-4 md:p-8"></main>
+        <main id="mainContent" class="flex-1 overflow-y-auto p-4 md:p-6"></main>
         
         <!-- Chat -->
         <aside id="chatSidebar" class="hidden md:flex flex-col w-80 bg-[#161b26]/95 backdrop-blur-xl border-l border-[#2a3042] shadow-2xl">
@@ -1015,8 +945,7 @@
             lose: new Audio('sounds/lose.wav'),
             mine: new Audio('sounds/explosion.wav'),
             gem: new Audio('sounds/win.wav'),
-            click: new Audio('sounds/click.wav'),
-            coin: new Audio('sounds/coin.wav')
+            click: new Audio('sounds/click.wav')
         };
 
         // Set volume for all sounds
@@ -1058,8 +987,6 @@
                 this.bjInProgress = false;
                 this.lastFreeCoinsClaim = 0;
                 this.bigWinThreshold = 1000;
-                this.coinflipActive = false;
-                this.coinflipSide = null;
                 this.chatLoadedAt = null;
                 this.liveWinsInterval = null;
                 this.minesDragging = false;
@@ -1527,7 +1454,7 @@
 
                 this.updateBalance();
                 this.showToast(`Sent ${amount} coins to ${recipientUsername}`, 'success');
-                this.playSound('coin');
+                this.playSound('click');
 
                 // Clear form
                 document.getElementById('sendToUsername').value = '';
@@ -1570,7 +1497,7 @@
             addChatMessage(user, msg, color = 'text-white', saveToDB = true) {
                 const messages = document.getElementById('chatMessages');
                 const div = document.createElement('div');
-                div.className = `flex gap-3 ${color} animate-fade-in-up`;
+                div.className = `flex gap-3 ${color}`;
                 div.innerHTML = `
                     <span class="font-bold min-w-[80px]">${user}:</span> 
                     <span class="flex-1">${msg}</span>
@@ -1776,9 +1703,6 @@
                     case 'blackjack':
                         this.renderBlackjack();
                         break;
-                    case 'coinflip':
-                        this.renderCoinflip();
-                        break;
                     case 'leaderboard':
                         this.renderLeaderboard();
                         break;
@@ -1791,20 +1715,20 @@
 
             renderHome() {
                 this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto space-y-8">
-                        <div class="rounded-3xl bg-gradient-to-r from-[#4c1d95] to-[#2e1065] p-8 md:p-12 relative overflow-hidden border border-[#8b5cf6]/30 shadow-2xl">
+                    <div class="max-w-6xl mx-auto space-y-6">
+                        <div class="rounded-3xl bg-gradient-to-r from-[#4c1d95] to-[#2e1065] p-6 md:p-8 relative overflow-hidden border border-[#8b5cf6]/30 shadow-2xl">
                             <div class="absolute top-0 right-0 w-96 h-96 bg-[#8b5cf6] rounded-full mix-blend-overlay filter blur-[100px] opacity-30"></div>
                             <div class="relative z-10">
-                                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-bold text-white mb-6 tracking-wider">
+                                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-bold text-white mb-4 tracking-wider">
                                     <span class="w-2.5 h-2.5 bg-[#10b981] rounded-full animate-pulse"></span> PREMIUM CASINO
                                 </div>
-                                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">Welcome, <span class="text-[#a78bfa]">${this.username || 'Guest'}</span>!</h1>
-                                <p class="text-[#d8b4fe] text-xl max-w-2xl mb-10">Experience the ultimate crypto casino with fair games, stunning animations, and real-time multiplayer features.</p>
-                                <div class="flex flex-wrap gap-6">
-                                    <button onclick="app.loadGame('blackjack')" class="btn-primary px-10 py-4 rounded-2xl font-bold text-xl shadow-xl hover:scale-105 transition-all duration-300">
+                                <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Welcome, <span class="text-[#a78bfa]">${this.username || 'Guest'}</span>!</h1>
+                                <p class="text-[#d8b4fe] text-lg max-w-2xl mb-6">Experience the ultimate crypto casino with fair games, stunning animations, and real-time multiplayer features.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <button onclick="app.loadGame('blackjack')" class="btn-primary px-6 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-lg md:text-xl shadow-xl hover:scale-105 transition-all duration-300">
                                         <i class="fa-solid fa-diamond mr-3"></i> Play Blackjack
                                     </button>
-                                    <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#1f2937] to-[#374151] hover:from-[#374151] hover:to-[#4b5563] text-white px-10 py-4 rounded-2xl font-bold text-xl border border-[#374151] transition-all duration-300 hover:scale-105">
+                                    <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#1f2937] to-[#374151] hover:from-[#374151] hover:to-[#4b5563] text-white px-6 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-lg md:text-xl border border-[#374151] transition-all duration-300 hover:scale-105">
                                         <i class="fa-solid fa-gift mr-3"></i> Free Coins
                                     </button>
                                 </div>
@@ -1822,14 +1746,13 @@
                             </div>
                         </div>
                         
-                        <h2 class="text-3xl font-bold text-white flex items-center gap-3">
+                        <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
                             <i class="fa-solid fa-gamepad text-[#8b5cf6]"></i> Featured Games
                         </h2>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                             ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs', '#f59e0b')}
                             ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer', '#10b981')}
-                            ${this.getGameCard('coinflip', 'CoinFlip', 'fa-coins', 'from-[#7c2d12] to-[#431407]', 'Heads or Tails?', '#f59e0b')}
                         </div>
                     </div>
                 `;
@@ -1915,19 +1838,19 @@
 
             getGameCard(id, name, icon, gradient, desc, color) {
                 return `
-                    <div onclick="app.loadGame('${id}')" class="game-card cursor-pointer rounded-2xl overflow-hidden group relative h-56">
+                    <div onclick="app.loadGame('${id}')" class="game-card cursor-pointer rounded-2xl overflow-hidden group relative h-48">
                         <div class="absolute inset-0 bg-gradient-to-br ${gradient} opacity-90 transition-all duration-500 group-hover:opacity-100"></div>
-                        <div class="absolute inset-0 p-8 flex flex-col justify-between z-10">
+                        <div class="absolute inset-0 p-6 flex flex-col justify-between z-10">
                             <div class="flex justify-between items-start">
-                                <div class="bg-black/30 p-4 rounded-2xl backdrop-blur-sm">
-                                    <i class="fa-solid ${icon} text-3xl text-white"></i>
+                                <div class="bg-black/30 p-3 rounded-2xl backdrop-blur-sm">
+                                    <i class="fa-solid ${icon} text-2xl text-white"></i>
                                 </div>
-                                <i class="fa-solid fa-arrow-right text-white/50 -translate-x-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-xl"></i>
+                                <i class="fa-solid fa-arrow-right text-white/50 -translate-x-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-lg"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-white mb-2">${name}</h3>
+                                <h3 class="text-xl font-bold text-white mb-2">${name}</h3>
                                 <p class="text-white/70 text-sm">${desc}</p>
-                                <div class="mt-4">
+                                <div class="mt-3">
                                     <span class="inline-block px-3 py-1 rounded-full text-xs font-bold" style="background: ${color}20; color: ${color}">PLAY NOW</span>
                                 </div>
                             </div>
@@ -1939,12 +1862,12 @@
             // MINES GAME with drag selection
             renderMines() {
                 this.mainContent.innerHTML = `
-                    <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 min-h-[600px] items-start">
-                        <div class="w-full md:w-80 bg-gradient-to-b from-[#161b26] to-[#11141c] p-8 rounded-3xl border border-[#2a3042] shadow-2xl sticky top-8">
-                            <div class="mb-8">
+                    <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-6 min-h-[600px] items-start game-container">
+                        <div class="w-full md:w-72 bg-gradient-to-b from-[#161b26] to-[#11141c] p-6 rounded-3xl border border-[#2a3042] shadow-2xl sticky top-8">
+                            <div class="mb-6">
                                 <label class="text-sm text-[#8b5cf6] font-bold mb-3 block tracking-wider">Bet Amount</label>
                                 <div class="flex bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-xl border border-[#2a3042] p-1">
-                                    <div class="pl-4 py-3.5 text-[#8b5cf6] font-bold"><i class="fa-solid fa-coins"></i></div>
+                                    <div class="pl-4 py-3 text-[#8b5cf6] font-bold"><i class="fa-solid fa-coins"></i></div>
                                     <input type="number" id="minesBetInput" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-4 font-bold text-lg outline-none">
                                     <div class="flex pr-2">
                                         <button onclick="document.getElementById('minesBetInput').value = Math.min(${this.balance}, document.getElementById('minesBetInput').value * 2)" class="px-4 text-sm font-bold text-[#8b5cf6] hover:text-white transition-all duration-300">2x</button>
@@ -1952,30 +1875,30 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-8">
+                            <div class="mb-6">
                                 <label class="text-sm text-[#8b5cf6] font-bold mb-3 block tracking-wider">Mines Count</label>
-                                <div class="grid grid-cols-5 gap-3">
+                                <div class="grid grid-cols-5 gap-2">
                                     ${[1,3,5,10,24].map(n => `
-                                        <button onclick="app.setMinesCount(${n})" class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] text-[#b1bad3] rounded-xl py-3 font-bold hover:border-[#8b5cf6] hover:text-white transition-all duration-300 ${n===3?'border-[#8b5cf6] text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]':''}" data-val="${n}">${n}</button>
+                                        <button onclick="app.setMinesCount(${n})" class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] text-[#b1bad3] rounded-xl py-2.5 font-bold hover:border-[#8b5cf6] hover:text-white transition-all duration-300 ${n===3?'border-[#8b5cf6] text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]':''}" data-val="${n}">${n}</button>
                                     `).join('')}
                                 </div>
                                 <input type="hidden" id="minesCountInput" value="3">
                             </div>
-                            <div class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-2xl p-6 mb-8 border border-[#2a3042] flex justify-between items-center">
+                            <div class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-2xl p-4 mb-6 border border-[#2a3042] flex justify-between items-center">
                                 <div>
                                     <div class="text-xs text-[#6b7280] tracking-wider">Next Tile</div>
-                                    <div class="text-[#10b981] font-bold text-2xl" id="minesNextMult">1.13x</div>
+                                    <div class="text-[#10b981] font-bold text-xl" id="minesNextMult">1.13x</div>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-xs text-[#6b7280] tracking-wider">Profit</div>
-                                    <div class="text-white font-bold text-2xl" id="minesProfit">0</div>
+                                    <div class="text-white font-bold text-xl" id="minesProfit">0</div>
                                 </div>
                             </div>
-                            <button id="minesBtn" onclick="app.playMines()" class="w-full btn-primary py-5 rounded-2xl font-bold text-xl tracking-wider hover:scale-[1.02] transition-all duration-300">
+                            <button id="minesBtn" onclick="app.playMines()" class="w-full btn-primary py-4 rounded-2xl font-bold text-lg tracking-wider hover:scale-[1.02] transition-all duration-300">
                                 <i class="fa-solid fa-play mr-2"></i> Start Game
                             </button>
                         </div>
-                        <div class="flex-1 w-full bg-gradient-to-b from-[#161b26] to-[#11141c] rounded-3xl p-10 border border-[#2a3042] shadow-2xl flex items-center justify-center relative overflow-hidden">
+                        <div class="flex-1 w-full bg-gradient-to-b from-[#161b26] to-[#11141c] rounded-3xl p-6 border border-[#2a3042] shadow-2xl flex items-center justify-center relative overflow-hidden">
                             <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8b5cf6] via-[#10b981] to-[#8b5cf6] animate-shimmer"></div>
                             <div class="mines-grid-container" id="minesGrid">
                                 ${Array(25).fill(0).map((_,i)=>`
@@ -2136,7 +2059,7 @@
 
                 const btn = document.getElementById('minesBtn');
                 btn.innerHTML = '<i class="fa-solid fa-money-bill-wave mr-2"></i> Cash Out <span id="minesCashoutVal" class="ml-2 bg-white/20 px-3 py-1 rounded-lg text-sm">0</span>';
-                btn.className = 'w-full bg-gradient-to-r from-[#10b981] to-[#059669] text-white py-5 rounded-2xl font-bold text-xl tracking-wider hover:scale-[1.02] transition-all duration-300';
+                btn.className = 'w-full bg-gradient-to-r from-[#10b981] to-[#059669] text-white py-4 rounded-2xl font-bold text-lg tracking-wider hover:scale-[1.02] transition-all duration-300';
 
                 document.querySelectorAll('.mine-tile-modern').forEach(el => {
                     el.className = 'mine-tile-modern';
@@ -2157,13 +2080,13 @@
 
                 if (this.minesGrid[idx] === 'mine') {
                     tile.classList.add('mine');
-                    tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-4xl animate-bounce"></i>';
+                    tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-3xl animate-bounce"></i>';
                     this.playSound('mine');
                     this.recordLoss(this.minesBet, 'Mines');
                     this.endMines(false, idx);
                 } else {
                     tile.classList.add('gem');
-                    tile.innerHTML = '<i class="fa-solid fa-gem text-[#10b981] text-3xl animate-pulse"></i>';
+                    tile.innerHTML = '<i class="fa-solid fa-gem text-[#10b981] text-2xl animate-pulse"></i>';
                     this.playSound('gem');
                     this.minesRevealedCount++;
 
@@ -2190,7 +2113,7 @@
                 const btn = document.getElementById('minesBtn');
                 if (btn) {
                     btn.innerHTML = '<i class="fa-solid fa-play mr-2"></i> Start Game';
-                    btn.className = 'w-full btn-primary py-5 rounded-2xl font-bold text-xl tracking-wider hover:scale-[1.02] transition-all duration-300';
+                    btn.className = 'w-full btn-primary py-4 rounded-2xl font-bold text-lg tracking-wider hover:scale-[1.02] transition-all duration-300';
                 }
 
                 this.minesGrid.forEach((type, idx) => {
@@ -2198,10 +2121,10 @@
                     if (!tile.classList.contains('revealed')) {
                         tile.classList.add('revealed');
                         if (type === 'mine') {
-                            tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-xl opacity-30"></i>';
+                            tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-lg opacity-30"></i>';
                             tile.classList.add('mine-hidden');
                         } else {
-                            tile.innerHTML = '<i class="fa-solid fa-gem text-white/10 text-xl"></i>';
+                            tile.innerHTML = '<i class="fa-solid fa-gem text-white/10 text-lg"></i>';
                             tile.classList.add('safe-hidden');
                         }
                     }
@@ -2223,7 +2146,7 @@
                 this.endMines(true, -1);
             }
 
-            // BLACKJACK GAME - Fixed to fit without scrolling
+            // BLACKJACK GAME - FIXED UI
             renderBlackjack() {
                 this.bjInProgress = false;
                 this.bjSettled = false;
@@ -2233,54 +2156,52 @@
                 this.bjDealerHand = [];
 
                 this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto flex flex-col gap-6 blackjack-fit-container">
+                    <div class="max-w-6xl mx-auto flex flex-col gap-6">
                         <div class="text-center mb-2">
-                            <h2 class="text-4xl font-bold text-white mb-2">Blackjack</h2>
-                            <p class="text-gray-400 text-lg">Beat the dealer without going over 21</p>
+                            <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Blackjack</h2>
+                            <p class="text-gray-400">Beat the dealer without going over 21</p>
                         </div>
                         
-                        <div class="blackjack-table p-6 md:p-8">
-                            <div class="flex flex-col items-center justify-between h-full">
-                                <!-- Dealer Section -->
-                                <div class="w-full mb-8">
-                                    <div class="flex items-center justify-center gap-3 mb-4">
-                                        <i class="fa-solid fa-user-tie text-2xl text-[#a7f3d0]"></i>
-                                        <div class="text-[#a7f3d0] text-lg font-bold tracking-wider">Dealer</div>
-                                        <div class="bg-black/40 px-4 py-2 rounded-full text-white font-bold text-lg" id="dealerScore">0</div>
-                                    </div>
-                                    <div id="dealerHand" class="flex justify-center items-center gap-2 min-h-[120px] flex-wrap"></div>
+                        <div class="blackjack-table">
+                            <!-- Dealer Section -->
+                            <div class="w-full mb-8">
+                                <div class="flex items-center justify-center gap-3 mb-4">
+                                    <i class="fa-solid fa-user-tie text-xl text-[#a7f3d0]"></i>
+                                    <div class="text-[#a7f3d0] font-bold tracking-wider">Dealer</div>
+                                    <div class="bg-black/40 px-4 py-2 rounded-full text-white font-bold text-lg" id="dealerScore">0</div>
                                 </div>
-                                
-                                <!-- Game Status -->
-                                <div id="bjStatus" class="text-center my-4">
-                                    <div class="text-xl font-bold text-white" id="bjGameStatus">Place your bet and deal!</div>
-                                </div>
-                                
-                                <!-- Player Section -->
-                                <div class="w-full mt-8">
-                                    <div id="playerHand" class="flex justify-center items-center gap-2 min-h-[120px] mb-4 flex-wrap"></div>
-                                    <div class="flex items-center justify-center gap-3">
-                                        <i class="fa-solid fa-user text-2xl text-[#a7f3d0]"></i>
-                                        <div class="text-[#a7f3d0] text-lg font-bold tracking-wider">You</div>
-                                        <div class="bg-black/40 px-4 py-2 rounded-full text-white font-bold text-lg" id="playerScore">0</div>
-                                    </div>
+                                <div id="dealerHand" class="hand-container"></div>
+                            </div>
+                            
+                            <!-- Game Status -->
+                            <div id="bjStatus" class="text-center my-4">
+                                <div class="status-text text-white" id="bjGameStatus">Place your bet and deal!</div>
+                            </div>
+                            
+                            <!-- Player Section -->
+                            <div class="w-full mt-8">
+                                <div id="playerHand" class="hand-container mb-4"></div>
+                                <div class="flex items-center justify-center gap-3">
+                                    <i class="fa-solid fa-user text-xl text-[#a7f3d0]"></i>
+                                    <div class="text-[#a7f3d0] font-bold tracking-wider">You</div>
+                                    <div class="bg-black/40 px-4 py-2 rounded-full text-white font-bold text-lg" id="playerScore">0</div>
                                 </div>
                             </div>
                             
                             <!-- Game Overlay -->
                             <div id="bjOverlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm hidden z-20 flex-col items-center justify-center rounded-2xl">
-                                <div id="bjMessage" class="text-4xl md:text-6xl font-black text-white mb-4 text-center"></div>
-                                <div id="bjPayout" class="text-2xl md:text-4xl font-bold text-yellow-300 mb-6"></div>
-                                <button onclick="app.resetBlackjackUI()" class="px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xl md:text-2xl rounded-2xl font-bold shadow-2xl hover:scale-110 transition-all duration-300">
+                                <div id="bjMessage" class="text-3xl md:text-4xl font-black text-white mb-4 text-center"></div>
+                                <div id="bjPayout" class="text-xl md:text-2xl font-bold text-yellow-300 mb-6"></div>
+                                <button onclick="app.resetBlackjackUI()" class="px-8 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-lg rounded-2xl font-bold shadow-2xl hover:scale-110 transition-all duration-300">
                                     <i class="fa-solid fa-rotate-right mr-3"></i> Play Again
                                 </button>
                             </div>
                         </div>
                         
                         <!-- Game Controls -->
-                        <div class="game-controls mt-4">
+                        <div class="game-controls">
                             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                                <div class="flex items-center gap-4 bg-gradient-to-r from-[#0b0e14] to-[#1e293b] px-6 py-3 rounded-2xl border border-[#2a3042] min-w-[180px]">
+                                <div class="flex items-center gap-4 bg-gradient-to-r from-[#0b0e14] to-[#1e293b] px-6 py-3 rounded-2xl border border-[#2a3042]">
                                     <span class="text-gray-400 font-bold text-sm tracking-wider">BET</span>
                                     <input type="number" id="bjBetInput" value="50" min="1" max="${this.balance}" class="bg-transparent text-white font-bold text-xl w-28 outline-none text-center">
                                     <div class="flex gap-2">
@@ -2289,15 +2210,15 @@
                                     </div>
                                 </div>
                                 
-                                <div class="flex gap-3 md:gap-4">
-                                    <button id="btnDeal" onclick="app.bjDeal()" class="px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black text-lg md:text-xl rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300">
+                                <div class="flex gap-3">
+                                    <button id="btnDeal" onclick="app.bjDeal()" class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black text-lg rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300">
                                         <i class="fa-solid fa-play mr-3"></i> DEAL CARDS
                                     </button>
-                                    <div id="bjActions" class="hidden flex gap-3 md:gap-4">
-                                        <button id="btnHit" onclick="app.bjHit()" class="px-6 md:px-10 py-3 md:py-4 bg-gradient-to-r from-gray-700 to-gray-800 text-white font-bold text-lg md:text-xl rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+                                    <div id="bjActions" class="hidden flex gap-3">
+                                        <button id="btnHit" onclick="app.bjHit()" class="px-6 py-3 bg-gradient-to-r from-gray-700 to-gray-800 text-white font-bold text-lg rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
                                             <i class="fa-solid fa-plus mr-2"></i> HIT
                                         </button>
-                                        <button id="btnStand" onclick="app.bjStand()" class="px-6 md:px-10 py-3 md:py-4 bg-gradient-to-r from-emerald-600 to-green-700 text-white font-black text-lg md:text-xl rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
+                                        <button id="btnStand" onclick="app.bjStand()" class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-700 text-white font-black text-lg rounded-2xl shadow-lg hover:scale-105 transition-all duration-300">
                                             <i class="fa-solid fa-hand mr-2"></i> STAND
                                         </button>
                                     </div>
@@ -2690,230 +2611,13 @@
                 this.playSound('click');
             }
 
-            // COINFLIP GAME
-            renderCoinflip() {
-                this.coinflipActive = false;
-                this.coinflipSide = null;
-
-                this.mainContent.innerHTML = `
-                    <div class="max-w-4xl mx-auto">
-                        <div class="text-center mb-8">
-                            <h2 class="text-4xl font-bold text-white mb-4">CoinFlip</h2>
-                            <p class="text-gray-400 text-lg">Heads or Tails? Double your money!</p>
-                        </div>
-                        
-                        <div class="coinflip-container p-8">
-                            <div class="text-center mb-10">
-                                <div class="coin" id="coin" onclick="app.flipCoin()">
-                                    <div class="text-5xl">🎲</div>
-                                </div>
-                                <div class="text-gray-400 text-sm mt-4">Click the coin to flip</div>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                                <div class="text-center">
-                                    <div class="text-gray-400 text-sm mb-3 tracking-wider">Select Side</div>
-                                    <div class="flex gap-6 justify-center">
-                                        <button onclick="app.selectCoinSide('heads')" id="btnHeads" class="w-32 h-32 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl border-4 border-yellow-400 flex flex-col items-center justify-center text-white font-bold text-xl shadow-2xl hover:scale-105 transition-all duration-300">
-                                            <i class="fa-solid fa-heading text-5xl mb-3"></i>
-                                            Heads
-                                            <div class="text-sm font-normal mt-2">2x Payout</div>
-                                        </button>
-                                        <button onclick="app.selectCoinSide('tails')" id="btnTails" class="w-32 h-32 bg-gradient-to-br from-gray-600 to-gray-800 rounded-2xl border-4 border-gray-500 flex flex-col items-center justify-center text-white font-bold text-xl shadow-2xl hover:scale-105 transition-all duration-300">
-                                            <i class="fa-solid fa-feather text-5xl mb-3"></i>
-                                            Tails
-                                            <div class="text-sm font-normal mt-2">2x Payout</div>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex flex-col justify-center">
-                                    <div class="mb-6">
-                                        <label class="text-gray-400 text-sm mb-3 block tracking-wider">Bet Amount</label>
-                                        <div class="flex bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-xl border border-[#2a3042] p-1">
-                                            <div class="pl-4 py-3.5 text-yellow-400 font-bold"><i class="fa-solid fa-coins"></i></div>
-                                            <input type="number" id="coinflipBet" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-4 font-bold text-lg outline-none">
-                                            <div class="flex pr-2">
-                                                <button onclick="document.getElementById('coinflipBet').value = Math.min(${this.balance}, document.getElementById('coinflipBet').value * 2)" class="px-4 text-sm font-bold text-yellow-400 hover:text-white transition-all duration-300">2x</button>
-                                                <button onclick="document.getElementById('coinflipBet').value = Math.max(1, document.getElementById('coinflipBet').value / 2)" class="px-4 text-sm font-bold text-yellow-400 hover:text-white transition-all duration-300">½</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-2xl p-6 border border-[#2a3042] mb-6">
-                                        <div class="text-center">
-                                            <div class="text-gray-400 text-sm mb-2">Potential Win</div>
-                                            <div class="text-white font-bold text-3xl" id="coinflipPotentialWin">20</div>
-                                            <div class="text-gray-500 text-xs mt-2">2x your bet</div>
-                                        </div>
-                                    </div>
-                                    
-                                    <button onclick="app.playCoinflip()" id="coinflipBtn" class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 text-white py-5 rounded-2xl font-bold text-xl tracking-wider hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                                        <i class="fa-solid fa-play mr-3"></i> Flip Coin
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div id="coinflipResult" class="text-center hidden">
-                                <div class="text-3xl font-bold mb-4" id="coinflipResultText"></div>
-                                <div class="text-2xl font-bold" id="coinflipResultAmount"></div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                this.updateCoinflipPotentialWin();
-            }
-
-            selectCoinSide(side) {
-                if (this.coinflipActive) return;
-                
-                this.coinflipSide = side;
-                
-                // Update button styles
-                document.getElementById('btnHeads').classList.remove('border-yellow-400', 'scale-105');
-                document.getElementById('btnTails').classList.remove('border-gray-500', 'scale-105');
-                
-                if (side === 'heads') {
-                    document.getElementById('btnHeads').classList.add('border-yellow-400', 'scale-105');
-                    document.getElementById('btnHeads').style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
-                } else {
-                    document.getElementById('btnTails').classList.add('border-gray-500', 'scale-105');
-                    document.getElementById('btnTails').style.background = 'linear-gradient(135deg, #6b7280, #4b5563)';
-                }
-                
-                this.playSound('click');
-            }
-
-            updateCoinflipPotentialWin() {
-                const bet = parseFloat(document.getElementById('coinflipBet').value) || 10;
-                document.getElementById('coinflipPotentialWin').textContent = (bet * 2).toLocaleString();
-            }
-
-            playCoinflip() {
-                if (!this.userId) {
-                    this.showToast('Please login to play', 'error');
-                    return;
-                }
-
-                if (this.coinflipActive) return;
-                
-                if (!this.coinflipSide) {
-                    this.showToast('Please select heads or tails first', 'error');
-                    return;
-                }
-
-                const bet = parseFloat(document.getElementById('coinflipBet').value);
-                if (isNaN(bet) || bet <= 0) return;
-                if (bet > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                this.playSound('click');
-                this.balance -= bet;
-                this.updateBalance();
-                this.recordWager(bet);
-                this.coinflipBet = bet;
-                this.coinflipActive = true;
-
-                // Disable button during flip
-                document.getElementById('coinflipBtn').disabled = true;
-                document.getElementById('coinflipBtn').innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-3"></i> Flipping...';
-
-                // Start the coin flip animation
-                this.flipCoin();
-            }
-
-            flipCoin() {
-                if (!this.coinflipActive) return;
-                
-                const coin = document.getElementById('coin');
-                coin.classList.add('flipping');
-                this.playSound('coin');
-
-                // Random result
-                const result = Math.random() < 0.5 ? 'heads' : 'tails';
-                const win = result === this.coinflipSide;
-
-                setTimeout(() => {
-                    coin.classList.remove('flipping');
-                    
-                    // Update coin appearance based on result
-                    coin.classList.remove('coin-heads', 'coin-tails');
-                    if (result === 'heads') {
-                        coin.classList.add('coin-heads');
-                        coin.innerHTML = '<div class="text-5xl">👑</div>';
-                    } else {
-                        coin.classList.add('coin-tails');
-                        coin.innerHTML = '<div class="text-5xl">🪙</div>';
-                    }
-
-                    // Show result
-                    const resultElement = document.getElementById('coinflipResult');
-                    const resultText = document.getElementById('coinflipResultText');
-                    const resultAmount = document.getElementById('coinflipResultAmount');
-                    
-                    resultElement.classList.remove('hidden');
-                    
-                    if (win) {
-                        const winAmount = this.coinflipBet * 2;
-                        this.balance += winAmount;
-                        this.updateBalance();
-                        this.recordWin(this.coinflipBet, 'CoinFlip');
-                        
-                        resultText.textContent = `You win! ${result.toUpperCase()}!`;
-                        resultText.style.color = '#10b981';
-                        resultAmount.textContent = `+${winAmount} coins`;
-                        resultAmount.style.color = '#10b981';
-                        
-                        this.showToast(`You won ${winAmount} coins!`, 'success');
-                        this.playSound('win');
-                        
-                        // Confetti for win
-                        confetti({
-                            particleCount: 100,
-                            spread: 70,
-                            origin: { y: 0.6 }
-                        });
-                    } else {
-                        this.recordLoss(this.coinflipBet, 'CoinFlip');
-                        
-                        resultText.textContent = `You lose! ${result.toUpperCase()}!`;
-                        resultText.style.color = '#ef4444';
-                        resultAmount.textContent = `-${this.coinflipBet} coins`;
-                        resultAmount.style.color = '#ef4444';
-                        
-                        this.showToast(`You lost ${this.coinflipBet} coins`, 'error');
-                        this.playSound('lose');
-                    }
-
-                    // Re-enable button
-                    setTimeout(() => {
-                        document.getElementById('coinflipBtn').disabled = false;
-                        document.getElementById('coinflipBtn').innerHTML = '<i class="fa-solid fa-play mr-3"></i> Flip Coin';
-                        this.coinflipActive = false;
-                        this.coinflipSide = null;
-                        
-                        // Reset button styles
-                        document.getElementById('btnHeads').classList.remove('border-yellow-400', 'scale-105');
-                        document.getElementById('btnTails').classList.remove('border-gray-500', 'scale-105');
-                        document.getElementById('btnHeads').style.background = '';
-                        document.getElementById('btnTails').style.background = '';
-                        
-                        // Update potential win for next round
-                        this.updateCoinflipPotentialWin();
-                    }, 2000);
-                }, 1000);
-            }
-
             // LEADERBOARD with Enhanced Stats
             async renderLeaderboard() {
                 this.mainContent.innerHTML = `
                     <div class="max-w-6xl mx-auto">
                         <div class="text-center mb-8">
-                            <h2 class="text-4xl font-bold text-white mb-4">Leaderboard</h2>
-                            <p class="text-gray-400 text-lg">Top players and statistics</p>
+                            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Leaderboard</h2>
+                            <p class="text-gray-400">Top players and statistics</p>
                         </div>
                         
                         <div class="tab-nav">
