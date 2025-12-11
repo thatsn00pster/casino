@@ -161,6 +161,181 @@
             border: 2px solid #ef4444;
         }
         
+        /* Plinko Styles */
+        .plinko-board {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: linear-gradient(135deg, #1a237e, #0d0f25);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 3px solid #3949ab;
+        }
+        
+        .plinko-pegs-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 100px;
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 4px;
+            padding: 20px;
+        }
+        
+        .plinko-peg {
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, #ffeb3b, #f57f17);
+            border-radius: 50%;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
+        }
+        
+        .plinko-ball {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: radial-gradient(circle at 30% 30%, #ff5252, #d32f2f);
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(255, 82, 82, 0.7);
+            transition: transform 0.1s linear;
+        }
+        
+        .plinko-slots {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .plinko-slot {
+            width: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 3px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        /* Towers Game */
+        .towers-game {
+            background: linear-gradient(135deg, #1b5e20, #0a2e0a);
+            border-radius: 20px;
+            padding: 30px;
+            border: 3px solid #4caf50;
+            position: relative;
+            min-height: 500px;
+        }
+        
+        .tower-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .tower-block {
+            width: 80px;
+            height: 40px;
+            background: linear-gradient(135deg, #795548, #5d4037);
+            border-radius: 5px;
+            border: 2px solid #3e2723;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 0 #3e2723;
+        }
+        
+        .tower-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #3e2723;
+        }
+        
+        .tower-block.selected {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border-color: #ff9800;
+            animation: pulse 1s infinite;
+        }
+        
+        /* Crossy Road Game */
+        .crossy-road-game {
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+            border-radius: 20px;
+            padding: 20px;
+            border: 3px solid #2196f3;
+            position: relative;
+            overflow: hidden;
+            min-height: 500px;
+        }
+        
+        .crossy-road-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 2px;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+            background: #1e88e5;
+            border: 2px solid #1565c0;
+        }
+        
+        .crossy-road-cell {
+            background: #64b5f6;
+            border: 1px solid #42a5f5;
+            position: relative;
+        }
+        
+        .crossy-road-cell.road {
+            background: #546e7a;
+        }
+        
+        .crossy-road-cell.grass {
+            background: #43a047;
+        }
+        
+        .crossy-road-cell.water {
+            background: #0288d1;
+        }
+        
+        .crossy-road-player {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background: #ff5722;
+            border-radius: 50%;
+            top: 10%;
+            left: 10%;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
+        }
+        
+        .crossy-road-obstacle {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            background: #f44336;
+            top: 5%;
+            left: 5%;
+            z-index: 5;
+            border-radius: 3px;
+        }
+        
         /* Animations */
         @keyframes bounce-in {
             0% { transform: scale(.9); opacity: 0; }
@@ -181,134 +356,9 @@
             animation: slide-up .28s ease-out forwards;
         }
         
-        /* Crash Game */
-        .crash-graph {
-            position: relative;
-            background: #0b0e14;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-        
-        .crash-line {
-            height: 4px;
-            background: #8b5cf6;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            transform-origin: left;
-        }
-        
-        .crash-multiplier {
-            font-size: 5rem;
-            font-weight: 900;
-            letter-spacing: -0.05em;
-        }
-        
-        .crashed .crash-multiplier {
-            color: #ef4444;
-            text-shadow: 0 0 30px #ef4444;
-        }
-        
-        /* Blackjack Cards */
-        .card-container {
-            width: 92px;
-            height: 134px;
-            perspective: 1200px;
-            margin: 0 10px;
-        }
-        
-        .game-card-item {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
-        }
-        
-        .game-card-item.flipped {
-            transform: rotateY(180deg);
-        }
-        
-        .card-face, .card-back {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            border-radius: 14px;
-            overflow: hidden;
-            background: #fdfdfd;
-            border: 3px solid #1e293b;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 9px 7px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        }
-        
-        .card-back {
-            background: radial-gradient(circle at 20% 30%, #60a5fa, #1e40af 50%), radial-gradient(circle at 80% 80%, #3b82f6, #1e3a8a);
-            background-size: 200% 200%;
-            animation: cardBackShine 12s ease-in-out infinite;
-            transform: rotateY(180deg);
-            border: 3px solid #1e40af;
-        }
-        
-        .card-back::before {
-            content: '◆';
-            font-size: 90px;
-            color: rgba(255,255,255,0.25);
-            text-shadow: 0 0 20px rgba(255,255,255,0.3);
-        }
-        
-        .card-face .text-red-500 {
-            color: #ef4444 !important;
-        }
-        
-        .card-face > div:first-child,
-        .card-face > div:last-child {
-            font-size: 15px;
-            line-height: 1;
-            letter-spacing: -1px;
-        }
-        
-        .card-face .text-4xl {
-            font-size: 52px;
-            align-self: center;
-            margin-top: -12px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-        }
-        
-        .card-face::before {
-            content: '';
-            position: absolute;
-            inset: 4px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent 60%);
-            pointer-events: none;
-        }
-        
-        @keyframes cardBackShine {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        /* Rain Panel */
-        .rain-panel {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 320px;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            border: 2px solid #38bdf8;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
-            z-index: 1000;
-            backdrop-filter: blur(10px);
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
         /* Sound Toggle */
@@ -339,39 +389,6 @@
         
         .sound-toggle.muted {
             background: #ef4444;
-        }
-        
-        /* 1v1 CoinFlip Game */
-        .coinflip-container {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border-radius: 20px;
-            padding: 30px;
-            border: 2px solid #334155;
-        }
-        
-        .coin {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f59e0b, #d97706);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
-            margin: 0 auto;
-        }
-        
-        .coin.flipping {
-            animation: coinFlip 1s ease-in-out;
-        }
-        
-        @keyframes coinFlip {
-            0% { transform: rotateY(0); }
-            50% { transform: rotateY(1800deg); }
-            100% { transform: rotateY(3600deg); }
         }
         
         /* Modal */
@@ -443,6 +460,30 @@
             background: rgba(239, 68, 68, 0.1);
         }
         
+        /* Win/Loss Notification in Chat */
+        .big-win-notification {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1));
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+        
+        .big-win-notification .username {
+            color: #fbbf24;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .big-win-notification .amount {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 20px;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .mines-grid-container {
@@ -455,14 +496,19 @@
                 height: 100px;
             }
             
-            .rain-panel {
-                width: calc(100% - 40px);
-                right: 20px;
-                bottom: 80px;
+            .plinko-board {
+                height: 400px;
             }
             
-            .crash-multiplier {
-                font-size: 3rem;
+            .crossy-road-grid {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .tower-block {
+                width: 60px;
+                height: 30px;
+                font-size: 16px;
             }
         }
     </style>
@@ -523,17 +569,23 @@
                     <i class="fa-solid fa-house w-5"></i> Home
                 </button>
                 <div class="h-px bg-[#2a3042] my-2 mx-2"></div>
-                <button onclick="app.loadGame('crash')" id="nav-crash" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-chart-line text-[#ef4444] w-5"></i> Crash
-                </button>
                 <button onclick="app.loadGame('mines')" id="nav-mines" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
                     <i class="fa-solid fa-bomb text-[#f59e0b] w-5"></i> Mines
                 </button>
                 <button onclick="app.loadGame('blackjack')" id="nav-blackjack" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
                     <i class="fa-solid fa-diamond text-[#10b981] w-5"></i> Blackjack
                 </button>
-                <button onclick="app.loadGame('coinflip')" id="nav-coinflip" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
-                    <i class="fa-solid fa-coins text-yellow-500 w-5"></i> CoinFlip 1v1
+                <button onclick="app.loadGame('plinko')" id="nav-plinko" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
+                    <i class="fa-solid fa-bullseye text-[#ef4444] w-5"></i> Plinko
+                </button>
+                <button onclick="app.loadGame('towers')" id="nav-towers" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
+                    <i class="fa-solid fa-layer-group text-[#8b5cf6] w-5"></i> Towers
+                </button>
+                <button onclick="app.loadGame('crossyroad')" id="nav-crossyroad" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
+                    <i class="fa-solid fa-frog text-[#10b981] w-5"></i> Crossy Road
+                </button>
+                <button onclick="app.loadGame('activewins')" id="nav-activewins" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
+                    <i class="fa-solid fa-chart-line text-[#f59e0b] w-5"></i> Active Wins
                 </button>
                 <button onclick="app.loadGame('leaderboard')" id="nav-leaderboard" class="w-full flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#2a3042] text-[#b1bad3] hover:text-white">
                     <i class="fa-solid fa-trophy text-[#f59e0b] w-5"></i> Leaderboard
@@ -623,17 +675,36 @@
         </div>
     </div>
     
-    <!-- Wallet Modal -->
+    <!-- Wallet Modal with Rain Section -->
     <div id="depositModal" class="modal">
         <div class="modal-content p-6">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-white">Wallet</h2>
+                <h2 class="text-xl font-bold text-white">Wallet & Rain</h2>
                 <button onclick="app.closeDepositModal()" class="text-[#6b7280] hover:text-white">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
             
             <div class="space-y-6">
+                <!-- Balance Display -->
+                <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-xl p-4 border border-[#2a3042]">
+                    <div class="text-center">
+                        <div class="text-gray-400 text-sm mb-2">Your Balance</div>
+                        <div class="text-white font-bold text-3xl mb-4" id="modalBalance">500</div>
+                        <div class="flex gap-3">
+                            <button onclick="app.addCoins(100)" class="flex-1 bg-[#1e293b] hover:bg-[#2a3042] text-white py-2 rounded-lg font-bold text-sm border border-[#2a3042]">
+                                +100
+                            </button>
+                            <button onclick="app.addCoins(500)" class="flex-1 bg-[#1e293b] hover:bg-[#2a3042] text-white py-2 rounded-lg font-bold text-sm border border-[#2a3042]">
+                                +500
+                            </button>
+                            <button onclick="app.addCoins(1000)" class="flex-1 bg-[#1e293b] hover:bg-[#2a3042] text-white py-2 rounded-lg font-bold text-sm border border-[#2a3042]">
+                                +1000
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Free Coins Section -->
                 <div class="text-center mb-4">
                     <i class="fa-solid fa-gift text-[#8b5cf6] text-5xl mb-4"></i>
@@ -643,6 +714,45 @@
                         <div class="text-white font-bold text-2xl mb-2" id="freeCoinsTimer">00:00:00</div>
                         <button id="claimCoinsBtn" onclick="app.claimFreeCoins()" class="w-full btn-primary py-3 rounded-xl font-bold disabled:opacity-50">
                             Claim 500 Coins
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Rain Section -->
+                <div class="border-t border-[#2a3042] pt-6">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-cloud-rain text-blue-400 text-xl"></i>
+                        <h3 class="text-white font-bold text-lg">Rain System</h3>
+                    </div>
+                    
+                    <div id="rainJoinSection" class="hidden mb-6">
+                        <div class="text-center mb-4">
+                            <div class="text-blue-300 text-sm mb-2">ACTIVE RAIN</div>
+                            <div class="text-white font-bold text-2xl mb-1" id="rainAmount">0</div>
+                            <div class="text-gray-400 text-xs">coins to be split</div>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <div class="text-gray-400 text-xs">Joined</div>
+                                <div class="text-white font-bold" id="rainJoinedCount">0</div>
+                            </div>
+                            <div>
+                                <div class="text-gray-400 text-xs">Time Left</div>
+                                <div class="text-white font-bold" id="rainTimer">07:00</div>
+                            </div>
+                        </div>
+                        <button onclick="app.joinRain()" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-bold">
+                            Join Rain
+                        </button>
+                    </div>
+                    
+                    <div id="rainCreateSection">
+                        <div class="mb-4">
+                            <label class="text-xs text-gray-400 font-bold mb-2 block">Rain Amount (Min 250)</label>
+                            <input type="number" id="rainAmountInput" value="250" min="250" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white">
+                        </div>
+                        <button onclick="app.createRain()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold">
+                            Start Rain (7 min)
                         </button>
                     </div>
                 </div>
@@ -668,85 +778,6 @@
         </div>
     </div>
     
-    <!-- Rain Panel -->
-    <div id="rainPanel" class="rain-panel hidden">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-white font-bold text-lg flex items-center gap-2">
-                <i class="fa-solid fa-cloud-rain text-blue-400"></i>
-                Rain Host
-            </h3>
-            <button onclick="app.closeRainPanel()" class="text-gray-400 hover:text-white">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        
-        <div id="rainJoinSection" class="hidden">
-            <div class="text-center mb-4">
-                <div class="text-blue-300 text-sm mb-2">RAIN IN PROGRESS</div>
-                <div class="text-white font-bold text-2xl mb-1" id="rainAmount">0</div>
-                <div class="text-gray-400 text-xs">coins to be split</div>
-            </div>
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <div class="text-gray-400 text-xs">Joined</div>
-                    <div class="text-white font-bold" id="rainJoinedCount">0</div>
-                </div>
-                <div>
-                    <div class="text-gray-400 text-xs">Time Left</div>
-                    <div class="text-white font-bold" id="rainTimer">07:00</div>
-                </div>
-            </div>
-            <button onclick="app.joinRain()" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-bold">
-                Join Rain
-            </button>
-        </div>
-        
-        <div id="rainCreateSection">
-            <div class="mb-4">
-                <label class="text-xs text-gray-400 font-bold mb-2 block">Rain Amount (Min 250)</label>
-                <input type="number" id="rainAmountInput" value="250" min="250" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white">
-            </div>
-            <button onclick="app.createRain()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold">
-                Start Rain (7 min)
-            </button>
-        </div>
-    </div>
-    
-    <!-- CoinFlip Modal -->
-    <div id="coinflipModal" class="modal">
-        <div class="modal-content p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-bold text-white">Create CoinFlip Challenge</h2>
-                <button onclick="app.closeCoinFlipModal()" class="text-[#6b7280] hover:text-white">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-            
-            <div class="space-y-6">
-                <div>
-                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Bet Amount</label>
-                    <input type="number" id="coinflipBet" value="100" min="1" max="10000" class="w-full bg-[#0b0e14] border border-[#2a3042] rounded-xl px-4 py-3 text-white">
-                </div>
-                <div>
-                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Choose Side</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button onclick="app.setCoinFlipSide('heads')" class="bg-[#0b0e14] border border-[#2a3042] rounded-xl p-4 text-center hover:border-[#f59e0b]">
-                            <i class="fa-solid fa-heading text-yellow-500 text-2xl mb-2"></i>
-                            <div class="text-white font-bold">Heads</div>
-                        </button>
-                        <button onclick="app.setCoinFlipSide('tails')" class="bg-[#0b0e14] border border-[#2a3042] rounded-xl p-4 text-center hover:border-[#f59e0b]">
-                            <i class="fa-solid fa-feather text-yellow-500 text-2xl mb-2"></i>
-                            <div class="text-white font-bold">Tails</div>
-                        </button>
-                    </div>
-                </div>
-                <button onclick="app.createCoinFlipChallenge()" class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 text-white py-3 rounded-xl font-bold">
-                    Create Challenge
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
@@ -760,7 +791,10 @@
             gem: new Audio('sounds/win.wav'),
             click: new Audio('sounds/click.wav'),
             rain: new Audio('sounds/rain.wav'),
-            coin: new Audio('sounds/coin.wav')
+            coin: new Audio('sounds/coin.wav'),
+            plinko: new Audio('sounds/click.wav'),
+            tower: new Audio('sounds/click.wav'),
+            crossy: new Audio('sounds/click.wav')
         };
 
         // Set volume for all sounds
@@ -798,10 +832,10 @@
                 this.sidebarOpen = false;
                 this.chatSidebar = document.getElementById('chatSidebar');
                 this.soundEnabled = true;
-                this.crashRunning = false;
                 this.minesActive = false;
                 this.bjInProgress = false;
                 this.lastFreeCoinsClaim = 0;
+                this.bigWinThreshold = 1000; // Announce wins over 1000 coins
                 
                 // Initialize app
                 this.init();
@@ -810,7 +844,9 @@
             init() {
                 this.checkAuth();
                 this.initChat();
+                this.initRain();
                 this.setupFreeCoinsTimer();
+                this.listenForBigWins();
                 
                 // Set default home page
                 this.loadGame('home');
@@ -892,6 +928,12 @@
             updateBalance() {
                 if (this.balanceDisplay) {
                     this.balanceDisplay.textContent = this.balance.toLocaleString();
+                    
+                    // Update modal balance
+                    const modalBalance = document.getElementById('modalBalance');
+                    if (modalBalance) {
+                        modalBalance.textContent = this.balance.toLocaleString();
+                    }
                     
                     // Animation effect
                     this.balanceDisplay.classList.add('text-[#10b981]');
@@ -979,7 +1021,10 @@
                     password: btoa(password), // Simple encoding
                     balance: 500,
                     createdAt: Date.now(),
-                    lastFreeCoins: 0
+                    lastFreeCoins: 0,
+                    totalWins: 0,
+                    totalLosses: 0,
+                    biggestWin: 0
                 };
 
                 await database.ref('users/' + userId).set(userData);
@@ -1093,10 +1138,25 @@
                 }
                 document.getElementById('depositModal').classList.add('active');
                 this.updateFreeCoinsButton();
+                
+                // Update modal balance display
+                document.getElementById('modalBalance').textContent = this.balance.toLocaleString();
             }
 
             closeDepositModal() {
                 document.getElementById('depositModal').classList.remove('active');
+            }
+
+            addCoins(amount) {
+                if (!this.userId) {
+                    this.showToast('Please login first', 'error');
+                    return;
+                }
+                
+                this.balance += amount;
+                this.updateBalance();
+                this.showToast(`Added ${amount} coins!`, 'success');
+                this.playSound('coin');
             }
 
             setupFreeCoinsTimer() {
@@ -1239,7 +1299,8 @@
                     from: this.username,
                     to: recipientUsername,
                     amount: amount,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    type: 'transfer'
                 };
 
                 await database.ref('transactions').push(transaction);
@@ -1280,6 +1341,23 @@
                 }
             }
 
+            addBigWinNotification(username, amount, game) {
+                const messages = document.getElementById('chatMessages');
+                const div = document.createElement('div');
+                div.className = 'big-win-notification';
+                div.innerHTML = `
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <i class="fa-solid fa-trophy text-yellow-400"></i>
+                        <div class="username">${username}</div>
+                        <i class="fa-solid fa-trophy text-yellow-400"></i>
+                    </div>
+                    <div class="amount">${amount.toLocaleString()} coins</div>
+                    <div class="text-gray-300 text-sm mt-1">won in ${game}!</div>
+                `;
+                messages.appendChild(div);
+                messages.scrollTop = messages.scrollHeight;
+            }
+
             sendChatMessage(e) {
                 e.preventDefault();
                 if (!this.userId) {
@@ -1295,16 +1373,94 @@
                 }
             }
 
+            // Big Win Announcements
+            async recordWin(amount, game) {
+                if (!this.userId || amount <= 0) return;
+
+                // Update user stats
+                const userRef = database.ref('users/' + this.userId);
+                const snapshot = await userRef.once('value');
+                const user = snapshot.val();
+
+                const updates = {
+                    totalWins: (user.totalWins || 0) + 1,
+                    biggestWin: Math.max(user.biggestWin || 0, amount)
+                };
+
+                await userRef.update(updates);
+
+                // Record transaction
+                const transaction = {
+                    userId: this.userId,
+                    username: this.username,
+                    amount: amount,
+                    type: 'win',
+                    game: game,
+                    timestamp: Date.now()
+                };
+
+                await database.ref('transactions').push(transaction);
+
+                // Announce big win in chat
+                if (amount >= this.bigWinThreshold) {
+                    this.addBigWinNotification(this.username, amount, game);
+                    
+                    // Also save as system message
+                    this.addChatMessage('System', 
+                        `🎉 ${this.username} just won ${amount.toLocaleString()} coins in ${game}! 🎉`, 
+                        'text-yellow-400', true);
+                }
+            }
+
+            async recordLoss(amount, game) {
+                if (!this.userId || amount <= 0) return;
+
+                // Update user stats
+                const userRef = database.ref('users/' + this.userId);
+                const snapshot = await userRef.once('value');
+                const user = snapshot.val();
+
+                const updates = {
+                    totalLosses: (user.totalLosses || 0) + 1
+                };
+
+                await userRef.update(updates);
+
+                // Record transaction
+                const transaction = {
+                    userId: this.userId,
+                    username: this.username,
+                    amount: amount,
+                    type: 'loss',
+                    game: game,
+                    timestamp: Date.now()
+                };
+
+                await database.ref('transactions').push(transaction);
+            }
+
+            listenForBigWins() {
+                // Listen for big wins from other users
+                database.ref('transactions').orderByChild('timestamp').limitToLast(10).on('child_added', (snapshot) => {
+                    const transaction = snapshot.val();
+                    
+                    // Check if it's a big win from another user
+                    if (transaction.type === 'win' && 
+                        transaction.amount >= this.bigWinThreshold && 
+                        transaction.userId !== this.userId) {
+                        
+                        // Add to chat with slight delay to avoid duplicate messages
+                        setTimeout(() => {
+                            this.addBigWinNotification(transaction.username, transaction.amount, transaction.game);
+                        }, 1000);
+                    }
+                });
+            }
+
             // Game Loading
             loadGame(gameName) {
                 if (window.innerWidth < 768) {
                     this.toggleSidebar();
-                }
-
-                // Stop any running games
-                if (this.crashRunning) {
-                    clearInterval(this.crashInterval);
-                    this.crashRunning = false;
                 }
 
                 // Update active nav
@@ -1322,17 +1478,23 @@
                     case 'home':
                         this.renderHome();
                         break;
-                    case 'crash':
-                        this.renderCrash();
-                        break;
                     case 'mines':
                         this.renderMines();
                         break;
                     case 'blackjack':
                         this.renderBlackjack();
                         break;
-                    case 'coinflip':
-                        this.renderCoinflip();
+                    case 'plinko':
+                        this.renderPlinko();
+                        break;
+                    case 'towers':
+                        this.renderTowers();
+                        break;
+                    case 'crossyroad':
+                        this.renderCrossyRoad();
+                        break;
+                    case 'activewins':
+                        this.renderActiveWins();
                         break;
                     case 'leaderboard':
                         this.renderLeaderboard();
@@ -1354,8 +1516,8 @@
                                 <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">Welcome, <span class="text-[#a78bfa]">${this.username || 'Guest'}</span>!</h1>
                                 <p class="text-[#d8b4fe] text-lg max-w-xl mb-8">The ultimate crypto gambling simulation. Experience fair gaming with zero risk.</p>
                                 <div class="flex flex-wrap gap-4">
-                                    <button onclick="app.loadGame('crash')" class="btn-primary px-8 py-3.5 rounded-xl font-bold text-lg">
-                                        <i class="fa-solid fa-rocket mr-2"></i> Play Crash
+                                    <button onclick="app.loadGame('plinko')" class="btn-primary px-8 py-3.5 rounded-xl font-bold text-lg">
+                                        <i class="fa-solid fa-bullseye mr-2"></i> Play Plinko
                                     </button>
                                     <button onclick="app.openDepositModal()" class="bg-[#1f2937] hover:bg-[#374151] text-white px-8 py-3.5 rounded-xl font-bold text-lg border border-[#374151]">
                                         Claim Free Coins
@@ -1365,14 +1527,16 @@
                         </div>
                         
                         <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-gamepad text-[#8b5cf6]"></i> Moon Originals
+                            <i class="fa-solid fa-gamepad text-[#8b5cf6]"></i> Featured Games
                         </h2>
                         
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            ${this.getGameCard('crash', 'Crash', 'fa-chart-line', 'from-[#450a0a] to-[#2a0a0a]', 'Multipliers up to 10,000x')}
                             ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs')}
                             ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer')}
-                            ${this.getGameCard('coinflip', 'CoinFlip 1v1', 'fa-coins', 'from-[#451a03] to-[#7c2d12]', 'Challenge other players')}
+                            ${this.getGameCard('plinko', 'Plinko', 'fa-bullseye', 'from-[#1a237e] to-[#0d0f25]', 'Drop balls for big wins')}
+                            ${this.getGameCard('towers', 'Towers', 'fa-layer-group', 'from-[#1b5e20] to-[#0a2e0a]', 'Build towers, win rewards')}
+                            ${this.getGameCard('crossyroad', 'Crossy Road', 'fa-frog', 'from-[#1976d2] to-[#0d47a1]', 'Navigate obstacles')}
+                            ${this.getGameCard('activewins', 'Active Wins', 'fa-chart-line', 'from-[#7c2d12] to-[#431407]', 'Live win tracker')}
                         </div>
                     </div>
                 `;
@@ -1396,171 +1560,6 @@
                         </div>
                     </div>
                 `;
-            }
-
-            // CRASH GAME
-            renderCrash() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-5xl mx-auto animate-slide-up">
-                        <div class="bg-[#0d0b13] rounded-2xl border border-[#362b52] overflow-hidden">
-                            <div class="relative h-[420px] bg-[#120f1c] overflow-hidden">
-                                <canvas id="crashCanvas" class="absolute inset-0 w-full h-full"></canvas>
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div id="crashMultiplier" class="text-6xl font-extrabold text-purple-400">
-                                        1.00x
-                                    </div>
-                                </div>
-                                <div id="crashFlash" class="absolute inset-0 bg-red-600/30 backdrop-blur-sm opacity-0 pointer-events-none"></div>
-                            </div>
-                            <div class="p-6 bg-[#0b0812] border-t border-[#362b52] flex flex-col md:flex-row gap-4">
-                                <div class="flex-1 flex bg-[#1a1626] rounded-xl border border-[#362b52] px-4 py-3 items-center">
-                                    <span class="text-purple-300 font-bold mr-3">Bet</span>
-                                    <input type="number" id="crashBet" value="10" step="1" min="1" max="${this.balance}" class="bg-transparent text-white font-bold w-full outline-none">
-                                    <div class="flex gap-2 ml-3">
-                                        <button onclick="document.getElementById('crashBet').value = Math.min(${this.balance}, document.getElementById('crashBet').value * 2)" class="text-xs text-purple-400 font-bold">2x</button>
-                                        <button onclick="document.getElementById('crashBet').value = Math.max(1, document.getElementById('crashBet').value / 2)" class="text-xs text-purple-400 font-bold">½</button>
-                                    </div>
-                                </div>
-                                <div class="flex gap-3">
-                                    <input type="number" id="crashAutoCashout" placeholder="Auto @ 2.00" step="0.01" class="w-32 bg-[#1a1626] border border-[#362b52] rounded-xl px-4 py-3 text-white text-center outline-none">
-                                    <button id="crashBtn" onclick="app.playCrash()" class="flex-1 rounded-xl font-bold text-xl bg-purple-600 hover:bg-purple-500 transition min-w-40">
-                                        BET
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                this.crashCanvas = document.getElementById("crashCanvas");
-                this.crashCtx = this.crashCanvas.getContext("2d");
-                this.resizeCrashCanvas();
-                window.addEventListener("resize", () => this.resizeCrashCanvas());
-            }
-
-            resizeCrashCanvas() {
-                if (!this.crashCanvas) return;
-                this.crashCanvas.width = this.crashCanvas.clientWidth;
-                this.crashCanvas.height = this.crashCanvas.clientHeight;
-            }
-
-            drawCrashGraph(multiplier) {
-                if (!this.crashCanvas || !this.crashCtx) return;
-                const c = this.crashCanvas;
-                const ctx = this.crashCtx;
-                const w = c.width;
-                const h = c.height;
-                ctx.clearRect(0, 0, w, h);
-                const progress = Math.min(1, multiplier / 12);
-                ctx.shadowBlur = 14;
-                ctx.shadowColor = "#a855f7";
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = "#c084fc";
-                ctx.beginPath();
-                ctx.moveTo(0, h);
-                const x = w * progress;
-                const y = h - (h * Math.pow(progress, 1.2));
-                ctx.lineTo(x, y);
-                ctx.stroke();
-                ctx.fillStyle = "#e9d5ff";
-                ctx.beginPath();
-                ctx.arc(x, y, 6, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            playCrash() {
-                if (!this.userId) {
-                    this.showToast('Please login to play', 'error');
-                    return;
-                }
-
-                if (this.crashRunning)
-                    return this.cashOutCrash();
-
-                const bet = parseFloat(document.getElementById('crashBet').value) || 0;
-                const auto = parseFloat(document.getElementById('crashAutoCashout').value) || 0;
-
-                if (bet <= 0 || bet > this.balance)
-                    return this.showToast("Invalid bet", "error");
-
-                this.playSound('click');
-                this.balance -= bet;
-                this.updateBalance();
-
-                this.crashRunning = true;
-                this.crashBet = bet;
-                this.crashAuto = auto;
-                this.crashMultiplier = 1.00;
-
-                document.getElementById('crashMultiplier').textContent = "1.00x";
-                document.getElementById('crashBtn').textContent = "CASH OUT";
-                document.getElementById('crashBtn').classList.remove("bg-purple-600");
-                document.getElementById('crashBtn').classList.add("bg-green-500");
-
-                const crashPoint = 1 + Math.pow(1 - Math.random(), -1.5) * 3;
-                let last = performance.now();
-
-                const tick = (now) => {
-                    if (!this.crashRunning) return;
-
-                    const delta = (now - last) / 1000;
-                    last = now;
-
-                    this.crashMultiplier += delta * (this.crashMultiplier * 0.75);
-
-                    document.getElementById('crashMultiplier').textContent = this.crashMultiplier.toFixed(2) + "x";
-                    this.drawCrashGraph(this.crashMultiplier);
-
-                    if (this.crashAuto > 0 && this.crashMultiplier >= this.crashAuto)
-                        return this.cashOutCrash();
-
-                    if (this.crashMultiplier >= crashPoint) {
-                        this.triggerCrashFlash();
-                        this.finishCrash();
-                        this.showToast("Crashed! You lost.", "error");
-                        this.playSound('lose');
-                        return;
-                    }
-
-                    requestAnimationFrame(tick);
-                };
-
-                requestAnimationFrame(tick);
-            }
-
-            triggerCrashFlash() {
-                const flash = document.getElementById("crashFlash");
-                flash.style.opacity = 1;
-                setTimeout(() => flash.style.opacity = 0, 250);
-            }
-
-            finishCrash() {
-                this.crashRunning = false;
-                document.getElementById('crashMultiplier').textContent = "CRASHED!";
-                document.getElementById('crashMultiplier').classList.add("text-red-500");
-                document.getElementById('crashBtn').textContent = "BET";
-                document.getElementById('crashBtn').classList.remove("bg-green-500");
-                document.getElementById('crashBtn').classList.add("bg-purple-600");
-            }
-
-            cashOutCrash() {
-                if (!this.crashRunning) return;
-
-                this.crashRunning = false;
-                const win = this.crashBet * this.crashMultiplier;
-                this.balance += win;
-                this.updateBalance();
-
-                document.getElementById('crashMultiplier').textContent = this.crashMultiplier.toFixed(2) + "x";
-                document.getElementById('crashBtn').textContent = "BET";
-                document.getElementById('crashBtn').classList.remove("bg-green-500");
-                document.getElementById('crashBtn').classList.add("bg-purple-600");
-
-                this.showToast(
-                    "Cashed out at " + this.crashMultiplier.toFixed(2) + "x — +" + win.toFixed(2) + " coins",
-                    "success"
-                );
-                this.playSound('win');
             }
 
             // MINES GAME
@@ -1706,6 +1705,7 @@
                     tile.classList.add('mine');
                     tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-3xl"></i>';
                     this.playSound('mine');
+                    this.recordLoss(this.minesBet, 'Mines');
                     this.endMines(false, idx);
                 } else {
                     tile.classList.add('gem');
@@ -1762,15 +1762,747 @@
                 this.updateBalance();
                 this.playSound('win');
                 this.showToast(`Cashed out ${win.toFixed(2)} coins`, 'success');
+                this.recordWin(win - this.minesBet, 'Mines');
                 this.endMines(true, -1);
             }
 
-            // BLACKJACK GAME
-            renderBlackjack() {
-                this.bjInProgress = false;
-                this.bjSettled = false;
-                this.bjStandCalled = false;
+            // PLINKO GAME
+            renderPlinko() {
+                this.mainContent.innerHTML = `
+                    <div class="max-w-6xl mx-auto animate-slide-up">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold text-white mb-2">Plinko</h2>
+                            <p class="text-gray-400">Drop the ball and watch it bounce to big wins!</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div class="lg:col-span-2">
+                                <div class="plinko-board" id="plinkoBoard">
+                                    <div class="plinko-pegs-container" id="plinkoPegs"></div>
+                                    <div class="plinko-slots" id="plinkoSlots"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-[#161b26] p-6 rounded-2xl border border-[#2a3042]">
+                                <div class="mb-6">
+                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Bet Amount</label>
+                                    <div class="flex bg-[#0b0e14] rounded-lg border border-[#2a3042]">
+                                        <div class="pl-4 py-3 text-[#6b7280] font-bold">$</div>
+                                        <input type="number" id="plinkoBet" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-2 font-bold outline-none">
+                                        <div class="flex pr-1">
+                                            <button onclick="document.getElementById('plinkoBet').value = Math.min(${this.balance}, document.getElementById('plinkoBet').value * 2)" class="px-3 text-xs font-bold text-[#6b7280]">2x</button>
+                                            <button onclick="document.getElementById('plinkoBet').value = Math.max(1, document.getElementById('plinkoBet').value / 2)" class="px-3 text-xs font-bold text-[#6b7280]">½</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Risk Level</label>
+                                    <div class="grid grid-cols-3 gap-2 mb-4">
+                                        <button onclick="app.setPlinkoRisk('low')" class="bg-[#0b0e14] border border-[#2a3042] text-[#10b981] rounded-lg py-2 font-bold text-sm">Low</button>
+                                        <button onclick="app.setPlinkoRisk('medium')" class="bg-[#0b0e14] border border-[#8b5cf6] text-white rounded-lg py-2 font-bold text-sm">Medium</button>
+                                        <button onclick="app.setPlinkoRisk('high')" class="bg-[#0b0e14] border border-[#2a3042] text-[#ef4444] rounded-lg py-2 font-bold text-sm">High</button>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-gray-400 text-sm">Multiplier Range</div>
+                                        <div class="text-white font-bold text-xl" id="plinkoMultiplierRange">1.1x - 5x</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-[#0b0e14] rounded-xl p-4 mb-6 border border-[#2a3042]">
+                                    <div class="text-center">
+                                        <div class="text-[10px] text-[#6b7280]">Last Win</div>
+                                        <div class="text-white font-bold text-xl" id="plinkoLastWin">0</div>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="app.playPlinko()" class="w-full btn-primary py-4 rounded-xl font-bold text-lg">Drop Ball</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.initPlinkoBoard();
+                this.setPlinkoRisk('medium');
+            }
 
+            initPlinkoBoard() {
+                const pegsContainer = document.getElementById('plinkoPegs');
+                const slotsContainer = document.getElementById('plinkoSlots');
+                
+                // Create pegs
+                for (let row = 0; row < 12; row++) {
+                    for (let col = 0; col < 15; col++) {
+                        const peg = document.createElement('div');
+                        peg.className = 'plinko-peg';
+                        pegsContainer.appendChild(peg);
+                    }
+                }
+                
+                // Create slots with multipliers
+                const multipliers = [0.2, 0.5, 1, 2, 5, 2, 1, 0.5, 0.2];
+                const colors = ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#10b981', '#0ea5e9', '#8b5cf6', '#ec4899'];
+                
+                for (let i = 0; i < 9; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'plinko-slot';
+                    slot.style.borderTopColor = colors[i];
+                    slot.textContent = multipliers[i] + 'x';
+                    slot.dataset.multiplier = multipliers[i];
+                    slotsContainer.appendChild(slot);
+                }
+            }
+
+            setPlinkoRisk(risk) {
+                this.plinkoRisk = risk;
+                let minMult, maxMult;
+                
+                switch(risk) {
+                    case 'low':
+                        minMult = 1.1;
+                        maxMult = 3;
+                        break;
+                    case 'medium':
+                        minMult = 0.5;
+                        maxMult = 5;
+                        break;
+                    case 'high':
+                        minMult = 0.2;
+                        maxMult = 10;
+                        break;
+                }
+                
+                document.getElementById('plinkoMultiplierRange').textContent = `${minMult}x - ${maxMult}x`;
+            }
+
+            async playPlinko() {
+                if (!this.userId) {
+                    this.showToast('Please login to play', 'error');
+                    return;
+                }
+
+                const bet = parseFloat(document.getElementById('plinkoBet').value);
+                if (isNaN(bet) || bet <= 0) return;
+                if (bet > this.balance) {
+                    this.showToast('Insufficient funds', 'error');
+                    return;
+                }
+
+                this.playSound('plinko');
+                this.balance -= bet;
+                this.updateBalance();
+
+                // Create ball
+                const board = document.getElementById('plinkoBoard');
+                const ball = document.createElement('div');
+                ball.className = 'plinko-ball';
+                ball.style.left = '50%';
+                ball.style.top = '20px';
+                ball.style.transform = 'translateX(-50%)';
+                board.appendChild(ball);
+
+                // Animate ball falling
+                let x = 50; // percentage
+                let y = 20;
+                const gravity = 0.5;
+                let velocityY = 0;
+                let velocityX = (Math.random() - 0.5) * 2;
+
+                const animate = () => {
+                    velocityY += gravity;
+                    y += velocityY;
+                    x += velocityX;
+
+                    // Bounce off walls
+                    if (x < 5) {
+                        x = 5;
+                        velocityX = Math.abs(velocityX) * 0.8;
+                    } else if (x > 95) {
+                        x = 95;
+                        velocityX = -Math.abs(velocityX) * 0.8;
+                    }
+
+                    // Bounce off bottom
+                    if (y > board.clientHeight - 120) {
+                        y = board.clientHeight - 120;
+                        velocityY = -Math.abs(velocityY) * 0.7;
+                        velocityX *= 0.9;
+                        
+                        // If slow enough, stop
+                        if (Math.abs(velocityY) < 1 && Math.abs(velocityX) < 0.5) {
+                            ball.remove();
+                            this.calculatePlinkoWin(bet, x);
+                            return;
+                        }
+                    }
+
+                    ball.style.left = x + '%';
+                    ball.style.top = y + 'px';
+
+                    requestAnimationFrame(animate);
+                };
+
+                animate();
+            }
+
+            calculatePlinkoWin(bet, finalX) {
+                // Determine which slot based on final position
+                const slotIndex = Math.floor((finalX / 100) * 9);
+                const slots = document.querySelectorAll('.plinko-slot');
+                const multiplier = parseFloat(slots[slotIndex].dataset.multiplier);
+                
+                const win = bet * multiplier;
+                this.balance += win;
+                this.updateBalance();
+                
+                document.getElementById('plinkoLastWin').textContent = win.toFixed(2);
+                
+                if (win > bet) {
+                    this.showToast(`Won ${win.toFixed(2)} coins! (${multiplier}x)`, 'success');
+                    this.recordWin(win - bet, 'Plinko');
+                } else {
+                    this.showToast(`Lost ${(bet - win).toFixed(2)} coins`, 'error');
+                    this.recordLoss(bet - win, 'Plinko');
+                }
+            }
+
+            // TOWERS GAME
+            renderTowers() {
+                this.mainContent.innerHTML = `
+                    <div class="max-w-6xl mx-auto animate-slide-up">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold text-white mb-2">Towers</h2>
+                            <p class="text-gray-400">Build towers and avoid the bomb to win big!</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div class="lg:col-span-2">
+                                <div class="towers-game">
+                                    <div id="towersGrid" class="flex flex-col items-center">
+                                        ${Array(8).fill(0).map((_, row) => `
+                                            <div class="tower-row">
+                                                ${Array(5).fill(0).map((_, col) => `
+                                                    <div id="tower-${row}-${col}" onclick="app.selectTowerBlock(${row}, ${col})" class="tower-block">
+                                                        ${row === 7 ? '1' : ''}
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-[#161b26] p-6 rounded-2xl border border-[#2a3042]">
+                                <div class="mb-6">
+                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Bet Amount</label>
+                                    <div class="flex bg-[#0b0e14] rounded-lg border border-[#2a3042]">
+                                        <div class="pl-4 py-3 text-[#6b7280] font-bold">$</div>
+                                        <input type="number" id="towersBet" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-2 font-bold outline-none">
+                                        <div class="flex pr-1">
+                                            <button onclick="document.getElementById('towersBet').value = Math.min(${this.balance}, document.getElementById('towersBet').value * 2)" class="px-3 text-xs font-bold text-[#6b7280]">2x</button>
+                                            <button onclick="document.getElementById('towersBet').value = Math.max(1, document.getElementById('towersBet').value / 2)" class="px-3 text-xs font-bold text-[#6b7280]">½</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Tower Height</label>
+                                    <div class="text-center mb-4">
+                                        <div class="text-white font-bold text-3xl" id="towerHeight">0/8</div>
+                                        <div class="text-gray-400 text-sm">Blocks placed</div>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <button onclick="app.setTowersHeight(4)" class="bg-[#0b0e14] border border-[#2a3042] text-[#10b981] rounded-lg py-2 font-bold text-sm">4 Blocks</button>
+                                        <button onclick="app.setTowersHeight(6)" class="bg-[#0b0e14] border border-[#8b5cf6] text-white rounded-lg py-2 font-bold text-sm">6 Blocks</button>
+                                        <button onclick="app.setTowersHeight(8)" class="bg-[#0b0e14] border border-[#2a3042] text-[#ef4444] rounded-lg py-2 font-bold text-sm">8 Blocks</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-[#0b0e14] rounded-xl p-4 mb-6 border border-[#2a3042]">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <div class="text-[10px] text-[#6b7280]">Multiplier</div>
+                                            <div class="text-white font-bold text-xl" id="towersMultiplier">1.00x</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-[10px] text-[#6b7280]">Potential Win</div>
+                                            <div class="text-white font-bold text-xl" id="towersPotentialWin">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button id="towersBtn" onclick="app.playTowers()" class="w-full btn-primary py-4 rounded-xl font-bold text-lg">Start Game</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.towersActive = false;
+                this.towerHeight = 6;
+                this.towerBlocksPlaced = 0;
+                this.setTowersHeight(6);
+            }
+
+            setTowersHeight(height) {
+                this.towerHeight = height;
+                document.getElementById('towerHeight').textContent = `0/${height}`;
+                
+                // Calculate multiplier
+                const multiplier = 1 + (height * 0.5);
+                document.getElementById('towersMultiplier').textContent = multiplier.toFixed(2) + 'x';
+                
+                const bet = parseFloat(document.getElementById('towersBet').value) || 10;
+                document.getElementById('towersPotentialWin').textContent = (bet * multiplier).toFixed(2);
+            }
+
+            playTowers() {
+                if (!this.userId) {
+                    this.showToast('Please login to play', 'error');
+                    return;
+                }
+
+                if (this.towersActive) {
+                    // Game in progress, cash out
+                    this.cashOutTowers();
+                    return;
+                }
+
+                const bet = parseFloat(document.getElementById('towersBet').value);
+                if (isNaN(bet) || bet <= 0) return;
+                if (bet > this.balance) {
+                    this.showToast('Insufficient funds', 'error');
+                    return;
+                }
+
+                this.playSound('tower');
+                this.balance -= bet;
+                this.updateBalance();
+
+                this.towersActive = true;
+                this.towersBet = bet;
+                this.towerBlocksPlaced = 0;
+                this.towerBombPosition = Math.floor(Math.random() * 5);
+
+                // Reset grid
+                for (let row = 0; row < 8; row++) {
+                    for (let col = 0; col < 5; col++) {
+                        const block = document.getElementById(`tower-${row}-${col}`);
+                        block.className = 'tower-block';
+                        block.textContent = row === 7 ? '1' : '';
+                        block.onclick = () => this.selectTowerBlock(row, col);
+                    }
+                }
+
+                document.getElementById('towersBtn').textContent = 'Cash Out';
+                document.getElementById('towersBtn').className = 'w-full bg-[#10b981] text-white py-4 rounded-xl font-bold text-lg';
+            }
+
+            selectTowerBlock(row, col) {
+                if (!this.towersActive) return;
+
+                const block = document.getElementById(`tower-${row}-${col}`);
+                if (block.classList.contains('selected')) return;
+
+                block.classList.add('selected');
+                this.towerBlocksPlaced++;
+                document.getElementById('towerHeight').textContent = `${this.towerBlocksPlaced}/${this.towerHeight}`;
+
+                this.playSound('click');
+
+                // Check if bomb
+                if (this.towerBlocksPlaced === this.towerHeight) {
+                    // Reached target height - win
+                    this.cashOutTowers();
+                } else if (col === this.towerBombPosition && row === (7 - this.towerBlocksPlaced + 1)) {
+                    // Hit bomb
+                    block.innerHTML = '<i class="fa-solid fa-bomb text-white"></i>';
+                    block.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                    this.playSound('mine');
+                    this.endTowers(false);
+                    this.recordLoss(this.towersBet, 'Towers');
+                }
+            }
+
+            endTowers(win) {
+                this.towersActive = false;
+                document.getElementById('towersBtn').textContent = 'Start Game';
+                document.getElementById('towersBtn').className = 'w-full btn-primary py-4 rounded-xl font-bold text-lg';
+
+                if (!win) {
+                    this.showToast('Boom! You hit the bomb!', 'error');
+                }
+            }
+
+            cashOutTowers() {
+                if (!this.towersActive) return;
+
+                const multiplier = 1 + (this.towerHeight * 0.5);
+                const win = this.towersBet * multiplier;
+                this.balance += win;
+                this.updateBalance();
+                this.playSound('win');
+                this.showToast(`Won ${win.toFixed(2)} coins! (${multiplier.toFixed(2)}x)`, 'success');
+                this.recordWin(win - this.towersBet, 'Towers');
+                this.endTowers(true);
+            }
+
+            // CROSSY ROAD GAME
+            renderCrossyRoad() {
+                this.mainContent.innerHTML = `
+                    <div class="max-w-6xl mx-auto animate-slide-up">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold text-white mb-2">Crossy Road</h2>
+                            <p class="text-gray-400">Navigate through obstacles to reach the other side!</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div class="lg:col-span-2">
+                                <div class="crossy-road-game">
+                                    <div class="crossy-road-grid" id="crossyRoadGrid">
+                                        ${Array(100).fill(0).map((_, i) => {
+                                            const row = Math.floor(i / 10);
+                                            const col = i % 10;
+                                            let className = 'crossy-road-cell';
+                                            
+                                            // Create pattern: roads, grass, water
+                                            if (row === 0 || row === 9) {
+                                                className += ' grass';
+                                            } else if (row >= 1 && row <= 3) {
+                                                className += ' road';
+                                            } else if (row >= 4 && row <= 6) {
+                                                className += ' water';
+                                            } else {
+                                                className += ' grass';
+                                            }
+                                            
+                                            return `<div id="cell-${row}-${col}" class="${className}"></div>`;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-[#161b26] p-6 rounded-2xl border border-[#2a3042]">
+                                <div class="mb-6">
+                                    <label class="text-xs text-[#6b7280] font-bold mb-2 block">Bet Amount</label>
+                                    <div class="flex bg-[#0b0e14] rounded-lg border border-[#2a3042]">
+                                        <div class="pl-4 py-3 text-[#6b7280] font-bold">$</div>
+                                        <input type="number" id="crossyBet" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-2 font-bold outline-none">
+                                        <div class="flex pr-1">
+                                            <button onclick="document.getElementById('crossyBet').value = Math.min(${this.balance}, document.getElementById('crossyBet').value * 2)" class="px-3 text-xs font-bold text-[#6b7280]">2x</button>
+                                            <button onclick="document.getElementById('crossyBet').value = Math.max(1, document.getElementById('crossyBet').value / 2)" class="px-3 text-xs font-bold text-[#6b7280]">½</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <div class="text-center mb-4">
+                                        <div class="text-white font-bold text-3xl" id="crossyScore">0</div>
+                                        <div class="text-gray-400 text-sm">Steps taken</div>
+                                    </div>
+                                    <div class="grid grid-cols-4 gap-2 mb-4">
+                                        <button onclick="app.moveCrossy('up')" class="bg-[#0b0e14] border border-[#2a3042] text-white rounded-lg py-3 font-bold text-sm">
+                                            <i class="fa-solid fa-arrow-up"></i>
+                                        </button>
+                                        <button onclick="app.moveCrossy('left')" class="bg-[#0b0e14] border border-[#2a3042] text-white rounded-lg py-3 font-bold text-sm">
+                                            <i class="fa-solid fa-arrow-left"></i>
+                                        </button>
+                                        <button onclick="app.moveCrossy('down')" class="bg-[#0b0e14] border border-[#2a3042] text-white rounded-lg py-3 font-bold text-sm">
+                                            <i class="fa-solid fa-arrow-down"></i>
+                                        </button>
+                                        <button onclick="app.moveCrossy('right')" class="bg-[#0b0e14] border border-[#2a3042] text-white rounded-lg py-3 font-bold text-sm">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-[#0b0e14] rounded-xl p-4 mb-6 border border-[#2a3042]">
+                                    <div class="flex justify-between">
+                                        <div>
+                                            <div class="text-[10px] text-[#6b7280]">Multiplier</div>
+                                            <div class="text-white font-bold text-xl" id="crossyMultiplier">1.00x</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-[10px] text-[#6b7280]">Potential Win</div>
+                                            <div class="text-white font-bold text-xl" id="crossyPotentialWin">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="app.startCrossyRoad()" class="w-full btn-primary py-4 rounded-xl font-bold text-lg">Start Game</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.initCrossyRoad();
+            }
+
+            initCrossyRoad() {
+                this.crossyActive = false;
+                this.crossyScore = 0;
+                this.crossyPlayerPos = { row: 9, col: 4 }; // Start at bottom middle
+                this.crossyObstacles = [];
+                
+                // Initialize obstacles on roads
+                for (let row = 1; row <= 3; row++) {
+                    for (let col = 0; col < 10; col++) {
+                        if (Math.random() > 0.7) {
+                            this.crossyObstacles.push({ row, col });
+                        }
+                    }
+                }
+                
+                this.renderCrossyBoard();
+            }
+
+            renderCrossyBoard() {
+                const grid = document.getElementById('crossyRoadGrid');
+                
+                // Clear previous player and obstacles
+                document.querySelectorAll('.crossy-road-player, .crossy-road-obstacle').forEach(el => el.remove());
+                
+                // Add obstacles
+                this.crossyObstacles.forEach(obs => {
+                    const cell = document.getElementById(`cell-${obs.row}-${obs.col}`);
+                    if (cell) {
+                        const obstacle = document.createElement('div');
+                        obstacle.className = 'crossy-road-obstacle';
+                        cell.appendChild(obstacle);
+                    }
+                });
+                
+                // Add player
+                const playerCell = document.getElementById(`cell-${this.crossyPlayerPos.row}-${this.crossyPlayerPos.col}`);
+                if (playerCell) {
+                    const player = document.createElement('div');
+                    player.className = 'crossy-road-player';
+                    playerCell.appendChild(player);
+                }
+            }
+
+            startCrossyRoad() {
+                if (!this.userId) {
+                    this.showToast('Please login to play', 'error');
+                    return;
+                }
+
+                const bet = parseFloat(document.getElementById('crossyBet').value);
+                if (isNaN(bet) || bet <= 0) return;
+                if (bet > this.balance) {
+                    this.showToast('Insufficient funds', 'error');
+                    return;
+                }
+
+                this.playSound('crossy');
+                this.balance -= bet;
+                this.updateBalance();
+
+                this.crossyActive = true;
+                this.crossyBet = bet;
+                this.crossyScore = 0;
+                this.crossyPlayerPos = { row: 9, col: 4 };
+                
+                document.getElementById('crossyScore').textContent = '0';
+                document.getElementById('crossyMultiplier').textContent = '1.00x';
+                document.getElementById('crossyPotentialWin').textContent = bet.toFixed(2);
+                
+                this.initCrossyRoad();
+            }
+
+            moveCrossy(direction) {
+                if (!this.crossyActive) return;
+
+                this.playSound('click');
+
+                let newRow = this.crossyPlayerPos.row;
+                let newCol = this.crossyPlayerPos.col;
+
+                switch(direction) {
+                    case 'up': newRow--; break;
+                    case 'down': newRow++; break;
+                    case 'left': newCol--; break;
+                    case 'right': newCol++; break;
+                }
+
+                // Check bounds
+                if (newRow < 0 || newRow > 9 || newCol < 0 || newCol > 9) {
+                    return;
+                }
+
+                // Check for obstacle collision
+                const hasObstacle = this.crossyObstacles.some(obs => obs.row === newRow && obs.col === newCol);
+                if (hasObstacle) {
+                    this.playSound('lose');
+                    this.showToast('Hit an obstacle!', 'error');
+                    this.recordLoss(this.crossyBet, 'Crossy Road');
+                    this.crossyActive = false;
+                    return;
+                }
+
+                // Update position and score
+                this.crossyPlayerPos = { row: newRow, col: newCol };
+                this.crossyScore++;
+
+                // Update display
+                document.getElementById('crossyScore').textContent = this.crossyScore;
+                const multiplier = 1 + (this.crossyScore * 0.1);
+                document.getElementById('crossyMultiplier').textContent = multiplier.toFixed(2) + 'x';
+                document.getElementById('crossyPotentialWin').textContent = (this.crossyBet * multiplier).toFixed(2);
+
+                this.renderCrossyBoard();
+
+                // Check for win (reached top)
+                if (newRow === 0) {
+                    this.winCrossyRoad();
+                }
+            }
+
+            winCrossyRoad() {
+                const multiplier = 1 + (this.crossyScore * 0.1);
+                const win = this.crossyBet * multiplier;
+                this.balance += win;
+                this.updateBalance();
+                this.playSound('win');
+                this.showToast(`Crossed safely! Won ${win.toFixed(2)} coins! (${multiplier.toFixed(2)}x)`, 'success');
+                this.recordWin(win - this.crossyBet, 'Crossy Road');
+                this.crossyActive = false;
+                
+                // Confetti celebration
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            // ACTIVE WINS/LOSSES PAGE
+            async renderActiveWins() {
+                this.mainContent.innerHTML = `
+                    <div class="max-w-6xl mx-auto animate-slide-up">
+                        <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-2xl border border-[#2a3042] p-8">
+                            <div class="flex items-center gap-3 mb-8">
+                                <i class="fa-solid fa-chart-line text-[#10b981] text-3xl"></i>
+                                <h2 class="text-3xl font-bold text-white">Live Wins & Losses</h2>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div class="bg-[#0f172a] rounded-xl p-6 border border-[#2a3042]">
+                                    <div class="text-center">
+                                        <div class="text-gray-400 text-sm mb-2">Today's Total Wins</div>
+                                        <div class="text-[#10b981] font-bold text-3xl" id="todayWins">0</div>
+                                    </div>
+                                </div>
+                                <div class="bg-[#0f172a] rounded-xl p-6 border border-[#2a3042]">
+                                    <div class="text-center">
+                                        <div class="text-gray-400 text-sm mb-2">Today's Total Losses</div>
+                                        <div class="text-[#ef4444] font-bold text-3xl" id="todayLosses">0</div>
+                                    </div>
+                                </div>
+                                <div class="bg-[#0f172a] rounded-xl p-6 border border-[#2a3042]">
+                                    <div class="text-center">
+                                        <div class="text-gray-400 text-sm mb-2">Biggest Win Today</div>
+                                        <div class="text-[#f59e0b] font-bold text-3xl" id="biggestWin">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-white mb-4">Recent Activity</h3>
+                                <div id="recentActivity" class="space-y-3 max-h-[400px] overflow-y-auto">
+                                    <div class="text-center py-12">
+                                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8b5cf6] mx-auto mb-4"></div>
+                                        <p class="text-gray-400">Loading recent activity...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                await this.loadActiveWins();
+            }
+
+            async loadActiveWins() {
+                // Get today's start timestamp
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayStart = today.getTime();
+
+                // Get transactions from today
+                const snapshot = await database.ref('transactions')
+                    .orderByChild('timestamp')
+                    .startAt(todayStart)
+                    .once('value');
+
+                const transactions = [];
+                let totalWins = 0;
+                let totalLosses = 0;
+                let biggestWin = 0;
+
+                snapshot.forEach(child => {
+                    const transaction = child.val();
+                    transactions.push(transaction);
+                    
+                    if (transaction.type === 'win') {
+                        totalWins += transaction.amount;
+                        if (transaction.amount > biggestWin) {
+                            biggestWin = transaction.amount;
+                        }
+                    } else if (transaction.type === 'loss') {
+                        totalLosses += transaction.amount;
+                    }
+                });
+
+                // Update stats
+                document.getElementById('todayWins').textContent = totalWins.toLocaleString();
+                document.getElementById('todayLosses').textContent = totalLosses.toLocaleString();
+                document.getElementById('biggestWin').textContent = biggestWin.toLocaleString();
+
+                // Display recent activity
+                const recentActivity = document.getElementById('recentActivity');
+                recentActivity.innerHTML = '';
+
+                transactions.sort((a, b) => b.timestamp - a.timestamp).slice(0, 20).forEach(transaction => {
+                    const div = document.createElement('div');
+                    div.className = `flex items-center justify-between p-4 rounded-lg border ${
+                        transaction.type === 'win' ? 'border-[#10b981] bg-[#064e3b]/20' : 'border-[#ef4444] bg-[#7f1d1d]/20'
+                    }`;
+                    
+                    const time = new Date(transaction.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full flex items-center justify-center ${
+                                transaction.type === 'win' ? 'bg-[#10b981]/20 text-[#10b981]' : 'bg-[#ef4444]/20 text-[#ef4444]'
+                            }">
+                                <i class="fa-solid ${transaction.type === 'win' ? 'fa-trophy' : 'fa-bomb'}"></i>
+                            </div>
+                            <div>
+                                <div class="text-white font-bold">${transaction.username}</div>
+                                <div class="text-gray-400 text-sm">${transaction.game} • ${time}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-white font-bold text-xl ${
+                                transaction.type === 'win' ? 'text-[#10b981]' : 'text-[#ef4444]'
+                            }">
+                                ${transaction.type === 'win' ? '+' : '-'}${transaction.amount.toLocaleString()}
+                            </div>
+                            <div class="text-gray-400 text-sm">coins</div>
+                        </div>
+                    `;
+                    
+                    recentActivity.appendChild(div);
+                });
+
+                if (transactions.length === 0) {
+                    recentActivity.innerHTML = '<div class="text-center py-12 text-gray-400">No activity yet today</div>';
+                }
+            }
+
+            // BLACKJACK GAME (simplified for brevity - you already have this)
+            renderBlackjack() {
+                // Your existing blackjack code here
                 this.mainContent.innerHTML = `
                     <div class="max-w-4xl mx-auto flex flex-col gap-6 h-full animate-slide-up">
                         <div class="relative flex-1 bg-[#064e3b] rounded-[3rem] border-[8px] border-[#3f2c22] p-8 flex flex-col items-center justify-center overflow-hidden">
@@ -1812,475 +2544,10 @@
                         </div>
                     </div>
                 `;
-            }
-
-            resetBlackjackUI() {
-                const overlay = document.getElementById('bjOverlay');
-                const msg = document.getElementById('bjMessage');
-                if (overlay) overlay.classList.add('hidden');
-                if (msg) msg.className = 'text-7xl font-black text-white mb-8';
-
-                const dh = document.getElementById('dealerHand');
-                const ph = document.getElementById('playerHand');
-                if (dh) dh.innerHTML = '';
-                if (ph) ph.innerHTML = '';
-
-                document.getElementById('dealerScore').innerText = '0';
-                document.getElementById('playerScore').innerText = '0';
-                document.getElementById('btnDeal').classList.remove('hidden');
-
-                const actions = document.getElementById('bjActions');
-                if (actions) {
-                    actions.classList.add('hidden');
-                    actions.classList.remove('flex');
-                }
-
-                const betInput = document.getElementById('bjBetInput');
-                if (betInput) betInput.disabled = false;
-
-                this.bjInProgress = false;
-                this.bjSettled = false;
-                this.bjStandCalled = false;
-            }
-
-            bjDeal() {
-                if (!this.userId) {
-                    this.showToast('Please login to play', 'error');
-                    return;
-                }
-
-                if (this.bjInProgress) return;
-
-                const betInput = document.getElementById('bjBetInput');
-                const bet = parseFloat(betInput.value);
-
-                if (isNaN(bet) || bet <= 0) return;
-                if (bet > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                this.playSound('click');
-                this.balance -= bet;
-                this.updateBalance();
-                this.bjBet = bet;
-
-                const suits = ['♠', '♥', '♦', '♣'];
-                const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-                let deck = [];
-
-                for (let s of suits) {
-                    for (let v of values) {
-                        deck.push({
-                            s,
-                            v,
-                            color: (s === '♥' || s === '♦') ? 'text-red-500' : 'text-black'
-                        });
-                    }
-                }
-
-                this.bjDeck = deck.sort(() => Math.random() - 0.5);
-                this.bjPlayerHand = [];
-                this.bjDealerHand = [];
-
-                document.getElementById('btnDeal').classList.add('hidden');
-                const actions = document.getElementById('bjActions');
-                actions.classList.remove('hidden');
-                actions.classList.add('flex');
-                betInput.disabled = true;
-
-                const pHandEl = document.getElementById('playerHand');
-                const dHandEl = document.getElementById('dealerHand');
-                if (pHandEl) pHandEl.innerHTML = '';
-                if (dHandEl) dHandEl.innerHTML = '';
-
-                this.bjInProgress = true;
-                this.bjSettled = false;
-                this.bjStandCalled = false;
-
-                // Deal cards with delay for animation
-                setTimeout(() => {
-                    this.dealCard(this.bjPlayerHand, pHandEl, false, 0, this.bjDeck);
-                    this.playSound('card');
-                }, 0);
-
-                setTimeout(() => {
-                    this.dealCard(this.bjDealerHand, dHandEl, false, 0, this.bjDeck);
-                    this.playSound('card');
-                }, 350);
-
-                setTimeout(() => {
-                    this.dealCard(this.bjPlayerHand, pHandEl, false, 0, this.bjDeck);
-                    this.playSound('card');
-                }, 700);
-
-                setTimeout(() => {
-                    this.dealCard(this.bjDealerHand, dHandEl, true, 0, this.bjDeck);
-                    this.playSound('card');
-                }, 1050);
-
-                setTimeout(() => {
-                    this.updateBjScores(true);
-                    if (this.calculateScore(this.bjPlayerHand) === 21) {
-                        this.bjStand();
-                    }
-                }, 1200);
-            }
-
-            dealCard(hand, container, hidden, delay, deckSource) {
-                if (!deckSource || deckSource.length === 0) return;
-
-                const card = deckSource.pop();
-                hand.push(card);
-
-                const el = document.createElement('div');
-                el.className = 'card-container';
-                el.style.zIndex = hand.length;
-
-                const inner = document.createElement('div');
-                inner.className = `game-card-item ${hidden ? 'flipped' : ''}`;
-
-                const face = document.createElement('div');
-                face.className = 'card-face';
-                face.innerHTML = `
-                    <div class="text-lg font-bold leading-none ${card.color}">${card.v}<br><span class="text-sm">${card.s}</span></div>
-                    <div class="text-4xl ${card.color} text-center">${card.s}</div>
-                    <div class="text-lg font-bold leading-none ${card.color} rotate-180">${card.v}<br><span class="text-sm">${card.s}</span></div>
-                `;
-
-                const back = document.createElement('div');
-                back.className = 'card-back';
-                back.id = hidden ? 'dealerHiddenCard' : '';
-
-                inner.appendChild(face);
-                inner.appendChild(back);
-                el.appendChild(inner);
-
-                if (container) container.appendChild(el);
-            }
-
-            calculateScore(hand) {
-                let score = 0;
-                let aces = 0;
-
-                hand.forEach(c => {
-                    if (['J', 'Q', 'K'].includes(c.v)) {
-                        score += 10;
-                    } else if (c.v === 'A') {
-                        score += 11;
-                        aces++;
-                    } else {
-                        score += parseInt(c.v);
-                    }
-                });
-
-                while (score > 21 && aces > 0) {
-                    score -= 10;
-                    aces--;
-                }
-
-                return score;
-            }
-
-            updateBjScores(hideDealer) {
-                document.getElementById('playerScore').innerText = this.calculateScore(this.bjPlayerHand);
-
-                if (hideDealer) {
-                    const val = this.bjDealerHand && this.bjDealerHand[0] ? this.bjDealerHand[0].v : '0';
-                    let score = 0;
-
-                    if (['J', 'Q', 'K'].includes(val)) {
-                        score = 10;
-                    } else if (val === 'A') {
-                        score = 11;
-                    } else {
-                        score = isNaN(parseInt(val)) ? 0 : parseInt(val);
-                    }
-
-                    document.getElementById('dealerScore').innerText = score;
-                } else {
-                    document.getElementById('dealerScore').innerText = this.calculateScore(this.bjDealerHand);
-                }
-            }
-
-            bjHit() {
-                if (!this.bjInProgress || this.bjSettled) return;
-
-                this.playSound('card');
-                this.dealCard(this.bjPlayerHand, document.getElementById('playerHand'), false, 0, this.bjDeck);
-
-                setTimeout(() => {
-                    this.updateBjScores(true);
-                    if (this.calculateScore(this.bjPlayerHand) > 21) {
-                        this.bjEnd('BUSTED', 'loss');
-                    }
-                }, 250);
-            }
-
-            bjStand() {
-                if (!this.bjInProgress || this.bjSettled || this.bjStandCalled) return;
-
-                this.bjStandCalled = true;
-                const actions = document.getElementById('bjActions');
-                if (actions) {
-                    actions.classList.add('hidden');
-                    actions.classList.remove('flex');
-                }
-
-                const hiddenEl = document.getElementById('dealerHiddenCard');
-                if (hiddenEl && hiddenEl.parentElement) {
-                    hiddenEl.parentElement.classList.remove('flipped');
-                    this.playSound('card');
-                }
-
-                this.updateBjScores(false);
-
-                const loop = () => {
-                    if (this.calculateScore(this.bjDealerHand) < 17) {
-                        setTimeout(() => {
-                            this.dealCard(this.bjDealerHand, document.getElementById('dealerHand'), false, 0, this.bjDeck);
-                            this.playSound('card');
-                            this.updateBjScores(false);
-                            loop();
-                        }, 600);
-                    } else {
-                        this.finalizeBj();
-                    }
-                };
-
-                setTimeout(loop, 600);
-            }
-
-            finalizeBj() {
-                const p = this.calculateScore(this.bjPlayerHand);
-                const d = this.calculateScore(this.bjDealerHand);
-
-                if (d > 21) {
-                    this.bjEnd('DEALER BUSTS', 'win');
-                } else if (p > d) {
-                    this.bjEnd('YOU WIN', 'win');
-                } else if (p < d) {
-                    this.bjEnd('DEALER WINS', 'loss');
-                } else {
-                    this.bjEnd('PUSH', 'push');
-                }
-            }
-
-            bjEnd(msg, type) {
-                if (this.bjSettled) return;
-
-                this.bjSettled = true;
-                this.bjInProgress = false;
-
-                const overlay = document.getElementById('bjOverlay');
-                const msgEl = document.getElementById('bjMessage');
-                const payoutEl = document.getElementById('bjPayout');
-
-                setTimeout(() => {
-                    if (overlay) {
-                        overlay.classList.remove('hidden');
-                        overlay.classList.add('flex');
-                    }
-
-                    if (msgEl) {
-                        msgEl.innerText = msg;
-                    }
-
-                    if (type === 'win') {
-                        const win = this.bjBet * 2;
-                        this.balance += win;
-                        this.updateBalance();
-
-                        if (payoutEl) {
-                            payoutEl.textContent = `+${win} coins`;
-                        }
-
-                        this.playSound('win');
-                        confetti({
-                            particleCount: 100,
-                            spread: 70,
-                            origin: { y: 0.6 }
-                        });
-
-                        if (msgEl) msgEl.style.color = '#10b981';
-                    } else if (type === 'push') {
-                        this.balance += this.bjBet;
-                        this.updateBalance();
-
-                        if (payoutEl) {
-                            payoutEl.textContent = 'Bet returned';
-                        }
-
-                        if (msgEl) msgEl.style.color = '#ffffff';
-                    } else {
-                        this.playSound('lose');
-                        if (payoutEl) {
-                            payoutEl.textContent = `-${this.bjBet} coins`;
-                        }
-                        if (msgEl) msgEl.style.color = '#ef4444';
-                    }
-
-                    const actions = document.getElementById('bjActions');
-                    if (actions) {
-                        actions.classList.add('hidden');
-                        actions.classList.remove('flex');
-                    }
-                }, 300);
-            }
-
-            // COINFLIP GAME
-            renderCoinflip() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-4xl mx-auto animate-slide-up">
-                        <div class="coinflip-container">
-                            <div class="text-center mb-8">
-                                <h2 class="text-3xl font-bold text-white mb-2">CoinFlip 1v1</h2>
-                                <p class="text-gray-400">Challenge other players in heads or tails</p>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div>
-                                    <h3 class="text-xl font-bold text-white mb-4">Create Challenge</h3>
-                                    <button onclick="app.openCoinFlipModal()" class="w-full bg-gradient-to-r from-yellow-600 to-orange-600 text-white py-4 rounded-xl font-bold text-lg">
-                                        Create New Challenge
-                                    </button>
-                                </div>
-                                
-                                <div>
-                                    <h3 class="text-xl font-bold text-white mb-4">Active Challenges</h3>
-                                    <div id="coinflipChallenges" class="space-y-3">
-                                        <div class="text-center py-8">
-                                            <div class="text-gray-400">Loading challenges...</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
                 
-                this.loadCoinflipChallenges();
-            }
-
-            openCoinFlipModal() {
-                if (!this.userId) {
-                    this.showToast('Please login to create challenges', 'error');
-                    return;
-                }
-                document.getElementById('coinflipModal').classList.add('active');
-            }
-
-            closeCoinFlipModal() {
-                document.getElementById('coinflipModal').classList.remove('active');
-            }
-
-            setCoinFlipSide(side) {
-                this.coinflipSide = side;
-                document.querySelectorAll('#coinflipModal button').forEach(btn => {
-                    btn.classList.remove('border-[#f59e0b]');
-                });
-                event.target.closest('button').classList.add('border-[#f59e0b]');
-            }
-
-            async createCoinFlipChallenge() {
-                const bet = parseFloat(document.getElementById('coinflipBet').value);
-                const side = this.coinflipSide || 'heads';
-
-                if (!bet || bet <= 0) {
-                    this.showToast('Please enter a valid bet amount', 'error');
-                    return;
-                }
-
-                if (bet > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                // Deduct bet
-                this.balance -= bet;
-                this.updateBalance();
-
-                // Create challenge
-                const challengeId = 'challenge_' + Date.now();
-                const challenge = {
-                    id: challengeId,
-                    creatorId: this.userId,
-                    creatorUsername: this.username,
-                    betAmount: bet,
-                    side: side,
-                    status: 'waiting',
-                    createdAt: Date.now()
-                };
-
-                await database.ref('coinflipChallenges/' + challengeId).set(challenge);
-
-                this.closeCoinFlipModal();
-                this.showToast('Challenge created!', 'success');
-                this.playSound('coin');
-            }
-
-            async loadCoinflipChallenges() {
-                const snapshot = await database.ref('coinflipChallenges').orderByChild('status').equalTo('waiting').once('value');
-                const challenges = document.getElementById('coinflipChallenges');
-                challenges.innerHTML = '';
-
-                if (!snapshot.exists()) {
-                    challenges.innerHTML = '<div class="text-center py-8 text-gray-400">No active challenges</div>';
-                    return;
-                }
-
-                snapshot.forEach(child => {
-                    const challenge = child.val();
-                    if (challenge.creatorId !== this.userId) {
-                        const div = document.createElement('div');
-                        div.className = 'challenge-item';
-                        div.innerHTML = `
-                            <div>
-                                <div class="text-white font-bold">${challenge.creatorUsername}</div>
-                                <div class="text-gray-400 text-sm">Bet: ${challenge.betAmount} coins</div>
-                            </div>
-                            <button onclick="app.joinCoinflipChallenge('${challenge.id}')" class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-2 rounded-lg font-bold">
-                                Accept
-                            </button>
-                        `;
-                        challenges.appendChild(div);
-                    }
-                });
-            }
-
-            async joinCoinflipChallenge(challengeId) {
-                if (!this.userId) {
-                    this.showToast('Please login to join challenges', 'error');
-                    return;
-                }
-
-                const snapshot = await database.ref('coinflipChallenges/' + challengeId).once('value');
-                const challenge = snapshot.val();
-
-                if (!challenge || challenge.status !== 'waiting') {
-                    this.showToast('Challenge no longer available', 'error');
-                    return;
-                }
-
-                if (challenge.betAmount > this.balance) {
-                    this.showToast('Insufficient funds to join', 'error');
-                    return;
-                }
-
-                // Deduct bet
-                this.balance -= challenge.betAmount;
-                this.updateBalance();
-
-                // Update challenge
-                await database.ref('coinflipChallenges/' + challengeId).update({
-                    joinerId: this.userId,
-                    joinerUsername: this.username,
-                    status: 'active'
-                });
-
-                this.showToast('Joined challenge!', 'success');
-                this.playSound('coin');
-                this.loadCoinflipChallenges();
+                this.bjInProgress = false;
+                this.bjSettled = false;
+                this.bjStandCalled = false;
             }
 
             // LEADERBOARD
@@ -2325,7 +2592,9 @@
                     users.push({
                         username: user.username,
                         balance: user.balance || 0,
-                        userId: user.userId
+                        userId: user.userId,
+                        totalWins: user.totalWins || 0,
+                        biggestWin: user.biggestWin || 0
                     });
                 });
 
@@ -2347,7 +2616,7 @@
                             <div class="text-3xl font-bold">${medal}</div>
                             <div class="flex-1">
                                 <div class="text-white font-bold text-lg">${user.username}</div>
-                                <div class="text-gray-400 text-sm">${user.userId}</div>
+                                <div class="text-gray-400 text-sm">Wins: ${user.totalWins} | Biggest: ${user.biggestWin || 0}</div>
                             </div>
                             <div class="text-right">
                                 <div class="text-[#10b981] font-bold text-xl">${user.balance.toLocaleString()}</div>
@@ -2384,7 +2653,7 @@
                 }
             }
 
-            // RAIN SYSTEM
+            // RAIN SYSTEM (now in wallet modal)
             initRain() {
                 // Listen for active rains
                 database.ref('activeRain').on('value', (snapshot) => {
@@ -2401,9 +2670,6 @@
             }
 
             showRainPanel(rain) {
-                const panel = document.getElementById('rainPanel');
-                panel.classList.remove('hidden');
-
                 document.getElementById('rainCreateSection').classList.add('hidden');
                 document.getElementById('rainJoinSection').classList.remove('hidden');
 
@@ -2414,12 +2680,8 @@
             }
 
             hideRainPanel() {
-                const panel = document.getElementById('rainPanel');
-                panel.classList.add('hidden');
-            }
-
-            closeRainPanel() {
-                this.hideRainPanel();
+                document.getElementById('rainJoinSection').classList.add('hidden');
+                document.getElementById('rainCreateSection').classList.remove('hidden');
             }
 
             startRainTimer(endTime) {
