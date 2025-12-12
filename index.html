@@ -703,45 +703,6 @@
             padding: 1rem;
             min-height: calc(100vh - 200px);
         }
-
-        /* Add this to your existing CSS */
-#mainContent {
-    flex: 1;
-    min-height: calc(100vh - 64px); /* Subtract navbar height */
-    display: flex;
-    flex-direction: column;
-}
-
-.game-container {
-    flex: 1;
-    min-height: calc(100vh - 180px);
-}
-
-/* Fix for the body and layout containers */
-body.min-h-screen.flex.flex-col {
-    min-height: 100vh;
-    height: 100vh;
-    overflow: hidden;
-}
-
-.flex-1.overflow-y-auto {
-    height: calc(100vh - 64px);
-}
-
-/* Ensure all game pages have proper height */
-.max-w-5xl.mx-auto.flex.flex-col.md\:flex-row.gap-6.min-h-\[600px\].items-start.game-container {
-    min-height: calc(100vh - 200px);
-}
-
-.max-w-6xl.mx-auto.flex.flex-col.gap-6 {
-    min-height: calc(100vh - 180px);
-}
-
-/* Adjust chat sidebar height */
-#chatSidebar {
-    height: calc(100vh - 64px);
-}
-        
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -1715,10 +1676,9 @@ body.min-h-screen.flex.flex-col {
 
             // Game Loading
             loadGame(gameName) {
-    
-    if (window.innerWidth < 768) {
-        this.toggleSidebar();
-    }
+                if (window.innerWidth < 768) {
+                    this.toggleSidebar();
+                }
 
                 // Update active nav
                 document.querySelectorAll('#sidebar button').forEach(b => {
@@ -1753,63 +1713,53 @@ body.min-h-screen.flex.flex-col {
                 this.playSound('click');
             }
 
-            // Update the renderHome method in the GameApp class
-renderHome() {
-    // Set minimum height for the main content to prevent empty space
-    this.mainContent.style.minHeight = 'calc(100vh - 180px)';
-    
-    this.mainContent.innerHTML = `
-        <div class="max-w-6xl mx-auto space-y-6">
-            <div class="rounded-3xl bg-gradient-to-r from-[#4c1d95] to-[#2e1065] p-6 md:p-8 relative overflow-hidden border border-[#8b5cf6]/30 shadow-2xl">
-                <div class="absolute top-0 right-0 w-96 h-96 bg-[#8b5cf6] rounded-full mix-blend-overlay filter blur-[100px] opacity-30"></div>
-                <div class="relative z-10">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-bold text-white mb-4 tracking-wider">
-                        <span class="w-2.5 h-2.5 bg-[#10b981] rounded-full animate-pulse"></span> PREMIUM CASINO
+            renderHome() {
+                this.mainContent.innerHTML = `
+                    <div class="max-w-6xl mx-auto space-y-6">
+                        <div class="rounded-3xl bg-gradient-to-r from-[#4c1d95] to-[#2e1065] p-6 md:p-8 relative overflow-hidden border border-[#8b5cf6]/30 shadow-2xl">
+                            <div class="absolute top-0 right-0 w-96 h-96 bg-[#8b5cf6] rounded-full mix-blend-overlay filter blur-[100px] opacity-30"></div>
+                            <div class="relative z-10">
+                                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-bold text-white mb-4 tracking-wider">
+                                    <span class="w-2.5 h-2.5 bg-[#10b981] rounded-full animate-pulse"></span> PREMIUM CASINO
+                                </div>
+                                <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Welcome, <span class="text-[#a78bfa]">${this.username || 'Guest'}</span>!</h1>
+                                <p class="text-[#d8b4fe] text-lg max-w-2xl mb-6">Experience the ultimate crypto casino with fair games, stunning animations, and real-time multiplayer features.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <button onclick="app.loadGame('blackjack')" class="btn-primary px-6 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-lg md:text-xl shadow-xl hover:scale-105 transition-all duration-300">
+                                        <i class="fa-solid fa-diamond mr-3"></i> Play Blackjack
+                                    </button>
+                                    <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#1f2937] to-[#374151] hover:from-[#374151] hover:to-[#4b5563] text-white px-6 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-lg md:text-xl border border-[#374151] transition-all duration-300 hover:scale-105">
+                                        <i class="fa-solid fa-gift mr-3"></i> Free Coins
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Live Wins Panel -->
+                        <div class="live-wins-panel">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-2 h-2 bg-[#10b981] rounded-full animate-pulse"></div>
+                                <h3 class="text-white font-bold text-lg">Live Wins</h3>
+                            </div>
+                            <div id="liveWinsContainer">
+                                <div class="text-center text-gray-500 py-8">Loading live wins...</div>
+                            </div>
+                        </div>
+                        
+                        <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-gamepad text-[#8b5cf6]"></i> Featured Games
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+                            ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs', '#f59e0b')}
+                            ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer', '#10b981')}
+                        </div>
                     </div>
-                    <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">Welcome, <span class="text-[#a78bfa]">${this.username || 'Guest'}</span>!</h1>
-                    <p class="text-[#d8b4fe] text-lg max-w-2xl mb-6">Experience the ultimate crypto casino with fair games, stunning animations, and real-time multiplayer features.</p>
-                    <div class="flex flex-wrap gap-4">
-                        <button onclick="app.loadGame('blackjack')" class="btn-primary px-6 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-lg md:text-xl shadow-xl hover:scale-105 transition-all duration-300">
-                            <i class="fa-solid fa-diamond mr-3"></i> Play Blackjack
-                        </button>
-                        <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#1f2937] to-[#374151] hover:from-[#374151] hover:to-[#4b5563] text-white px-6 md:px-10 py-3 md:py-4 rounded-2xl font-bold text-lg md:text-xl border border-[#374151] transition-all duration-300 hover:scale-105">
-                            <i class="fa-solid fa-gift mr-3"></i> Free Coins
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Live Wins Panel - Now with fixed height -->
-            <div class="live-wins-panel" style="max-height: 350px;">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="w-2 h-2 bg-[#10b981] rounded-full animate-pulse"></div>
-                    <h3 class="text-white font-bold text-lg">Live Wins</h3>
-                </div>
-                <div id="liveWinsContainer" style="height: calc(350px - 70px); overflow-y: auto;">
-                    <div class="text-center text-gray-500 py-8">Loading live wins...</div>
-                </div>
-            </div>
-            
-            <h2 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
-                <i class="fa-solid fa-gamepad text-[#8b5cf6]"></i> Featured Games
-            </h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 pb-8">
-                ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs', '#f59e0b')}
-                ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer', '#10b981')}
-            </div>
-            
-            <!-- Add a footer section to fill remaining space -->
-            <div class="mt-8 text-center text-gray-500 text-sm pb-8 border-t border-[#2a3042] pt-8">
-                <p>Moon Casino © ${new Date().getFullYear()} - Premium Crypto Gaming Experience</p>
-                <p class="mt-2">Games are for entertainment purposes only</p>
-            </div>
-        </div>
-    `;
-    
-    // Start live wins updates
-    this.startLiveWinsUpdates();
-}
+                `;
+                
+                // Start live wins updates
+                this.startLiveWinsUpdates();
+            }
 
             startLiveWinsUpdates() {
                 // Clear existing interval
