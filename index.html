@@ -226,6 +226,7 @@
             padding: 10px;
             min-height: 400px;
             align-items: center;
+            position: relative;
         }
         
         .mine-tile-modern {
@@ -264,6 +265,11 @@
             transform: translateY(6px);
             box-shadow: 0 2px 0 #0f172a;
             cursor: default;
+        }
+        
+        .mine-tile-modern.selected {
+            border: 2px solid #8b5cf6;
+            background: linear-gradient(145deg, #2a3042, #1e293b);
         }
         
         .mine-tile-modern.gem {
@@ -628,6 +634,8 @@
             flex-direction: column;
             justify-content: space-between;
             flex-shrink: 0;
+            transform: none !important;
+            scale: 1 !important;
         }
         
         @media (max-width: 768px) {
@@ -728,6 +736,8 @@
             padding: 10px;
             overflow: visible;
             flex-shrink: 0;
+            transform: none !important;
+            scale: 1 !important;
         }
         
         @media (max-width: 768px) {
@@ -747,6 +757,8 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            transform: none !important;
+            scale: 1 !important;
         }
         
         @media (max-width: 768px) {
@@ -1089,6 +1101,110 @@
                 max-height: 500px;
             }
         }
+        
+        /* Plinko Game Styles */
+        .plinko-container {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            background: linear-gradient(180deg, #0b0e14 0%, #161b26 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #2a3042;
+        }
+        
+        .plinko-board {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .plinko-peg {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+            z-index: 1;
+        }
+        
+        .plinko-ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.7);
+            z-index: 2;
+            transition: transform 0.1s linear;
+        }
+        
+        .plinko-slot {
+            position: absolute;
+            bottom: 0;
+            width: 40px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 10px;
+        }
+        
+        .plinko-slot-value {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 5px;
+        }
+        
+        .plinko-multiplier {
+            font-size: 18px;
+            font-weight: bold;
+            color: #10b981;
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+        
+        /* Plinko Controls */
+        .plinko-risk-btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .plinko-risk-btn.active {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .plinko-risk-low {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .plinko-risk-medium {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .plinko-risk-high {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .plinko-ball-trail {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(251, 191, 36, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -1173,9 +1289,9 @@
                     <span>Blackjack</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <button onclick="app.loadGame('rps')" id="nav-rps" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group">
-                    <i class="fa-solid fa-hand-back-fist text-[#8b5cf6] w-5 text-center group-hover:scale-110 transition-all duration-300"></i> 
-                    <span>Rock Paper Scissors</span>
+                <button onclick="app.loadGame('plinko')" id="nav-plinko" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group">
+                    <i class="fa-solid fa-circle text-[#3b82f6] w-5 text-center group-hover:scale-110 transition-all duration-300"></i> 
+                    <span>Plinko</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
                 <button onclick="app.loadGame('leaderboard')" id="nav-leaderboard" class="w-full flex items-center gap-4 px-5 py-3.5 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group">
@@ -1365,7 +1481,8 @@
             lose: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-losing-bleeps-2026.mp3'),
             mine: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-bomb-explosion-in-the-air-2801.mp3'),
             gem: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3'),
-            click: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3')
+            click: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3'),
+            plink: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-ping-pong-hit-1101.mp3')
         };
 
         // Set volume for all sounds
@@ -1416,17 +1533,24 @@
                 this.rainActive = false;
                 this.rainTimer = null;
                 this.rainData = null;
-                this.rpsGame = null;
-                this.rpsOpponent = null;
-                this.rpsChoice = null;
-                this.rpsBet = 0;
-                this.rpsGameId = null;
+                this.plinkoGame = null;
+                this.plinkoBalls = [];
+                this.plinkoBallId = 0;
                 
                 // Mines game state
                 this.minesBet = 0;
                 this.minesCount = 3;
                 this.minesRevealedCount = 0;
                 this.minesGrid = [];
+                
+                // Plinko game state
+                this.plinkoBet = 50;
+                this.plinkoRisk = 'medium';
+                this.plinkoMultipliers = {
+                    low: [1.2, 1.5, 2, 3, 5, 3, 2, 1.5, 1.2],
+                    medium: [0.5, 0.8, 1.2, 2, 5, 10, 5, 2, 1.2, 0.8, 0.5],
+                    high: [0.2, 0.5, 1, 2, 5, 10, 20, 10, 5, 2, 1, 0.5, 0.2]
+                };
                 
                 // Initialize app
                 this.init();
@@ -1632,10 +1756,7 @@
                     wonToday: 0,
                     lastWagered: Date.now(),
                     banned: false,
-                    isAdmin: false,
-                    rpsWins: 0,
-                    rpsLosses: 0,
-                    rpsTies: 0
+                    isAdmin: false
                 };
 
                 await database.ref('users/' + userId).set(userData);
@@ -1716,19 +1837,12 @@
             }
 
             logout() {
-                // Leave RPS game if in one
-                if (this.rpsGameId) {
-                    this.leaveRPSGame();
-                }
-                
                 localStorage.removeItem('moonCasinoUser');
                 localStorage.removeItem(`balance_${this.userId}`);
                 this.userId = '';
                 this.username = '';
                 this.balance = 500;
                 this.isAdmin = false;
-                this.rpsGameId = null;
-                this.rpsChoice = null;
                 this.showAuthModal();
                 this.updateUI();
                 
@@ -2265,8 +2379,8 @@
                     case 'blackjack':
                         this.renderBlackjack();
                         break;
-                    case 'rps':
-                        this.renderRPS();
+                    case 'plinko':
+                        this.renderPlinko();
                         break;
                     case 'leaderboard':
                         this.renderLeaderboard();
@@ -2321,7 +2435,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
                             ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs', '#f59e0b')}
                             ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer', '#10b981')}
-                            ${this.getGameCard('rps', 'Rock Paper Scissors', 'fa-hand-back-fist', 'from-[#1e3a8a] to-[#1e40af]', 'Multiplayer PvP', '#8b5cf6')}
+                            ${this.getGameCard('plinko', 'Plinko', 'fa-circle', 'from-[#1e3a8a] to-[#1e40af]', 'Drop balls for multipliers', '#3b82f6')}
                         </div>
                     </div>
                 `;
@@ -2428,7 +2542,7 @@
                 `;
             }
 
-            // MINES GAME - FIXED
+            // MINES GAME - FIXED with drag selection
             renderMines() {
                 this.mainContent.innerHTML = `
                     <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 min-h-[500px]">
@@ -2466,14 +2580,20 @@
                             <button id="minesBtn" onclick="app.playMines()" class="w-full btn-primary py-4 rounded-2xl font-bold text-lg tracking-wider hover:scale-[1.02] transition-all duration-300">
                                 <i class="fa-solid fa-play mr-2"></i> Start Game
                             </button>
+                            <div class="mt-4 text-xs text-gray-500 text-center">
+                                <i class="fa-solid fa-mouse-pointer mr-1"></i> Drag to select multiple tiles
+                            </div>
                         </div>
                         <div class="flex-1 w-full bg-gradient-to-b from-[#161b26] to-[#11141c] rounded-3xl p-6 border border-[#2a3042] shadow-2xl flex items-center justify-center relative overflow-hidden">
                             <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8b5cf6] via-[#10b981] to-[#8b5cf6] animate-shimmer"></div>
-                            <div class="mines-grid-container">
+                            <div class="mines-grid-container" id="minesGrid">
                                 ${Array(25).fill(0).map((_,i)=>`
                                     <div id="tile-${i}" 
-                                         onclick="app.clickMineTile(${i})"
-                                         class="mine-tile-modern"></div>
+                                         class="mine-tile-modern"
+                                         onmousedown="app.startMinesDrag(${i}, event)"
+                                         ontouchstart="app.startMinesDrag(${i}, event)"
+                                         onmouseenter="app.handleMinesHover(${i})"
+                                         ontouchmove="app.handleMinesTouchMove(event)"></div>
                                 `).join('')}
                             </div>
                         </div>
@@ -2481,6 +2601,10 @@
                 `;
                 this.minesActive = false;
                 this.setMinesCount(3);
+                
+                // Add event listeners for drag selection
+                document.addEventListener('mouseup', () => this.endMinesDrag());
+                document.addEventListener('touchend', () => this.endMinesDrag());
             }
 
             adjustMinesBet(multiplier) {
@@ -2525,6 +2649,61 @@
                     multiplier *= (25 - i) / (25 - mines - i);
                 }
                 return multiplier;
+            }
+
+            startMinesDrag(tileIndex, event) {
+                if (!this.minesActive || this.minesGrid[tileIndex] === 'mine') return;
+                
+                event.preventDefault();
+                this.minesDragging = true;
+                this.minesDragStartTile = tileIndex;
+                this.minesSelectedTiles.clear();
+                this.selectMinesTile(tileIndex);
+            }
+
+            handleMinesHover(tileIndex) {
+                if (this.minesDragging && this.minesActive && this.minesGrid[tileIndex] !== 'mine') {
+                    this.selectMinesTile(tileIndex);
+                }
+            }
+
+            handleMinesTouchMove(event) {
+                if (!this.minesDragging || !this.minesActive) return;
+                
+                event.preventDefault();
+                const touch = event.touches[0];
+                const element = document.elementFromPoint(touch.clientX, touch.clientY);
+                
+                if (element && element.id && element.id.startsWith('tile-')) {
+                    const tileIndex = parseInt(element.id.split('-')[1]);
+                    if (this.minesGrid[tileIndex] !== 'mine') {
+                        this.selectMinesTile(tileIndex);
+                    }
+                }
+            }
+
+            selectMinesTile(tileIndex) {
+                if (this.minesSelectedTiles.has(tileIndex)) return;
+                
+                const tile = document.getElementById(`tile-${tileIndex}`);
+                if (tile && !tile.classList.contains('revealed')) {
+                    tile.classList.add('selected');
+                    this.minesSelectedTiles.add(tileIndex);
+                }
+            }
+
+            endMinesDrag() {
+                if (!this.minesDragging) return;
+                
+                this.minesDragging = false;
+                
+                // Reveal all selected tiles
+                this.minesSelectedTiles.forEach(tileIndex => {
+                    this.clickMineTile(tileIndex);
+                });
+                
+                this.minesSelectedTiles.clear();
+                this.minesDragStartTile = null;
             }
 
             playMines() {
@@ -2572,8 +2751,6 @@
                     }
                 }
 
-                console.log('Mines placed at positions:', this.minesGrid.map((v, i) => v === 'mine' ? i : -1).filter(i => i !== -1));
-
                 const btn = document.getElementById('minesBtn');
                 btn.innerHTML = '<i class="fa-solid fa-money-bill-wave mr-2"></i> Cash Out <span id="minesCashoutVal" class="ml-2 bg-white/20 px-3 py-1 rounded-lg text-sm">0</span>';
                 btn.className = 'w-full bg-gradient-to-r from-[#10b981] to-[#059669] text-white py-4 rounded-2xl font-bold text-lg tracking-wider hover:scale-[1.02] transition-all duration-300';
@@ -2593,6 +2770,7 @@
                 if (tile.classList.contains('revealed')) return;
 
                 tile.classList.add('revealed');
+                tile.classList.remove('selected');
 
                 if (this.minesGrid[idx] === 'mine') {
                     tile.classList.add('mine');
@@ -2685,25 +2863,25 @@
                             <p class="text-gray-400">Beat the dealer without going over 21</p>
                         </div>
                         
-                        <div class="blackjack-table">
+                        <div class="blackjack-table no-scale">
                             <!-- Dealer Section -->
-                            <div class="w-full mb-4 md:mb-8 flex-shrink-0">
+                            <div class="w-full mb-4 md:mb-8 flex-shrink-0 no-scale">
                                 <div class="flex items-center justify-center gap-3 mb-4">
                                     <i class="fa-solid fa-user-tie text-xl text-[#a7f3d0]"></i>
                                     <div class="text-[#a7f3d0] font-bold tracking-wider">Dealer</div>
                                     <div class="bg-black/40 px-4 py-2 rounded-full text-white font-bold text-lg" id="dealerScore">0</div>
                                 </div>
-                                <div id="dealerHand" class="hand-container"></div>
+                                <div id="dealerHand" class="hand-container no-scale"></div>
                             </div>
                             
                             <!-- Game Status -->
-                            <div id="bjStatus" class="text-center my-4 flex-shrink-0">
-                                <div class="status-text text-white" id="bjGameStatus">Place your bet and deal!</div>
+                            <div id="bjStatus" class="text-center my-4 flex-shrink-0 no-scale">
+                                <div class="status-text text-white no-scale" id="bjGameStatus">Place your bet and deal!</div>
                             </div>
                             
                             <!-- Player Section -->
-                            <div class="w-full mt-4 md:mt-8 flex-shrink-0">
-                                <div id="playerHand" class="hand-container mb-4"></div>
+                            <div class="w-full mt-4 md:mt-8 flex-shrink-0 no-scale">
+                                <div id="playerHand" class="hand-container mb-4 no-scale"></div>
                                 <div class="flex items-center justify-center gap-3">
                                     <i class="fa-solid fa-user text-xl text-[#a7f3d0]"></i>
                                     <div class="text-[#a7f3d0] font-bold tracking-wider">You</div>
@@ -2712,7 +2890,7 @@
                             </div>
                             
                             <!-- Game Overlay -->
-                            <div id="bjOverlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm hidden z-20 flex-col items-center justify-center rounded-2xl">
+                            <div id="bjOverlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm hidden z-20 flex-col items-center justify-center rounded-2xl no-scale">
                                 <div id="bjMessage" class="text-2xl md:text-3xl font-black text-white mb-4 text-center"></div>
                                 <div id="bjPayout" class="text-lg md:text-xl font-bold text-yellow-300 mb-6"></div>
                                 <button onclick="app.resetBlackjackUI()" class="px-6 md:px-8 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-lg rounded-2xl font-bold shadow-2xl hover:scale-110 transition-all duration-300">
@@ -2722,7 +2900,7 @@
                         </div>
                         
                         <!-- Game Controls -->
-                        <div class="game-controls">
+                        <div class="game-controls no-scale">
                             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                                 <div class="flex items-center gap-4 bg-gradient-to-r from-[#0b0e14] to-[#1e293b] px-4 md:px-6 py-3 rounded-2xl border border-[#2a3042]">
                                     <span class="text-gray-400 font-bold text-sm tracking-wider">BET</span>
@@ -2893,7 +3071,7 @@
 
             createCardElement(card, faceUp = true) {
                 const container = document.createElement('div');
-                container.className = 'card-container';
+                container.className = 'card-container no-scale';
                 
                 const cardItem = document.createElement('div');
                 cardItem.className = `game-card-item ${!faceUp ? 'flipped' : ''}`;
@@ -3133,14 +3311,14 @@
                 this.playSound('click');
             }
 
-            // ROCK PAPER SCISSORS GAME
-            renderRPS() {
+            // PLINKO GAME
+            renderPlinko() {
                 if (!this.userId) {
                     this.mainContent.innerHTML = `
                         <div class="max-w-6xl mx-auto text-center py-12">
                             <i class="fa-solid fa-lock text-6xl text-red-500 mb-6"></i>
                             <h2 class="text-3xl font-bold text-white mb-4">Login Required</h2>
-                            <p class="text-gray-400 mb-8">Please login to play Rock Paper Scissors</p>
+                            <p class="text-gray-400 mb-8">Please login to play Plinko</p>
                             <button onclick="app.showAuthModal()" class="btn-primary px-8 py-3 rounded-xl font-bold text-lg">
                                 Login to Play
                             </button>
@@ -3152,87 +3330,227 @@
                 this.mainContent.innerHTML = `
                     <div class="max-w-6xl mx-auto">
                         <div class="text-center mb-8">
-                            <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Rock Paper Scissors</h2>
-                            <p class="text-gray-400">Multiplayer PvP - Challenge other players!</p>
+                            <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">Plinko</h2>
+                            <p class="text-gray-400">Drop balls and watch them bounce to win multipliers!</p>
                         </div>
                         
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <!-- Left Panel: Game Lobby -->
+                            <!-- Left Panel: Controls -->
                             <div class="lg:col-span-1">
                                 <div class="bg-gradient-to-b from-[#161b26] to-[#11141c] p-6 rounded-3xl border border-[#2a3042] shadow-2xl">
                                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                                        <i class="fa-solid fa-users"></i> Game Lobby
+                                        <i class="fa-solid fa-sliders"></i> Game Controls
                                     </h3>
                                     
                                     <div class="mb-6">
-                                        <label class="block text-gray-400 text-sm mb-2">Your Bet</label>
+                                        <label class="block text-gray-400 text-sm mb-2">Bet Amount</label>
                                         <div class="flex bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-xl border border-[#2a3042] p-1">
                                             <div class="pl-4 py-3 text-[#8b5cf6] font-bold"><i class="fa-solid fa-coins"></i></div>
-                                            <input type="number" id="rpsBetInput" value="50" min="10" max="${this.balance}" class="w-full bg-transparent text-white px-4 font-bold text-lg outline-none">
+                                            <input type="number" id="plinkoBetInput" value="50" min="10" max="${this.balance}" class="w-full bg-transparent text-white px-4 font-bold text-lg outline-none">
                                             <div class="flex pr-2">
-                                                <button onclick="app.adjustRPSBet(0.5)" class="px-4 text-sm font-bold text-[#8b5cf6] hover:text-white transition-all duration-300">½</button>
-                                                <button onclick="app.adjustRPSBet(2)" class="px-4 text-sm font-bold text-[#8b5cf6] hover:text-white transition-all duration-300">2x</button>
+                                                <button onclick="app.adjustPlinkoBet(0.5)" class="px-4 text-sm font-bold text-[#8b5cf6] hover:text-white transition-all duration-300">½</button>
+                                                <button onclick="app.adjustPlinkoBet(2)" class="px-4 text-sm font-bold text-[#8b5cf6] hover:text-white transition-all duration-300">2x</button>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <button onclick="app.createRPSGame()" class="w-full btn-primary py-3 mb-4 rounded-xl font-bold text-lg tracking-wider transition-all duration-300">
-                                        <i class="fa-solid fa-plus mr-2"></i> Create Game
+                                    <div class="mb-6">
+                                        <label class="block text-gray-400 text-sm mb-2">Risk Level</label>
+                                        <div class="grid grid-cols-3 gap-2">
+                                            <button onclick="app.setPlinkoRisk('low')" class="plinko-risk-btn plinko-risk-low ${this.plinkoRisk === 'low' ? 'active border-white' : ''}">
+                                                Low
+                                            </button>
+                                            <button onclick="app.setPlinkoRisk('medium')" class="plinko-risk-btn plinko-risk-medium ${this.plinkoRisk === 'medium' ? 'active border-white' : ''}">
+                                                Medium
+                                            </button>
+                                            <button onclick="app.setPlinkoRisk('high')" class="plinko-risk-btn plinko-risk-high ${this.plinkoRisk === 'high' ? 'active border-white' : ''}">
+                                                High
+                                            </button>
+                                        </div>
+                                        <div class="text-gray-400 text-xs mt-2 text-center" id="plinkoRiskDesc">
+                                            ${this.plinkoRisk === 'low' ? 'Safe multipliers (1.2x - 5x)' : 
+                                              this.plinkoRisk === 'medium' ? 'Balanced multipliers (0.5x - 10x)' : 
+                                              'High risk multipliers (0.2x - 20x)'}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-2xl p-4 mb-6 border border-[#2a3042]">
+                                        <div class="flex justify-between items-center mb-3">
+                                            <div class="text-gray-400 text-sm">Current Bet</div>
+                                            <div class="text-white font-bold" id="currentPlinkoBet">50 coins</div>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <div class="text-gray-400 text-sm">Potential Win</div>
+                                            <div class="text-[#10b981] font-bold" id="potentialPlinkoWin">0 coins</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button onclick="app.dropPlinkoBall()" class="w-full btn-primary py-4 rounded-2xl font-bold text-lg tracking-wider hover:scale-[1.02] transition-all duration-300 mb-3">
+                                        <i class="fa-solid fa-circle-down mr-2"></i> Drop Ball
                                     </button>
                                     
-                                    <div class="mb-4">
-                                        <div class="flex items-center justify-between mb-3">
-                                            <span class="text-gray-400 text-sm font-bold">Active Games</span>
-                                            <span class="text-[#8b5cf6] text-xs" id="refreshGamesBtn" onclick="app.loadRPSGames()" style="cursor: pointer;">
-                                                <i class="fa-solid fa-rotate"></i> Refresh
-                                            </span>
-                                        </div>
-                                        <div id="rpsGameList" class="space-y-3 max-h-[400px] overflow-y-auto">
-                                            <div class="text-center py-8">
-                                                <div class="loading-spinner mx-auto mb-4"></div>
-                                                <p class="text-gray-400">Loading games...</p>
-                                            </div>
-                                        </div>
+                                    <button onclick="app.dropMultiplePlinkoBalls(5)" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold text-lg tracking-wider hover:scale-[1.02] transition-all duration-300">
+                                        <i class="fa-solid fa-bolt mr-2"></i> Drop 5 Balls
+                                    </button>
+                                    
+                                    <div class="mt-6 text-center">
+                                        <div class="text-gray-400 text-sm mb-2">Last Result</div>
+                                        <div class="text-white font-bold text-xl" id="lastPlinkoResult">-</div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- Center Panel: Game Area -->
+                            <!-- Center Panel: Plinko Board -->
                             <div class="lg:col-span-2">
-                                <div class="bg-gradient-to-b from-[#161b26] to-[#11141c] p-6 rounded-3xl border border-[#2a3042] shadow-2xl h-full">
-                                    <div id="rpsGameArea">
-                                        <div class="text-center py-12">
-                                            <i class="fa-solid fa-hand-back-fist text-6xl text-[#8b5cf6] mb-6"></i>
-                                            <h3 class="text-2xl font-bold text-white mb-4">Select or Create a Game</h3>
-                                            <p class="text-gray-400">Choose a game from the lobby or create your own!</p>
-                                        </div>
+                                <div class="bg-gradient-to-b from-[#161b26] to-[#11141c] rounded-3xl border border-[#2a3042] shadow-2xl h-full p-6">
+                                    <div class="plinko-container" id="plinkoBoard">
+                                        <!-- Plinko board will be generated here -->
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Statistics -->
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="stats-card text-center">
+                                <div class="text-2xl font-bold text-white mb-2" id="plinkoBallsDropped">0</div>
+                                <div class="text-gray-400 text-sm">Balls Dropped</div>
+                            </div>
+                            <div class="stats-card text-center">
+                                <div class="text-2xl font-bold text-white mb-2" id="plinkoTotalWins">0</div>
+                                <div class="text-gray-400 text-sm">Total Wins</div>
+                            </div>
+                            <div class="stats-card text-center">
+                                <div class="text-2xl font-bold text-white mb-2" id="plinkoBiggestWin">0</div>
+                                <div class="text-gray-400 text-sm">Biggest Win</div>
+                            </div>
+                            <div class="stats-card text-center">
+                                <div class="text-2xl font-bold text-white mb-2" id="plinkoWinRate">0%</div>
+                                <div class="text-gray-400 text-sm">Win Rate</div>
                             </div>
                         </div>
                     </div>
                 `;
                 
-                this.loadRPSGames();
+                this.initializePlinkoBoard();
+                this.updatePlinkoStats();
+                this.updatePlinkoPotentialWin();
             }
 
-            adjustRPSBet(multiplier) {
-                const betInput = document.getElementById('rpsBetInput');
+            adjustPlinkoBet(multiplier) {
+                const betInput = document.getElementById('plinkoBetInput');
                 const currentBet = parseFloat(betInput.value) || 50;
                 let newBet = currentBet * multiplier;
                 newBet = Math.round(newBet);
                 newBet = Math.max(10, Math.min(newBet, this.balance));
                 betInput.value = newBet;
+                this.plinkoBet = newBet;
+                this.updatePlinkoPotentialWin();
                 this.playSound('click');
             }
 
-            async createRPSGame() {
+            setPlinkoRisk(risk) {
+                this.plinkoRisk = risk;
+                
+                // Update button styles
+                document.querySelectorAll('.plinko-risk-btn').forEach(btn => {
+                    btn.classList.remove('active', 'border-white');
+                });
+                
+                const activeBtn = document.querySelector(`.plinko-risk-${risk}`);
+                if (activeBtn) {
+                    activeBtn.classList.add('active', 'border-white');
+                }
+                
+                // Update description
+                const desc = document.getElementById('plinkoRiskDesc');
+                if (desc) {
+                    desc.textContent = 
+                        risk === 'low' ? 'Safe multipliers (1.2x - 5x)' :
+                        risk === 'medium' ? 'Balanced multipliers (0.5x - 10x)' :
+                        'High risk multipliers (0.2x - 20x)';
+                }
+                
+                this.updatePlinkoPotentialWin();
+                this.playSound('click');
+            }
+
+            updatePlinkoPotentialWin() {
+                const multipliers = this.plinkoMultipliers[this.plinkoRisk];
+                const maxMultiplier = Math.max(...multipliers);
+                const potentialWin = this.plinkoBet * maxMultiplier;
+                
+                const element = document.getElementById('potentialPlinkoWin');
+                if (element) {
+                    element.textContent = `${potentialWin.toFixed(0)} coins`;
+                }
+                
+                const currentBetElement = document.getElementById('currentPlinkoBet');
+                if (currentBetElement) {
+                    currentBetElement.textContent = `${this.plinkoBet} coins`;
+                }
+            }
+
+            initializePlinkoBoard() {
+                const board = document.getElementById('plinkoBoard');
+                if (!board) return;
+                
+                board.innerHTML = '';
+                
+                const width = board.clientWidth;
+                const height = board.clientHeight;
+                
+                // Create pegs
+                const rows = 12;
+                const cols = 13;
+                const pegSize = 12;
+                const horizontalSpacing = width / (cols + 1);
+                const verticalSpacing = height / (rows + 3);
+                
+                for (let row = 0; row < rows; row++) {
+                    const pegsInRow = row + 1;
+                    const startX = (width - (pegsInRow * horizontalSpacing)) / 2;
+                    
+                    for (let col = 0; col < pegsInRow; col++) {
+                        const peg = document.createElement('div');
+                        peg.className = 'plinko-peg';
+                        peg.style.left = `${startX + col * horizontalSpacing}px`;
+                        peg.style.top = `${100 + row * verticalSpacing}px`;
+                        board.appendChild(peg);
+                    }
+                }
+                
+                // Create slots
+                const multipliers = this.plinkoMultipliers[this.plinkoRisk];
+                const slotWidth = width / multipliers.length;
+                
+                for (let i = 0; i < multipliers.length; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = 'plinko-slot';
+                    slot.style.left = `${i * slotWidth}px`;
+                    slot.style.width = `${slotWidth}px`;
+                    
+                    const value = document.createElement('div');
+                    value.className = 'plinko-slot-value';
+                    value.textContent = `${multipliers[i]}x`;
+                    
+                    const multiplier = document.createElement('div');
+                    multiplier.className = 'plinko-multiplier';
+                    multiplier.textContent = `×${multipliers[i]}`;
+                    
+                    slot.appendChild(value);
+                    slot.appendChild(multiplier);
+                    board.appendChild(slot);
+                }
+            }
+
+            dropPlinkoBall() {
                 if (!this.userId) {
-                    this.showToast('Please login to create a game', 'error');
+                    this.showToast('Please login to play', 'error');
                     return;
                 }
 
-                const betInput = document.getElementById('rpsBetInput');
+                const betInput = document.getElementById('plinkoBetInput');
                 const bet = parseFloat(betInput.value);
 
                 if (isNaN(bet) || bet < 10) {
@@ -3248,598 +3566,213 @@
                 // Deduct bet
                 this.balance -= bet;
                 this.updateBalance();
+                this.recordWager(bet);
 
-                const gameId = 'rps_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                // Create ball
+                const ballId = this.plinkoBallId++;
+                const board = document.getElementById('plinkoBoard');
+                const ball = document.createElement('div');
+                ball.className = 'plinko-ball';
+                ball.id = `plinko-ball-${ballId}`;
                 
-                const gameData = {
-                    id: gameId,
-                    creator: {
-                        userId: this.userId,
-                        username: this.username,
-                        choice: null,
-                        ready: false
-                    },
-                    opponent: null,
-                    bet: bet,
-                    status: 'waiting',
-                    winner: null,
-                    createdAt: Date.now(),
-                    lastActivity: Date.now()
-                };
-
-                await database.ref('rpsGames/' + gameId).set(gameData);
+                const startX = board.clientWidth / 2;
+                ball.style.left = `${startX - 10}px`;
+                ball.style.top = '20px';
                 
-                this.rpsGameId = gameId;
-                this.rpsBet = bet;
-                this.rpsChoice = null;
+                board.appendChild(ball);
                 
-                this.showToast(`Game created with ${bet} coin bet!`, 'success');
-                this.playSound('click');
-                
-                // Join the game
-                this.joinRPSGame(gameId);
-                
-                // Load updated game list
-                this.loadRPSGames();
+                // Animate ball drop
+                this.animatePlinkoBall(ballId, startX - 10, 20, bet);
+                this.playSound('plink');
             }
 
-            async loadRPSGames() {
-                const snapshot = await database.ref('rpsGames')
-                    .orderByChild('lastActivity')
-                    .limitToLast(20)
-                    .once('value');
-                
-                const games = [];
-                snapshot.forEach(child => {
-                    const game = child.val();
-                    if (game.status === 'waiting' && game.creator.userId !== this.userId) {
-                        games.push(game);
-                    }
-                });
-
-                const gameList = document.getElementById('rpsGameList');
-                if (!gameList) return;
-
-                if (games.length === 0) {
-                    gameList.innerHTML = `
-                        <div class="text-center py-8">
-                            <i class="fa-solid fa-gamepad text-4xl text-gray-600 mb-4"></i>
-                            <p class="text-gray-400">No active games found</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                gameList.innerHTML = games.map(game => `
-                    <div class="game-lobby-item" onclick="app.joinRPSGame('${game.id}')">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <div class="text-white font-bold">${game.creator.username}</div>
-                                <div class="text-gray-400 text-xs">Bet: ${game.bet} coins</div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-[#10b981] font-bold">${game.bet} coins</div>
-                                <div class="text-gray-400 text-xs">Click to join</div>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            async joinRPSGame(gameId) {
+            async dropMultiplePlinkoBalls(count) {
                 if (!this.userId) {
-                    this.showToast('Please login to join a game', 'error');
+                    this.showToast('Please login to play', 'error');
                     return;
                 }
 
-                const gameRef = database.ref('rpsGames/' + gameId);
-                const snapshot = await gameRef.once('value');
-                const game = snapshot.val();
-
-                if (!game) {
-                    this.showToast('Game not found', 'error');
-                    return;
-                }
-
-                if (game.status !== 'waiting') {
-                    this.showToast('Game is no longer available', 'error');
-                    return;
-                }
-
-                if (game.creator.userId === this.userId) {
-                    // User is creator, just load the game
-                    this.rpsGameId = gameId;
-                    this.rpsBet = game.bet;
-                    this.renderRPSGame(game);
-                    this.listenToRPSGame(gameId);
-                    return;
-                }
-
-                // Check if opponent slot is available
-                if (game.opponent) {
-                    this.showToast('Game is full', 'error');
-                    return;
-                }
-
-                const betInput = document.getElementById('rpsBetInput');
+                const betInput = document.getElementById('plinkoBetInput');
                 const bet = parseFloat(betInput.value);
+                const totalBet = bet * count;
 
-                if (bet !== game.bet) {
-                    this.showToast(`Bet must be exactly ${game.bet} coins`, 'error');
+                if (isNaN(bet) || bet < 10) {
+                    this.showToast('Minimum bet is 10 coins', 'error');
                     return;
                 }
 
-                if (bet > this.balance) {
+                if (totalBet > this.balance) {
                     this.showToast('Insufficient funds', 'error');
                     return;
                 }
 
-                // Deduct bet
-                this.balance -= bet;
+                // Deduct total bet
+                this.balance -= totalBet;
                 this.updateBalance();
+                this.recordWager(totalBet);
 
-                // Join as opponent
-                await gameRef.update({
-                    opponent: {
-                        userId: this.userId,
-                        username: this.username,
-                        choice: null,
-                        ready: false
-                    },
-                    status: 'active',
-                    lastActivity: Date.now()
-                });
-
-                this.rpsGameId = gameId;
-                this.rpsBet = bet;
-                this.rpsChoice = null;
-                
-                this.showToast(`Joined ${game.creator.username}'s game!`, 'success');
-                this.playSound('click');
-                
-                // Load the game
-                this.renderRPSGame({...game, opponent: {
-                    userId: this.userId,
-                    username: this.username,
-                    choice: null,
-                    ready: false
-                }, status: 'active'});
-                
-                this.listenToRPSGame(gameId);
-                
-                // Add chat message
-                this.addChatMessage('System', 
-                    `${this.username} joined ${game.creator.username}'s RPS game for ${bet} coins!`, 
-                    'text-[#8b5cf6]', true);
-            }
-
-            async leaveRPSGame() {
-                if (!this.rpsGameId) return;
-
-                const gameRef = database.ref('rpsGames/' + this.rpsGameId);
-                const snapshot = await gameRef.once('value');
-                const game = snapshot.val();
-
-                if (game) {
-                    if (game.status === 'waiting' && game.creator.userId === this.userId) {
-                        // Creator leaves waiting game - refund and delete
-                        this.balance += game.bet;
-                        this.updateBalance();
-                        await gameRef.remove();
-                        this.showToast('Game cancelled', 'warning');
-                    } else if (game.status === 'active') {
-                        // Player leaves active game
-                        if (game.creator.userId === this.userId) {
-                            // Creator leaves - opponent wins by default
-                            if (game.opponent && game.opponent.userId) {
-                                const opponentRef = database.ref('users/' + game.opponent.userId);
-                                const opponentSnapshot = await opponentRef.once('value');
-                                const opponent = opponentSnapshot.val();
-                                
-                                const winAmount = game.bet * 2;
-                                await opponentRef.update({
-                                    balance: (opponent.balance || 0) + winAmount,
-                                    rpsWins: (opponent.rpsWins || 0) + 1
-                                });
-                                
-                                // Record win for opponent
-                                const transaction = {
-                                    userId: game.opponent.userId,
-                                    username: game.opponent.username,
-                                    amount: winAmount,
-                                    type: 'win',
-                                    game: 'Rock Paper Scissors',
-                                    timestamp: Date.now()
-                                };
-                                
-                                await database.ref('transactions').push(transaction);
-                                
-                                this.addChatMessage('System',
-                                    `${game.opponent.username} wins ${winAmount} coins by forfeit in RPS!`,
-                                    'text-[#10b981]', true);
-                            }
-                        } else if (game.opponent.userId === this.userId) {
-                            // Opponent leaves - creator wins by default
-                            const creatorRef = database.ref('users/' + game.creator.userId);
-                            const creatorSnapshot = await creatorRef.once('value');
-                            const creator = creatorSnapshot.val();
-                            
-                            const winAmount = game.bet * 2;
-                            await creatorRef.update({
-                                balance: (creator.balance || 0) + winAmount,
-                                rpsWins: (creator.rpsWins || 0) + 1
-                            });
-                            
-                            // Record win for creator
-                            const transaction = {
-                                userId: game.creator.userId,
-                                username: game.creator.username,
-                                amount: winAmount,
-                                type: 'win',
-                                game: 'Rock Paper Scissors',
-                                timestamp: Date.now()
-                            };
-                            
-                            await database.ref('transactions').push(transaction);
-                            
-                            this.addChatMessage('System',
-                                `${game.creator.username} wins ${winAmount} coins by forfeit in RPS!`,
-                                'text-[#10b981]', true);
-                        }
+                // Drop balls with delays
+                for (let i = 0; i < count; i++) {
+                    setTimeout(() => {
+                        const ballId = this.plinkoBallId++;
+                        const board = document.getElementById('plinkoBoard');
+                        const ball = document.createElement('div');
+                        ball.className = 'plinko-ball';
+                        ball.id = `plinko-ball-${ballId}`;
                         
-                        await gameRef.remove();
-                        this.showToast('Left game', 'warning');
-                    }
+                        // Random starting position
+                        const startX = (board.clientWidth / 2) + (Math.random() * 100 - 50);
+                        ball.style.left = `${Math.max(10, Math.min(board.clientWidth - 30, startX))}px`;
+                        ball.style.top = '20px';
+                        
+                        board.appendChild(ball);
+                        
+                        // Animate ball drop
+                        this.animatePlinkoBall(ballId, parseFloat(ball.style.left), 20, bet);
+                        this.playSound('plink');
+                    }, i * 300);
                 }
-
-                this.rpsGameId = null;
-                this.rpsChoice = null;
-                this.rpsBet = 0;
-                
-                // Reload RPS page
-                this.loadGame('rps');
             }
 
-            renderRPSGame(game) {
-                const gameArea = document.getElementById('rpsGameArea');
-                if (!gameArea) return;
+            animatePlinkoBall(ballId, startX, startY, bet) {
+                const ball = document.getElementById(`plinko-ball-${ballId}`);
+                if (!ball) return;
 
-                const isCreator = game.creator.userId === this.userId;
-                const opponent = isCreator ? game.opponent : game.creator;
-                const myChoice = isCreator ? game.creator.choice : (game.opponent ? game.opponent.choice : null);
-                const opponentChoice = opponent ? opponent.choice : null;
-                const bothReady = (game.creator.ready && (!game.opponent || game.opponent.ready));
-
-                let statusText = '';
-                let statusColor = 'text-gray-400';
+                const board = document.getElementById('plinkoBoard');
+                const width = board.clientWidth;
+                const height = board.clientHeight;
                 
-                if (game.status === 'waiting') {
-                    statusText = 'Waiting for opponent...';
-                    statusColor = 'text-yellow-400';
-                } else if (game.status === 'active') {
-                    if (!myChoice) {
-                        statusText = 'Choose your move!';
-                        statusColor = 'text-blue-400';
-                    } else if (!opponentChoice) {
-                        statusText = 'Waiting for opponent...';
-                        statusColor = 'text-yellow-400';
-                    } else {
-                        statusText = 'Revealing results...';
-                        statusColor = 'text-purple-400';
-                    }
-                } else if (game.status === 'finished') {
-                    if (game.winner === this.userId) {
-                        statusText = 'You won!';
-                        statusColor = 'text-green-400';
-                    } else if (game.winner === 'tie') {
-                        statusText = "It's a tie!";
-                        statusColor = 'text-yellow-400';
-                    } else {
-                        statusText = 'You lost!';
-                        statusColor = 'text-red-400';
-                    }
-                }
-
-                gameArea.innerHTML = `
-                    <div class="text-center mb-6">
-                        <h3 class="text-2xl font-bold text-white mb-2">Game vs ${opponent ? opponent.username : 'Waiting...'}</h3>
-                        <div class="text-lg ${statusColor} font-bold mb-4">${statusText}</div>
-                        <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-xl p-4 inline-block border border-[#2a3042]">
-                            <div class="text-white font-bold text-xl">Bet: ${game.bet} coins</div>
-                            <div class="text-gray-400 text-sm">Winner gets ${game.bet * 2} coins</div>
-                        </div>
-                    </div>
+                let x = startX;
+                let y = startY;
+                let xVelocity = (Math.random() - 0.5) * 4;
+                let yVelocity = 2;
+                const gravity = 0.2;
+                const friction = 0.98;
+                const bounce = 0.8;
+                
+                const multipliers = this.plinkoMultipliers[this.plinkoRisk];
+                const slotWidth = width / multipliers.length;
+                
+                const animate = () => {
+                    // Apply gravity
+                    yVelocity += gravity;
                     
-                    <div class="rps-vs-container mb-8">
-                        <div class="rps-player-choice">
-                            ${myChoice ? `
-                                <div class="rps-icon">
-                                    <i class="fa-solid ${this.getRPSIcon(myChoice)}"></i>
-                                </div>
-                                <div class="text-white text-sm font-bold mt-2">${this.username}</div>
-                            ` : `
-                                <div class="text-gray-400">You</div>
-                            `}
-                        </div>
-                        
-                        <div class="rps-opponent-choice">
-                            ${opponentChoice ? `
-                                <div class="rps-icon">
-                                    <i class="fa-solid ${this.getRPSIcon(opponentChoice)}"></i>
-                                </div>
-                                <div class="text-white text-sm font-bold mt-2">${opponent ? opponent.username : 'Opponent'}</div>
-                            ` : opponent ? `
-                                <div class="text-gray-400">${opponent.username}</div>
-                            ` : `
-                                <div class="text-gray-400">Waiting...</div>
-                            `}
-                        </div>
-                        
-                        <div class="rps-vs-text">VS</div>
-                    </div>
+                    // Update position
+                    x += xVelocity;
+                    y += yVelocity;
                     
-                    ${game.status === 'finished' ? `
-                        <div class="rps-result ${game.winner === this.userId ? 'win' : game.winner === 'tie' ? 'tie' : 'loss'} mb-6">
-                            ${game.winner === this.userId ? '🎉 YOU WIN! 🎉' : 
-                              game.winner === 'tie' ? '🤝 TIE GAME! 🤝' : '😢 YOU LOSE! 😢'}
-                            <div class="text-lg mt-2">${game.winner === this.userId ? `+${game.bet * 2} coins` : 
-                                game.winner === 'tie' ? 'Bet returned' : `-${game.bet} coins`}</div>
-                        </div>
+                    // Check collision with walls
+                    if (x <= 10 || x >= width - 30) {
+                        xVelocity *= -bounce;
+                        x = x <= 10 ? 10 : width - 30;
+                        this.playSound('plink');
+                    }
+                    
+                    // Check collision with pegs
+                    const pegs = document.querySelectorAll('.plinko-peg');
+                    pegs.forEach(peg => {
+                        const pegRect = peg.getBoundingClientRect();
+                        const ballRect = ball.getBoundingClientRect();
+                        const boardRect = board.getBoundingClientRect();
                         
-                        <button onclick="app.leaveRPSGame()" class="w-full btn-primary py-3 rounded-xl font-bold text-lg">
-                            <i class="fa-solid fa-arrow-left mr-2"></i> Back to Lobby
-                        </button>
-                    ` : `
-                        <div class="flex justify-center gap-6 mb-8">
-                            ${['rock', 'paper', 'scissors'].map(choice => `
-                                <div onclick="app.selectRPSChoice('${choice}')" 
-                                     class="rps-choice ${choice} ${myChoice === choice ? 'selected' : ''} ${myChoice ? 'disabled' : ''}">
-                                    <div class="rps-icon">
-                                        <i class="fa-solid ${this.getRPSIcon(choice)}"></i>
-                                    </div>
-                                    <div class="text-white text-sm font-bold mt-2">
-                                        ${choice.charAt(0).toUpperCase() + choice.slice(1)}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
+                        const pegX = pegRect.left - boardRect.left + pegRect.width / 2;
+                        const pegY = pegRect.top - boardRect.top + pegRect.height / 2;
+                        const ballCenterX = x + 10;
+                        const ballCenterY = y + 10;
                         
-                        ${myChoice && !game.creator.ready && isCreator ? `
-                            <button onclick="app.confirmRPSChoice()" class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 rounded-xl font-bold text-lg transition-all duration-300">
-                                <i class="fa-solid fa-check mr-2"></i> Confirm Choice
-                            </button>
-                        ` : myChoice && game.opponent && !game.opponent.ready && !isCreator ? `
-                            <button onclick="app.confirmRPSChoice()" class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white py-3 rounded-xl font-bold text-lg transition-all duration-300">
-                                <i class="fa-solid fa-check mr-2"></i> Confirm Choice
-                            </button>
-                        ` : ''}
+                        const distance = Math.sqrt(
+                            Math.pow(ballCenterX - pegX, 2) + 
+                            Math.pow(ballCenterY - pegY, 2)
+                        );
                         
-                        ${bothReady && game.status === 'active' ? `
-                            <div class="countdown-timer text-center mb-6" id="rpsCountdown">3</div>
-                        ` : ''}
-                        
-                        <button onclick="app.leaveRPSGame()" class="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-3 rounded-xl font-bold text-lg mt-4 transition-all duration-300">
-                            <i class="fa-solid fa-sign-out mr-2"></i> Leave Game
-                        </button>
-                    `}
-                `;
-
-                // Start countdown if both are ready
-                if (bothReady && game.status === 'active') {
-                    this.startRPSCountdown();
-                }
-            }
-
-            getRPSIcon(choice) {
-                switch(choice) {
-                    case 'rock': return 'fa-hand-back-fist';
-                    case 'paper': return 'fa-hand';
-                    case 'scissors': return 'fa-hand-scissors';
-                    default: return 'fa-question';
-                }
-            }
-
-            selectRPSChoice(choice) {
-                if (!this.rpsGameId || this.rpsChoice) return;
-                
-                this.rpsChoice = choice;
-                this.playSound('click');
-                
-                // Update UI
-                const gameArea = document.getElementById('rpsGameArea');
-                if (gameArea) {
-                    document.querySelectorAll('.rps-choice').forEach(el => {
-                        el.classList.remove('selected');
-                        if (el.classList.contains(choice)) {
-                            el.classList.add('selected');
+                        if (distance < 20) {
+                            // Collision detected
+                            const angle = Math.atan2(ballCenterY - pegY, ballCenterX - pegX);
+                            const speed = Math.sqrt(xVelocity * xVelocity + yVelocity * yVelocity);
+                            
+                            xVelocity = Math.cos(angle) * speed * bounce;
+                            yVelocity = Math.sin(angle) * speed * bounce;
+                            
+                            // Move ball out of collision
+                            const overlap = 20 - distance;
+                            x += Math.cos(angle) * overlap;
+                            y += Math.sin(angle) * overlap;
+                            
+                            this.playSound('plink');
                         }
                     });
-                }
-            }
-
-            async confirmRPSChoice() {
-                if (!this.rpsGameId || !this.rpsChoice) {
-                    this.showToast('Please select a choice first', 'error');
-                    return;
-                }
-
-                const gameRef = database.ref('rpsGames/' + this.rpsGameId);
-                const snapshot = await gameRef.once('value');
-                const game = snapshot.val();
-
-                if (!game) {
-                    this.showToast('Game not found', 'error');
-                    return;
-                }
-
-                const isCreator = game.creator.userId === this.userId;
-                const updatePath = isCreator ? 'creator' : 'opponent';
-
-                await gameRef.update({
-                    [updatePath + '.choice']: this.rpsChoice,
-                    [updatePath + '.ready']: true,
-                    lastActivity: Date.now()
-                });
-
-                this.showToast('Choice confirmed!', 'success');
-                this.playSound('click');
-            }
-
-            startRPSCountdown() {
-                let countdown = 3;
-                const countdownElement = document.getElementById('rpsCountdown');
-                
-                if (!countdownElement) return;
-
-                const countdownInterval = setInterval(() => {
-                    countdownElement.textContent = countdown;
-                    countdown--;
                     
-                    if (countdown < 0) {
-                        clearInterval(countdownInterval);
-                        this.revealRPSResults();
-                    }
-                }, 1000);
-            }
-
-            async revealRPSResults() {
-                if (!this.rpsGameId) return;
-
-                const gameRef = database.ref('rpsGames/' + this.rpsGameId);
-                const snapshot = await gameRef.once('value');
-                const game = snapshot.val();
-
-                if (!game || !game.creator.choice || !game.opponent || !game.opponent.choice) {
-                    return;
-                }
-
-                const creatorChoice = game.creator.choice;
-                const opponentChoice = game.opponent.choice;
-                
-                let winner = null;
-                
-                // Determine winner
-                if (creatorChoice === opponentChoice) {
-                    winner = 'tie';
-                } else if (
-                    (creatorChoice === 'rock' && opponentChoice === 'scissors') ||
-                    (creatorChoice === 'paper' && opponentChoice === 'rock') ||
-                    (creatorChoice === 'scissors' && opponentChoice === 'paper')
-                ) {
-                    winner = game.creator.userId;
-                } else {
-                    winner = game.opponent.userId;
-                }
-
-                // Update game status
-                await gameRef.update({
-                    status: 'finished',
-                    winner: winner,
-                    lastActivity: Date.now()
-                });
-
-                // Handle payouts
-                if (winner === 'tie') {
-                    // Return bets to both players
-                    const creatorRef = database.ref('users/' + game.creator.userId);
-                    const opponentRef = database.ref('users/' + game.opponent.userId);
+                    // Apply friction
+                    xVelocity *= friction;
+                    yVelocity *= friction;
                     
-                    const creatorSnapshot = await creatorRef.once('value');
-                    const opponentSnapshot = await opponentRef.once('value');
+                    // Update ball position
+                    ball.style.left = `${x}px`;
+                    ball.style.top = `${y}px`;
                     
-                    const creator = creatorSnapshot.val();
-                    const opponent = opponentSnapshot.val();
-                    
-                    await creatorRef.update({
-                        balance: (creator.balance || 0) + game.bet,
-                        rpsTies: (creator.rpsTies || 0) + 1
-                    });
-                    
-                    await opponentRef.update({
-                        balance: (opponent.balance || 0) + game.bet,
-                        rpsTies: (opponent.rpsTies || 0) + 1
-                    });
-                    
-                    // Add chat message
-                    this.addChatMessage('System',
-                        `${game.creator.username} vs ${game.opponent.username}: Tie game in RPS!`,
-                        'text-yellow-400', true);
+                    // Check if ball reached bottom
+                    if (y >= height - 80) {
+                        // Determine which slot the ball landed in
+                        const slotIndex = Math.floor(x / slotWidth);
+                        const multiplier = multipliers[Math.min(Math.max(0, slotIndex), multipliers.length - 1)];
+                        const winAmount = bet * multiplier;
                         
-                } else {
-                    const winnerId = winner;
-                    const loserId = winner === game.creator.userId ? game.opponent.userId : game.creator.userId;
-                    const winnerUsername = winner === game.creator.userId ? game.creator.username : game.opponent.username;
-                    const loserUsername = winner === game.creator.userId ? game.opponent.username : game.creator.username;
-                    
-                    const winAmount = game.bet * 2;
-                    
-                    // Update winner's balance
-                    const winnerRef = database.ref('users/' + winnerId);
-                    const winnerSnapshot = await winnerRef.once('value');
-                    const winnerUser = winnerSnapshot.val();
-                    
-                    await winnerRef.update({
-                        balance: (winnerUser.balance || 0) + winAmount,
-                        rpsWins: (winnerUser.rpsWins || 0) + 1
-                    });
-                    
-                    // Update loser's stats
-                    const loserRef = database.ref('users/' + loserId);
-                    await loserRef.update({
-                        rpsLosses: (game.loser?.rpsLosses || 0) + 1
-                    });
-                    
-                    // Record transaction
-                    const transaction = {
-                        userId: winnerId,
-                        username: winnerUsername,
-                        amount: winAmount,
-                        type: 'win',
-                        game: 'Rock Paper Scissors',
-                        timestamp: Date.now()
-                    };
-                    
-                    await database.ref('transactions').push(transaction);
-                    
-                    // Update local balance if user is winner
-                    if (winnerId === this.userId) {
+                        // Update balance
                         this.balance += winAmount;
                         this.updateBalance();
-                        this.playSound('win');
-                        confetti({
-                            particleCount: 150,
-                            spread: 70,
-                            origin: { y: 0.6 }
-                        });
-                    } else {
-                        this.playSound('lose');
+                        
+                        // Record result
+                        if (winAmount > bet) {
+                            this.recordWin(winAmount - bet, 'Plinko');
+                        } else if (winAmount < bet) {
+                            this.recordLoss(bet - winAmount, 'Plinko');
+                        }
+                        
+                        // Show result
+                        const resultElement = document.getElementById('lastPlinkoResult');
+                        if (resultElement) {
+                            resultElement.textContent = `${multiplier}x = ${winAmount.toFixed(2)} coins`;
+                            resultElement.style.color = winAmount > bet ? '#10b981' : 
+                                                       winAmount < bet ? '#ef4444' : '#f59e0b';
+                        }
+                        
+                        // Remove ball after delay
+                        setTimeout(() => {
+                            if (ball.parentNode) {
+                                ball.parentNode.removeChild(ball);
+                            }
+                        }, 1000);
+                        
+                        // Update stats
+                        this.updatePlinkoStats();
+                        
+                        // Confetti for big win
+                        if (winAmount > bet * 5) {
+                            confetti({
+                                particleCount: 100,
+                                spread: 70,
+                                origin: { y: 0.6 }
+                            });
+                            this.playSound('win');
+                        }
+                        
+                        return;
                     }
                     
-                    // Add chat message
-                    this.addChatMessage('System',
-                        `${winnerUsername} defeated ${loserUsername} and won ${winAmount} coins in RPS!`,
-                        'text-[#10b981]', true);
-                }
-
-                // Clean up game after 30 seconds
-                setTimeout(async () => {
-                    await gameRef.remove();
-                }, 30000);
+                    // Continue animation
+                    requestAnimationFrame(animate);
+                };
+                
+                animate();
             }
 
-            listenToRPSGame(gameId) {
-                database.ref('rpsGames/' + gameId).on('value', (snapshot) => {
-                    const game = snapshot.val();
-                    if (game) {
-                        this.renderRPSGame(game);
-                    } else {
-                        // Game was deleted
-                        this.rpsGameId = null;
-                        this.rpsChoice = null;
-                        this.rpsBet = 0;
-                        this.loadGame('rps');
-                    }
-                });
+            updatePlinkoStats() {
+                // In a real implementation, these would come from Firebase
+                // For now, we'll just show placeholder values
+                document.getElementById('plinkoBallsDropped').textContent = '0';
+                document.getElementById('plinkoTotalWins').textContent = '0';
+                document.getElementById('plinkoBiggestWin').textContent = '0';
+                document.getElementById('plinkoWinRate').textContent = '0%';
             }
 
             // LEADERBOARD
@@ -3873,10 +3806,7 @@
                         users.push({
                             username: user.username,
                             balance: user.balance || 0,
-                            userId: user.userId,
-                            rpsWins: user.rpsWins || 0,
-                            rpsLosses: user.rpsLosses || 0,
-                            rpsTies: user.rpsTies || 0
+                            userId: user.userId
                         });
                     }
                 });
@@ -3912,9 +3842,7 @@
                             <div class="text-2xl font-bold w-10">${medal}</div>
                             <div class="flex-1">
                                 <div class="text-white font-bold text-lg">${user.username}</div>
-                                <div class="text-gray-400 text-sm">
-                                    RPS: ${user.rpsWins || 0}W ${user.rpsLosses || 0}L ${user.rpsTies || 0}T
-                                </div>
+                                <div class="text-gray-400 text-sm">ID: ${user.userId}</div>
                             </div>
                             <div class="text-right">
                                 <div class="text-xl font-bold text-green-400">${user.balance.toLocaleString()} coins</div>
