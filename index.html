@@ -214,7 +214,7 @@
             box-shadow: 0 25px 50px -12px rgba(110,86,207,0.4);
         }
         
-        /* Mines Grid */
+        /* Mines Grid - FIXED */
         .mines-grid-container {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -224,6 +224,8 @@
             margin: 0 auto;
             user-select: none;
             padding: 10px;
+            min-height: 400px;
+            align-items: center;
         }
         
         .mine-tile-modern {
@@ -276,12 +278,13 @@
             animation: shake 0.5s;
         }
         
-        /* Blackjack Cards */
+        /* Blackjack Cards - FIXED to prevent scaling */
         .card-container {
             width: 100px;
             height: 146px;
             perspective: 1200px;
             margin: 0 8px;
+            flex-shrink: 0; /* Prevent scaling */
         }
         
         @media (max-width: 768px) {
@@ -546,6 +549,7 @@
             .mines-grid-container {
                 gap: 10px;
                 max-width: 400px;
+                min-height: 350px;
             }
             
             .sound-toggle {
@@ -609,7 +613,7 @@
             border-bottom: 3px solid #8b5cf6;
         }
         
-        /* Blackjack Table - FIXED */
+        /* Blackjack Table - FIXED to prevent scaling */
         .blackjack-table {
             background: linear-gradient(135deg, #064e3b, #022c22);
             border-radius: 20px;
@@ -618,16 +622,19 @@
             position: relative;
             overflow: hidden;
             padding: 15px;
-            min-height: 400px;
+            min-height: 500px;
+            max-height: 500px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            flex-shrink: 0;
         }
         
         @media (max-width: 768px) {
             .blackjack-table {
                 padding: 10px;
-                min-height: 350px;
+                min-height: 450px;
+                max-height: 450px;
             }
         }
         
@@ -649,6 +656,7 @@
             border: 1px solid #334155;
             padding: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
         }
         
         /* Live Wins Panel */
@@ -701,13 +709,15 @@
             z-index: 10;
         }
         
-        /* Blackjack fit adjustment */
-        .blackjack-fit-container {
-            max-height: calc(100vh - 180px);
-            overflow-y: auto;
+        /* Blackjack fixed height containers */
+        .blackjack-fixed-container {
+            max-height: 500px;
+            overflow: visible;
+            display: flex;
+            flex-direction: column;
         }
         
-        /* Game Hand Containers */
+        /* Game Hand Containers - FIXED to prevent scaling */
         .hand-container {
             min-height: 160px;
             display: flex;
@@ -716,6 +726,8 @@
             flex-wrap: wrap;
             gap: 10px;
             padding: 10px;
+            overflow: visible;
+            flex-shrink: 0;
         }
         
         @media (max-width: 768px) {
@@ -734,6 +746,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
         
         @media (max-width: 768px) {
@@ -746,6 +759,7 @@
         .game-container {
             padding: 1rem;
             min-height: calc(100vh - 200px);
+            overflow: visible;
         }
 
         /* Add this to your existing CSS */
@@ -754,11 +768,13 @@
             min-height: calc(100vh - 64px);
             display: flex;
             flex-direction: column;
+            overflow: visible;
         }
 
         .game-container {
             flex: 1;
             min-height: calc(100vh - 180px);
+            overflow: visible;
         }
 
         /* Fix for the body and layout containers */
@@ -770,15 +786,18 @@
 
         .flex-1.overflow-y-auto {
             height: calc(100vh - 64px);
+            overflow: visible;
         }
 
         /* Ensure all game pages have proper height */
         .max-w-5xl.mx-auto.flex.flex-col.md\:flex-row.gap-6.min-h-\[600px\].items-start.game-container {
             min-height: calc(100vh - 200px);
+            overflow: visible;
         }
 
         .max-w-6xl.mx-auto.flex.flex-col.gap-6 {
             min-height: calc(100vh - 180px);
+            overflow: visible;
         }
 
         /* Adjust chat sidebar height */
@@ -832,6 +851,7 @@
             .mines-grid-container {
                 gap: 8px;
                 padding: 5px;
+                min-height: 300px;
             }
             
             .mine-tile-modern {
@@ -841,7 +861,8 @@
             }
             
             .blackjack-table {
-                min-height: 300px;
+                min-height: 400px;
+                max-height: 400px;
             }
             
             .game-controls {
@@ -1045,6 +1066,28 @@
             border-radius: 10px;
             margin-left: 5px;
             vertical-align: middle;
+        }
+        
+        /* Prevent scaling of game containers */
+        .no-scale {
+            transform: none !important;
+            scale: 1 !important;
+        }
+        
+        /* Fixed layout for games */
+        .fixed-game-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            max-height: 600px;
+            overflow: visible;
+        }
+        
+        @media (max-width: 768px) {
+            .fixed-game-layout {
+                min-height: 500px;
+                max-height: 500px;
+            }
         }
     </style>
 </head>
@@ -1317,17 +1360,17 @@
     <script>
         // Sound Effects
         const sounds = {
-            card: new Audio('sounds/card.wav'),
-            win: new Audio('sounds/win.wav'),
-            lose: new Audio('sounds/lose.wav'),
-            mine: new Audio('sounds/explosion.wav'),
-            gem: new Audio('sounds/win.wav'),
-            click: new Audio('sounds/click.wav')
+            card: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-card-shuffle-2464.mp3'),
+            win: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3'),
+            lose: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-losing-bleeps-2026.mp3'),
+            mine: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-bomb-explosion-in-the-air-2801.mp3'),
+            gem: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3'),
+            click: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3')
         };
 
         // Set volume for all sounds
         Object.values(sounds).forEach(sound => {
-            sound.volume = 0.5;
+            sound.volume = 0.3;
             sound.preload = 'auto';
         });
 
@@ -1378,6 +1421,12 @@
                 this.rpsChoice = null;
                 this.rpsBet = 0;
                 this.rpsGameId = null;
+                
+                // Mines game state
+                this.minesBet = 0;
+                this.minesCount = 3;
+                this.minesRevealedCount = 0;
+                this.minesGrid = [];
                 
                 // Initialize app
                 this.init();
@@ -2379,7 +2428,7 @@
                 `;
             }
 
-            // MINES GAME
+            // MINES GAME - FIXED
             renderMines() {
                 this.mainContent.innerHTML = `
                     <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 min-h-[500px]">
@@ -2472,7 +2521,9 @@
 
             calculateMinesMultiplier(mines, revealed) {
                 let multiplier = 1.0;
-                for (let i = 0; i < revealed; i++) multiplier *= (25 - i) / (25 - mines - i);
+                for (let i = 0; i < revealed; i++) {
+                    multiplier *= (25 - i) / (25 - mines - i);
+                }
                 return multiplier;
             }
 
@@ -2491,7 +2542,11 @@
                 const bet = parseFloat(betInput.value);
                 const mines = parseInt(document.getElementById('minesCountInput').value);
 
-                if (isNaN(bet) || bet <= 0) return;
+                if (isNaN(bet) || bet <= 0) {
+                    this.showToast('Please enter a valid bet', 'error');
+                    return;
+                }
+
                 if (bet > this.balance) {
                     this.showToast('Insufficient funds', 'error');
                     return;
@@ -2516,6 +2571,8 @@
                         placed++;
                     }
                 }
+
+                console.log('Mines placed at positions:', this.minesGrid.map((v, i) => v === 'mine' ? i : -1).filter(i => i !== -1));
 
                 const btn = document.getElementById('minesBtn');
                 btn.innerHTML = '<i class="fa-solid fa-money-bill-wave mr-2"></i> Cash Out <span id="minesCashoutVal" class="ml-2 bg-white/20 px-3 py-1 rounded-lg text-sm">0</span>';
@@ -2573,6 +2630,7 @@
                     btn.className = 'w-full btn-primary py-4 rounded-2xl font-bold text-lg tracking-wider hover:scale-[1.02] transition-all duration-300';
                 }
 
+                // Reveal all mines
                 this.minesGrid.forEach((type, idx) => {
                     const tile = document.getElementById(`tile-${idx}`);
                     if (!tile.classList.contains('revealed')) {
@@ -2601,9 +2659,17 @@
                 this.showToast(`Cashed out ${win.toFixed(2)} coins! (${mult.toFixed(2)}x)`, 'success');
                 this.recordWin(win - this.minesBet, 'Mines');
                 this.endMines(true, -1);
+                
+                if (win - this.minesBet > 0) {
+                    confetti({
+                        particleCount: 150,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
             }
 
-            // BLACKJACK GAME
+            // BLACKJACK GAME - FIXED to prevent scaling
             renderBlackjack() {
                 this.bjInProgress = false;
                 this.bjSettled = false;
@@ -2621,7 +2687,7 @@
                         
                         <div class="blackjack-table">
                             <!-- Dealer Section -->
-                            <div class="w-full mb-4 md:mb-8">
+                            <div class="w-full mb-4 md:mb-8 flex-shrink-0">
                                 <div class="flex items-center justify-center gap-3 mb-4">
                                     <i class="fa-solid fa-user-tie text-xl text-[#a7f3d0]"></i>
                                     <div class="text-[#a7f3d0] font-bold tracking-wider">Dealer</div>
@@ -2631,12 +2697,12 @@
                             </div>
                             
                             <!-- Game Status -->
-                            <div id="bjStatus" class="text-center my-4">
+                            <div id="bjStatus" class="text-center my-4 flex-shrink-0">
                                 <div class="status-text text-white" id="bjGameStatus">Place your bet and deal!</div>
                             </div>
                             
                             <!-- Player Section -->
-                            <div class="w-full mt-4 md:mt-8">
+                            <div class="w-full mt-4 md:mt-8 flex-shrink-0">
                                 <div id="playerHand" class="hand-container mb-4"></div>
                                 <div class="flex items-center justify-center gap-3">
                                     <i class="fa-solid fa-user text-xl text-[#a7f3d0]"></i>
@@ -2707,7 +2773,11 @@
                 const betInput = document.getElementById('bjBetInput');
                 const bet = parseFloat(betInput.value);
 
-                if (isNaN(bet) || bet <= 0) return;
+                if (isNaN(bet) || bet <= 0) {
+                    this.showToast('Please enter a valid bet', 'error');
+                    return;
+                }
+
                 if (bet > this.balance) {
                     this.showToast('Insufficient funds', 'error');
                     return;
@@ -3868,7 +3938,7 @@
                 }
             }
 
-            // ADMIN PANEL (same as before but updated for RPS)
+            // ADMIN PANEL
             async renderAdminPanel() {
                 if (!this.isAdmin) {
                     this.mainContent.innerHTML = `
