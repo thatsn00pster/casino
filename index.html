@@ -982,9 +982,9 @@
                 <div class="text-center wallet-section">
                     <i class="fa-solid fa-gift text-[#8b5cf6] text-3xl mb-2"></i>
                     <h3 class="text-white font-bold text-base mb-1">Free Coins</h3>
-                    <p class="text-[#6b7280] text-xs mb-4">Claim 500 free coins every hour when balance is low</p>
+                    <p class="text-[#6b7280] text-xs mb-4">Claim 500 free coins whenever your balance is under 100</p>
                     <div class="bg-gradient-to-r from-[#11141c] to-[#0b0e14] rounded-xl p-4 border border-[#2a3042]">
-                        <div class="text-white font-bold text-xl mb-3" id="freeCoinsTimer">00:00:00</div>
+                        <div class="text-white font-bold text-xl mb-3" id="freeCoinsTimer">Ready to Claim</div>
                         <button id="claimCoinsBtn" onclick="app.claimFreeCoins()" class="w-full btn-primary py-3 rounded-xl font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 touch-button">
                             Claim 500 Coins
                         </button>
@@ -1054,7 +1054,7 @@
         class GameApp {
             constructor() {
                 this.user = null;
-                this.balance = 500;
+                this.balance = 500; // Default, will be loaded from database
                 this.username = '';
                 this.userId = '';
                 this.activeGame = null;
@@ -1081,7 +1081,7 @@
             init() {
                 this.checkAuth();
                 this.initChat();
-                this.setupFreeCoinsTimer();
+                this.updateFreeCoinsButton(); // Initialize free coins button
                 this.listenForBigWins();
                 
                 // Set default home page
@@ -1203,29 +1203,43 @@
                     }, 500);
                 }
                 
-                // Save to localStorage
-                if (this.userId) {
-                    localStorage.setItem(`balance_${this.userId}`, this.balance);
-                    
-                    // Update in Firebase if user is logged in
-                    if (this.username) {
-                        database.ref('users/' + this.userId + '/balance').set(this.balance);
-                    }
+                // Save to database only
+                if (this.userId && this.username) {
+                    database.ref('users/' + this.userId + '/balance').set(this.balance);
                 }
+                
+                // Update free coins button
+                this.updateFreeCoinsButton();
             }
 
-            // Auth Functions
-            checkAuth() {
+            // Auth Functions - MODIFIED: Only use database, verify account exists
+            async checkAuth() {
                 const savedUser = localStorage.getItem('moonCasinoUser');
                 if (savedUser) {
                     try {
                         const user = JSON.parse(savedUser);
+                        
+                        // Check if user still exists in database
+                        const userSnapshot = await database.ref('users/' + user.userId).once('value');
+                        if (!userSnapshot.exists()) {
+                            // Account was deleted or doesn't exist, log out
+                            this.logout();
+                            this.showToast('Account no longer exists', 'error');
+                            return;
+                        }
+                        
+                        const userData = userSnapshot.val();
                         this.userId = user.userId;
-                        this.username = user.username;
-                        this.balance = parseInt(localStorage.getItem(`balance_${user.userId}`)) || 500;
+                        this.username = userData.username;
+                        this.balance = parseInt(userData.balance) || 500;
+                        this.lastFreeCoinsClaim = userData.lastFreeCoins || 0;
+                        
                         this.updateUI();
                         this.hideAuthModal();
+                        this.updateOnlineStatus();
+                        
                     } catch (e) {
+                        console.error('Auth error:', e);
                         this.showAuthModal();
                     }
                 } else {
@@ -1304,9 +1318,8 @@
 
                 await database.ref('users/' + userId).set(userData);
 
-                // Save locally
+                // Save locally (only for auto-login, balance comes from database)
                 localStorage.setItem('moonCasinoUser', JSON.stringify({ userId, username }));
-                localStorage.setItem(`balance_${userId}`, 500);
 
                 this.userId = userId;
                 this.username = username;
@@ -1352,12 +1365,11 @@
                     return;
                 }
 
-                // Save locally
+                // Save locally (only for auto-login, balance comes from database)
                 localStorage.setItem('moonCasinoUser', JSON.stringify({
                     userId: userFound.userId,
                     username: userFound.username
                 }));
-                localStorage.setItem(`balance_${userFound.userId}`, userFound.balance || 500);
 
                 this.userId = userFound.userId;
                 this.username = userFound.username;
@@ -1373,7 +1385,6 @@
 
             logout() {
                 localStorage.removeItem('moonCasinoUser');
-                localStorage.removeItem(`balance_${this.userId}`);
                 this.userId = '';
                 this.username = '';
                 this.balance = 500;
@@ -1435,66 +1446,44 @@
                 this.playSound('click');
             }
 
-            setupFreeCoinsTimer() {
-                setInterval(() => {
-                    this.updateFreeCoinsButton();
-                }, 1000);
-            }
-
             updateFreeCoinsButton() {
-                const now = Date.now();
-                const timeSinceLastClaim = now - this.lastFreeCoinsClaim;
-                const oneHour = 3600000;
-
-                const timeLeft = Math.max(0, oneHour - timeSinceLastClaim);
-                const hours = Math.floor(timeLeft / 3600000);
-                const minutes = Math.floor((timeLeft % 3600000) / 60000);
-                const seconds = Math.floor((timeLeft % 60000) / 1000);
-
-                const timerElement = document.getElementById('freeCoinsTimer');
                 const claimButton = document.getElementById('claimCoinsBtn');
+                const timerElement = document.getElementById('freeCoinsTimer');
 
-                if (timerElement) {
-                    timerElement.textContent = 
-                        `${hours.toString().padStart(2, '0')}:` +
-                        `${minutes.toString().padStart(2, '0')}:` +
-                        `${seconds.toString().padStart(2, '0')}`;
-                }
-
-                if (claimButton) {
-                    const canClaim = this.balance < 100 && timeSinceLastClaim >= oneHour;
-                    claimButton.disabled = !canClaim;
-                    claimButton.textContent = canClaim ? 'Claim 500 Coins' : 'Not Available';
-                    claimButton.className = canClaim ? 
-                        'w-full btn-primary py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-[1.02] touch-button' :
-                        'w-full bg-gray-700 text-gray-400 py-3 rounded-xl font-bold text-sm cursor-not-allowed touch-button';
+                if (claimButton && timerElement) {
+                    const canClaim = this.balance < 100;
+                    
+                    if (canClaim) {
+                        timerElement.textContent = 'Ready to Claim';
+                        claimButton.disabled = false;
+                        claimButton.textContent = 'Claim 500 Coins';
+                        claimButton.className = 'w-full btn-primary py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-[1.02] touch-button';
+                    } else {
+                        timerElement.textContent = 'Balance too high';
+                        claimButton.disabled = true;
+                        claimButton.textContent = 'Balance must be under 100';
+                        claimButton.className = 'w-full bg-gray-700 text-gray-400 py-3 rounded-xl font-bold text-sm cursor-not-allowed touch-button';
+                    }
                 }
             }
 
             async claimFreeCoins() {
                 if (!this.userId) return;
 
-                const now = Date.now();
-                const oneHour = 3600000;
-
+                // Check if balance is under 100
                 if (this.balance >= 100) {
                     this.showToast('You must have less than 100 coins to claim', 'error');
                     return;
                 }
 
-                if (now - this.lastFreeCoinsClaim < oneHour) {
-                    this.showToast('You can only claim once per hour', 'error');
-                    return;
-                }
-
                 this.balance += 500;
-                this.lastFreeCoinsClaim = now;
+                this.lastFreeCoinsClaim = Date.now();
 
                 // Update in database
                 if (this.username) {
                     await database.ref('users/' + this.userId).update({
                         balance: this.balance,
-                        lastFreeCoins: now
+                        lastFreeCoins: this.lastFreeCoinsClaim
                     });
                 }
 
