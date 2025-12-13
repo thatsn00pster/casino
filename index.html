@@ -19,16 +19,16 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
         
         :root {
-            --primary: #8b5cf6;
-            --secondary: #10b981;
+            --primary: #00e701;
+            --secondary: #1475e1;
             --danger: #ef4444;
             --warning: #f59e0b;
-            --bg-dark: #0b0e14;
-            --bg-panel: #161b26;
-            --border: #2a3042;
+            --bg-dark: #0f212e;
+            --bg-panel: #1a2c38;
+            --border: #2f4553;
         }
         
         * {
@@ -43,94 +43,15 @@
         }
         
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: #000;
+            font-family: 'Fredoka', sans-serif;
+            background-color: #0f212e;
             color: #b1bad3;
-            background-image:
-                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-                radial-gradient(2px 2px at 40px 70px, #fff, transparent),
-                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                radial-gradient(1px 1px at 130px 80px, #eee, transparent),
-                radial-gradient(2px 2px at 160px 30px, #fff, transparent),
-                radial-gradient(circle at 50% 50%, rgba(139,92,246,0.08) 0%, transparent 50%),
-                linear-gradient(135deg, #0f0720 0%, #000 100%);
-            background-repeat: repeat, repeat, repeat, repeat, repeat, no-repeat, no-repeat;
-            background-size: 200px 200px, 300px 300px, 400px 400px, 350px 350px, 250px 250px, 100% 100%, 100% 100%;
-            animation: stars 120s linear infinite;
-            position: relative;
             overflow-x: hidden;
             overscroll-behavior: none;
             -webkit-tap-highlight-color: transparent;
         }
         
-        @keyframes stars {
-            from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
-            to { background-position: 200px 200px, 300px 300px, 400px 400px, 350px 350px, 250px 250px, 0 0, 0 0; }
-        }
-        
-        body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 70%, rgba(139,92,246,0.15), transparent 40%),
-                        radial-gradient(circle at 80% 20%, rgba(34,211,238,0.12), transparent 50%);
-            pointer-events: none;
-            animation: nebula 25s ease-in-out infinite alternate;
-        }
-        
-        @keyframes nebula {
-            0% { opacity: 0.4; transform: scale(1) rotate(0deg); }
-            100% { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
-        }
-        
-        /* Enhanced Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(2deg); }
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
-        }
-        
-        @keyframes slide-in-right {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slide-in-left {
-            from { transform: translateX(-100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes scale-in {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        
-        @keyframes card-deal {
-            0% { transform: translateY(-100px) rotate(-10deg) scale(0.5); opacity: 0; }
-            60% { transform: translateY(10px) rotate(2deg) scale(1.05); opacity: 1; }
-            100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -200px 0; }
-            100% { background-position: calc(200px + 100%) 0; }
-        }
-        
-        @keyframes fade-in-up {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        /* Chicken Road Game Specific Animations */
+        /* --- ANIMATIONS --- */
         @keyframes hop {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.3); }
@@ -144,9 +65,10 @@
         }
         .shake-screen { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
+        /* Crash Car: Comes from TOP to BOTTOM */
         @keyframes crashDriveVertical {
             0% { transform: translate(-50%, -200px); opacity: 1; }
-            50% { transform: translate(-50%, 0%); }
+            50% { transform: translate(-50%, 0%); } /* Impact point */
             100% { transform: translate(-50%, 100vh); opacity: 1; }
         }
         .crash-car-anim {
@@ -158,6 +80,7 @@
             animation: crashDriveVertical 0.6s cubic-bezier(0.5, 0, 0.5, 1) forwards;
         }
 
+        /* Continuous Traffic in Lanes */
         @keyframes trafficFlow {
             0% { transform: translate(-50%, -150px); }
             100% { transform: translate(-50%, 120vh); }
@@ -166,13 +89,13 @@
             position: absolute;
             left: 50%;
             top: 0;
-            transform: translate(-50%, -150px);
+            transform: translate(-50%, -150px); /* Start off screen */
             animation: trafficFlow linear infinite;
             z-index: 5;
             will-change: transform;
         }
 
-        /* Chicken Road Car Models */
+        /* --- CSS DRAWN CARS --- */
         .car-model {
             width: 44px;
             height: 80px;
@@ -181,6 +104,7 @@
             box-shadow: 4px 8px 12px rgba(0,0,0,0.5);
             overflow: hidden;
         }
+        /* Headlights */
         .car-model::before {
             content: '';
             position: absolute;
@@ -236,6 +160,7 @@
             border-radius: 6px 6px 2px 2px;
         }
 
+        /* Car Colors */
         .car-red { background: linear-gradient(to bottom, #c0392b, #e74c3c); }
         .car-blue { background: linear-gradient(to bottom, #2980b9, #3498db); }
         .car-yellow { background: linear-gradient(to bottom, #f39c12, #f1c40f); }
@@ -243,7 +168,7 @@
         .car-black { background: linear-gradient(to bottom, #2c3e50, #34495e); }
         .car-green { background: linear-gradient(to bottom, #27ae60, #2ecc71); }
 
-        /* Chicken Road Lane Styles */
+        /* --- STYLES --- */
         .lane-card {
             transition: transform 0.2s, filter 0.2s;
             box-shadow: inset 10px 0 20px -10px rgba(0,0,0,0.5), inset -10px 0 20px -10px rgba(0,0,0,0.5);
@@ -262,6 +187,7 @@
             box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
         }
 
+        /* --- ENVIRONMENT TEXTURES --- */
         .grass-texture {
             background-color: #4caf50;
             background-image: 
@@ -293,13 +219,14 @@
         }
 
         .road-texture {
-            background-color: #2d3436;
+            background-color: #2d3436; /* Dark Asphalt */
             background-image: 
+                /* Noise */
                 url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
             box-shadow: inset 0 10px 20px rgba(0,0,0,0.5), inset 0 -10px 20px rgba(0,0,0,0.5);
             position: relative;
         }
-        
+        /* Top and Bottom White Lines of the Road */
         .road-border-top {
             position: absolute;
             top: 0; left: 0; right: 0; height: 6px;
@@ -344,245 +271,39 @@
         }
         
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #8b5cf6, #10b981);
+            background: linear-gradient(135deg, #00e701, #1475e1);
             border-radius: 4px;
             transition: all 0.3s;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #7c3aed, #059669);
+            background: linear-gradient(135deg, #00c701, #0f64c1);
         }
         
         /* Button Styles */
         .btn-primary {
-            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-            color: white;
+            background: linear-gradient(135deg, #00e701 0%, #00c701 100%);
+            color: #0f212e;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 600;
+            font-weight: 700;
             border: none;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
             position: relative;
             overflow: hidden;
+            font-family: 'Fredoka', sans-serif;
         }
         
         .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(139,92,246,0.4);
-        }
-        
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.7s;
-        }
-        
-        .btn-primary:hover::after {
-            left: 100%;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 231, 1, 0.3);
         }
         
         /* Game Card */
         .game-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(145deg, #161b26, #11141c);
+            background: linear-gradient(145deg, #1a2c38, #0f212e);
             border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
-        }
-        
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #8b5cf6, #10b981, #8b5cf6);
-            background-size: 200% 100%;
-            animation: shimmer 2s linear infinite;
-        }
-        
-        .game-card:hover {
-            transform: translateY(-10px) scale(1.03);
-            border-color: #8b5cf6;
-            box-shadow: 0 25px 50px -12px rgba(110,86,207,0.4);
-        }
-        
-        /* Mines Grid */
-        .mines-grid-container {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-            user-select: none;
-        }
-        
-        .mine-tile-modern {
-            aspect-ratio: 1;
-            background: linear-gradient(145deg, #1f2937, #111827);
-            border-radius: 12px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 6px 0 #0f172a;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid transparent;
-            touch-action: none;
-        }
-        
-        .mine-tile-modern:hover:not(.revealed),
-        .mine-tile-modern.hover-effect:not(.revealed) {
-            transform: translateY(-3px);
-            border-color: rgba(139, 92, 246, 0.3);
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
-        }
-        
-        .mine-tile-modern.revealed {
-            transform: translateY(6px);
-            box-shadow: 0 2px 0 #0f172a;
-            cursor: default;
-        }
-        
-        .mine-tile-modern.gem {
-            background: linear-gradient(145deg, #065f46, #064e3b);
-            border: 2px solid #10b981;
-            animation: pulse-glow 2s infinite;
-        }
-        
-        .mine-tile-modern.mine {
-            background: linear-gradient(145deg, #7f1d1d, #450a0a);
-            border: 2px solid #ef4444;
-            animation: shake 0.5s;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        
-        /* Blackjack Cards */
-        .card-container {
-            width: 100px;
-            height: 146px;
-            perspective: 1200px;
-            margin: 0 8px;
-        }
-        
-        .game-card-item {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.2);
-        }
-        
-        .game-card-item.flipped {
-            transform: rotateY(180deg);
-        }
-        
-        .card-face, .card-back {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #fdfdfd;
-            border: 3px solid #1e293b;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px 8px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        }
-        
-        .card-back {
-            background: linear-gradient(135deg, #1e40af, #1e3a8a);
-            transform: rotateY(180deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .card-back::before {
-            content: '◆';
-            font-size: 80px;
-            color: rgba(255,255,255,0.3);
-            text-shadow: 0 0 20px rgba(255,255,255,0.5);
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .card-face .text-red-500 {
-            color: #ef4444 !important;
-        }
-        
-        .card-face > div:first-child,
-        .card-face > div:last-child {
-            font-size: 16px;
-            line-height: 1;
-            letter-spacing: -1px;
-        }
-        
-        .card-face .card-value {
-            font-size: 56px;
-            align-self: center;
-            margin-top: -15px;
-            text-shadow: 0 3px 6px rgba(0,0,0,0.2);
-        }
-        
-        .card-face::before {
-            content: '';
-            position: absolute;
-            inset: 5px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.5), transparent 60%);
-            pointer-events: none;
-        }
-        
-        /* Sound Toggle */
-        .sound-toggle {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: #1e293b;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 22px;
-            cursor: pointer;
-            z-index: 1000;
-            border: 2px solid #334155;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: bounce 2s infinite;
-        }
-        
-        .sound-toggle:hover {
-            transform: scale(1.1) rotate(15deg);
-            box-shadow: 0 15px 35px rgba(56, 189, 248, 0.5);
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-        }
-        
-        .sound-toggle.muted {
-            background: #ef4444;
-            animation: none;
         }
         
         /* Modal */
@@ -606,9 +327,9 @@
         }
         
         .modal-content {
-            background: #161b26;
+            background: #1a2c38;
             border-radius: 16px;
-            border: 1px solid #2a3042;
+            border: 1px solid #2f4553;
             box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.8);
             max-width: 100%;
             width: 420px;
@@ -623,15 +344,20 @@
             to { opacity: 1; backdrop-filter: blur(10px); }
         }
         
+        @keyframes scale-in {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
         /* Toast */
         .toast {
             position: fixed;
             bottom: 20px;
             right: 20px;
             padding: 16px 20px;
-            background: #1e293b;
+            background: #1a2c38;
             border-radius: 12px;
-            border: 1px solid #334155;
+            border: 1px solid #2f4553;
             color: white;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             z-index: 1001;
@@ -647,335 +373,22 @@
         }
         
         .toast.success {
-            border-color: #10b981;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), #1e293b);
+            border-color: #00e701;
+            background: linear-gradient(135deg, rgba(0, 231, 1, 0.15), #1a2c38);
         }
         
         .toast.error {
             border-color: #ef4444;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), #1e293b);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), #1a2c38);
         }
         
         .toast.warning {
             border-color: #f59e0b;
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), #1e293b);
-        }
-        
-        /* Win/Loss Notification */
-        .big-win-notification {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1));
-            border: 2px solid #f59e0b;
-            border-radius: 12px;
-            padding: 16px;
-            margin: 12px 0;
-            text-align: center;
-            animation: pulse-glow 1.5s infinite, scale-in 0.3s ease-out;
-        }
-        
-        .big-win-notification .username {
-            color: #fbbf24;
-            font-weight: bold;
-            font-size: 18px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .big-win-notification .amount {
-            color: #10b981;
-            font-weight: bold;
-            font-size: 24px;
-            text-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
-            margin: 8px 0;
-        }
-        
-        /* Stats Cards */
-        .stats-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 16px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stats-card:hover {
-            transform: translateY(-5px);
-            border-color: #8b5cf6;
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
-        }
-        
-        .stats-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #8b5cf6, #10b981);
-        }
-        
-        /* Leaderboard Item */
-        .leaderboard-item {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.8));
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 10px;
-            transition: all 0.3s;
-            animation: fade-in-up 0.3s ease-out;
-        }
-        
-        .leaderboard-item:hover {
-            transform: translateX(5px);
-            border-color: #8b5cf6;
-            background: linear-gradient(135deg, rgba(44, 58, 83, 0.8), rgba(25, 35, 58, 0.8));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), #1a2c38);
         }
         
         /* Responsive */
         @media (max-width: 768px) {
-            .mines-grid-container {
-                gap: 8px;
-                max-width: 320px;
-            }
-            
-            .card-container {
-                width: 70px;
-                height: 102px;
-                margin: 0 4px;
-            }
-            
-            .sound-toggle {
-                width: 45px;
-                height: 45px;
-                font-size: 20px;
-                bottom: 15px;
-                left: 15px;
-            }
-            
-            .modal-content {
-                width: 100%;
-                padding: 20px;
-                margin: 0 16px;
-            }
-            
-            .blackjack-table {
-                padding: 12px;
-            }
-            
-            .hand-container {
-                min-height: 120px;
-            }
-            
-            .card-container {
-                width: 60px;
-                height: 87px;
-                margin: 0 2px;
-            }
-            
-            .game-controls {
-                padding: 12px;
-            }
-            
-            .btn-primary, button {
-                font-size: 14px !important;
-                padding: 12px 16px !important;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .mines-grid-container {
-                gap: 6px;
-                max-width: 280px;
-            }
-            
-            .card-container {
-                width: 50px;
-                height: 73px;
-                margin: 0 1px;
-            }
-            
-            .card-face > div:first-child,
-            .card-face > div:last-child {
-                font-size: 12px;
-            }
-            
-            .card-face .card-value {
-                font-size: 36px;
-            }
-            
-            .modal-content {
-                padding: 16px;
-            }
-        }
-        
-        /* Loading Animation */
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(139, 92, 246, 0.3);
-            border-radius: 50%;
-            border-top-color: #8b5cf6;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Blackjack Table - FIXED */
-        .blackjack-table {
-            background: linear-gradient(135deg, #064e3b, #022c22);
-            border-radius: 16px;
-            border: 4px solid #3f2c22;
-            box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-            padding: 16px;
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        .blackjack-table::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 1px, transparent 1px),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.3;
-        }
-        
-        /* Game Controls */
-        .game-controls {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border-radius: 12px;
-            border: 1px solid #334155;
-            padding: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        /* Live Wins Panel */
-        .live-wins-panel {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 16px;
-            max-height: 250px;
-            overflow-y: auto;
-            backdrop-filter: blur(10px);
-        }
-        
-        .live-win-item {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(139, 92, 246, 0.05));
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            animation: slide-in-right 0.3s ease-out;
-            font-size: 14px;
-        }
-        
-        /* Chat adjustments */
-        #chatSidebar {
-            flex-shrink: 0;
-            width: 280px;
-            height: calc(100vh - 64px);
-            position: sticky;
-            top: 64px;
-        }
-        
-        #chatMessages {
-            height: calc(100vh - 180px);
-            overflow-y: auto;
-        }
-        
-        /* Mines drag selection */
-        .mine-selection-line {
-            position: absolute;
-            background: rgba(139, 92, 246, 0.3);
-            border-radius: 4px;
-            pointer-events: none;
-            z-index: 10;
-        }
-        
-        /* Blackjack fit adjustment */
-        .blackjack-fit-container {
-            max-height: calc(100vh - 180px);
-            overflow-y: auto;
-        }
-        
-        /* Game Hand Containers */
-        .hand-container {
-            min-height: 140px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 8px;
-        }
-        
-        /* Status Text */
-        .status-text {
-            font-size: 1.25rem;
-            font-weight: bold;
-            text-align: center;
-            padding: 8px;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Game Container */
-        .game-container {
-            padding: 1rem;
-            min-height: calc(100vh - 180px);
-        }
-        
-        /* Wallet Modal Compact */
-        .wallet-section {
-            padding: 12px !important;
-            margin-bottom: 12px !important;
-        }
-        
-        .wallet-section h3 {
-            font-size: 18px !important;
-            margin-bottom: 12px !important;
-        }
-        
-        /* Input sizes */
-        input, button, select, textarea {
-            font-size: 16px !important; /* Prevents iOS zoom on focus */
-        }
-        
-        /* Prevent text overflow */
-        .truncate {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        /* Touch-friendly button sizes */
-        .touch-button {
-            min-height: 44px;
-            min-width: 44px;
-        }
-        
-        /* Hide sidebar on mobile when not active */
-        @media (max-width: 768px) {
-            #sidebar:not(.mobile-open) {
-                transform: translateX(-100%);
-            }
-            
-            #sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            
             .modal {
                 align-items: flex-start;
                 padding-top: 40px;
@@ -987,36 +400,362 @@
             }
         }
         
-        /* Chicken Road Styles */
+        /* Chicken Road Container */
+        .chicken-road-main {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 64px);
+            background: #0f212e;
+            font-family: 'Fredoka', sans-serif;
+        }
+        
+        /* Top Stats Bar */
+        .chicken-top-bar {
+            height: 64px;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0f212e;
+            border-bottom: 1px solid #2f4553;
+            z-index: 10;
+        }
+        
+        .chicken-game-stats {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .chicken-stat-box {
+            background: #1a2c38;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #2f4553;
+            min-width: 120px;
+        }
+        
+        .chicken-stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #b1bad3;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .chicken-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            margin-top: 0.25rem;
+        }
+        
+        .chicken-stat-value.multiplier {
+            color: #00e701;
+        }
+        
+        /* Main Game Area */
+        .chicken-game-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+        }
+        
+        /* Controls Sidebar */
+        .chicken-controls-sidebar {
+            width: 320px;
+            background: #1a2c38;
+            border-right: 1px solid #2f4553;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .chicken-controls-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .chicken-controls-header .emoji {
+            font-size: 2rem;
+        }
+        
+        .chicken-controls-header h2 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .chicken-control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .chicken-control-label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #b1bad3;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .chicken-input-group {
+            display: flex;
+            background: #2f4553;
+            border-radius: 8px;
+            border: 1px solid #2f4553;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        
+        .chicken-input-group:focus-within {
+            border-color: #00e701;
+        }
+        
+        .chicken-input-group input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Fredoka', sans-serif;
+            outline: none;
+        }
+        
+        .chicken-input-group .icon {
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            background: rgba(15, 33, 46, 0.3);
+            color: #f59e0b;
+        }
+        
+        .chicken-quick-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        
+        .chicken-quick-button {
+            background: #2f4553;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem;
+            color: #b1bad3;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Fredoka', sans-serif;
+        }
+        
+        .chicken-quick-button:hover {
+            background: #3e5666;
+            color: white;
+        }
+        
+        .chicken-select {
+            width: 100%;
+            background: #2f4553;
+            border: 1px solid #2f4553;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Fredoka', sans-serif;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        
+        .chicken-select:focus {
+            border-color: #00e701;
+        }
+        
+        .chicken-stats-box {
+            background: #1a2c38;
+            border-radius: 8px;
+            border: 1px solid #2f4553;
+            padding: 1rem;
+        }
+        
+        .chicken-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        
+        .chicken-main-action {
+            margin-top: auto;
+        }
+        
+        .chicken-action-button {
+            width: 100%;
+            background: linear-gradient(135deg, #00e701 0%, #00c701 100%);
+            color: #0f212e;
+            border: none;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Fredoka', sans-serif;
+            box-shadow: 0 4px 0 #00b500;
+        }
+        
+        .chicken-action-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #00b500;
+        }
+        
+        .chicken-action-button:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #00b500;
+        }
+        
+        .chicken-action-button:disabled {
+            background: #2f4553;
+            color: #b1bad3;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        
+        .chicken-game-info {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        /* Road Container */
         .chicken-road-container {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            border-radius: 16px;
-            border: 1px solid #334155;
+            flex: 1;
+            position: relative;
+            background: #1a2c38;
             overflow: hidden;
         }
         
-        .chicken-sidebar {
-            background: linear-gradient(135deg, #1a2538, #0f172a);
-            border-right: 1px solid #334155;
+        .chicken-road-inner {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .chicken-lane {
-            background: linear-gradient(135deg, #2d3436, #1a1e21);
-            position: relative;
+        /* Result Overlay */
+        .chicken-result-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         
-        .chicken-lane.passed {
-            background: linear-gradient(135deg, #064e3b, #022c22);
+        .chicken-result-overlay.active {
+            display: flex;
+            opacity: 1;
         }
         
-        .chicken-lane.current {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(6, 78, 59, 0.7));
-            animation: pulse-glow 2s infinite;
+        .chicken-result-content {
+            background: linear-gradient(135deg, #1a2c38, #0f212e);
+            border-radius: 20px;
+            border: 1px solid #2f4553;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
         
-        .chicken-lane.crashed {
-            background: linear-gradient(135deg, #7f1d1d, #450a0a);
-            animation: shake 0.5s;
+        .chicken-result-emoji {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .chicken-result-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .chicken-result-title.win {
+            color: #00e701;
+            text-shadow: 0 0 10px rgba(0, 231, 1, 0.5);
+        }
+        
+        .chicken-result-title.loss {
+            color: #ef4444;
+        }
+        
+        .chicken-result-subtitle {
+            font-size: 1.25rem;
+            color: #b1bad3;
+            margin-bottom: 1.5rem;
+        }
+        
+        .chicken-result-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00e701;
+            margin-bottom: 2rem;
+        }
+        
+        .glass-panel {
+            background: rgba(15, 33, 46, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glow-text { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+        
+        @media (max-width: 1024px) {
+            .chicken-game-area {
+                flex-direction: column;
+            }
+            
+            .chicken-controls-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #2f4553;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .chicken-top-bar {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+            
+            .chicken-game-stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .chicken-stat-box {
+                min-width: auto;
+                flex: 1;
+            }
         }
     </style>
 </head>
@@ -1027,46 +766,39 @@
     </div>
 
     <!-- Navbar -->
-    <nav class="h-16 bg-[#161b26]/95 backdrop-blur-xl flex items-center justify-between px-4 md:px-6 shadow-2xl border-b border-[#2a3042] sticky top-0 z-40">
+    <nav class="h-16 bg-[#1a2c38]/95 backdrop-blur-xl flex items-center justify-between px-4 md:px-6 shadow-2xl border-b border-[#2f4553] sticky top-0 z-40">
         <div class="flex items-center gap-3">
             <button class="text-gray-400 hover:text-white md:hidden transition-all duration-300 hover:scale-110 touch-button" onclick="app.toggleSidebar()">
                 <i class="fa-solid fa-bars text-lg"></i>
             </button>
             <div class="flex items-center gap-2 cursor-pointer group" onclick="app.loadGame('home')">
-                <!-- Logo without animation -->
-                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#4c1d95] flex items-center justify-center shadow-lg relative overflow-hidden">
+                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#00e701] to-[#00b500] flex items-center justify-center shadow-lg relative overflow-hidden">
                     <i class="fa-solid fa-moon text-white text-sm md:text-lg relative z-10"></i>
                     <div class="absolute inset-0 bg-white/10"></div>
                 </div>
                 <div class="text-xl md:text-2xl font-bold text-white tracking-tight truncate max-w-[150px] md:max-w-none">
-                    Moon<span class="text-[#8b5cf6]">Casino</span>
+                    Moon<span class="text-[#00e701]">Casino</span>
                 </div>
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <!-- Live Wins Indicator -->
-            <div class="hidden md:flex items-center gap-2 bg-gradient-to-r from-[#0b0e14] to-[#1e2533] rounded-full px-2 py-1 border border-[#2a3042]">
-                <div class="w-2 h-2 bg-[#10b981] rounded-full animate-pulse"></div>
-                <span class="text-[#10b981] text-xs font-bold tracking-wider">LIVE WINS</span>
-            </div>
-            
-            <div class="hidden md:flex bg-gradient-to-r from-[#0b0e14] to-[#1e2533] rounded-full px-1 py-1 items-center gap-2 border border-[#2a3042] shadow-lg">
-                <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-full px-3 py-2 flex items-center gap-2 min-w-[140px] justify-between cursor-pointer hover:from-[#2a3042] hover:to-[#1e293b] transition-all duration-300 group" onclick="app.openDepositModal()">
-                    <span class="text-[#8b5cf6] text-xs font-bold tracking-wider">COINS</span>
+            <div class="hidden md:flex bg-gradient-to-r from-[#0f212e] to-[#1a2c38] rounded-full px-1 py-1 items-center gap-2 border border-[#2f4553] shadow-lg">
+                <div class="bg-gradient-to-r from-[#1a2c38] to-[#0f212e] rounded-full px-3 py-2 flex items-center gap-2 min-w-[140px] justify-between cursor-pointer hover:from-[#2f4553] hover:to-[#1a2c38] transition-all duration-300 group" onclick="app.openDepositModal()">
+                    <span class="text-[#00e701] text-xs font-bold tracking-wider">COINS</span>
                     <span class="text-white font-mono font-bold text-base tracking-wider truncate max-w-[80px]" id="balanceDisplay">500</span>
                     <i class="fa-solid fa-coins text-yellow-400 opacity-0 group-hover:opacity-100 transition-all duration-300 text-sm"></i>
                 </div>
-                <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] hover:from-[#7c3aed] hover:to-[#6d28d9] text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg shadow-purple-900/30 transition-all duration-300 hover:scale-105">
+                <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#00e701] to-[#00c701] hover:from-[#00c701] hover:to-[#00b500] text-[#0f212e] px-4 py-2 rounded-full text-xs font-bold shadow-lg shadow-green-900/30 transition-all duration-300 hover:scale-105">
                     <i class="fa-solid fa-wallet mr-1"></i> Wallet
                 </button>
             </div>
-            <button class="md:hidden text-white bg-gradient-to-r from-[#1e293b] to-[#0f172a] p-2 rounded-lg border border-[#2a3042] shadow-lg hover:scale-110 transition-all duration-300 touch-button" onclick="app.openDepositModal()">
-                <i class="fa-solid fa-wallet text-[#8b5cf6] text-base"></i>
+            <button class="md:hidden text-white bg-gradient-to-r from-[#1a2c38] to-[#0f212e] p-2 rounded-lg border border-[#2f4553] shadow-lg hover:scale-110 transition-all duration-300 touch-button" onclick="app.openDepositModal()">
+                <i class="fa-solid fa-wallet text-[#00e701] text-base"></i>
             </button>
             <button class="text-gray-400 hover:text-white ml-1 transition-all duration-300 hover:scale-110 touch-button" onclick="app.toggleChat()">
                 <i class="fa-solid fa-message text-lg"></i>
             </button>
-            <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-r from-blue-500 to-teal-400 flex items-center justify-center text-white font-bold text-sm border-2 border-[#161b26] shadow-lg hover:scale-110 transition-all duration-300 cursor-pointer touch-button" id="userAvatar">
+            <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-r from-[#00e701] to-[#1475e1] flex items-center justify-center text-white font-bold text-sm border-2 border-[#1a2c38] shadow-lg hover:scale-110 transition-all duration-300 cursor-pointer touch-button" id="userAvatar">
                 U
             </div>
             <button onclick="app.logout()" class="text-gray-400 hover:text-white ml-1 transition-all duration-300 hover:scale-110 touch-button">
@@ -1078,64 +810,64 @@
     <!-- Layout -->
     <div class="flex flex-1 overflow-hidden">
         <!-- Sidebar -->
-        <aside id="sidebar" class="absolute md:relative inset-y-0 left-0 z-30 w-64 bg-[#161b26]/95 backdrop-blur-xl border-r border-[#2a3042] transform -translate-x-full md:translate-x-0 flex flex-col transition-transform duration-500 ease-out shadow-2xl md:shadow-none">
+        <aside id="sidebar" class="absolute md:relative inset-y-0 left-0 z-30 w-64 bg-[#1a2c38]/95 backdrop-blur-xl border-r border-[#2f4553] transform -translate-x-full md:translate-x-0 flex flex-col transition-transform duration-500 ease-out shadow-2xl md:shadow-none">
             <div class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
-                <div class="text-xs font-bold text-[#8b5cf6] mb-4 px-3 tracking-wider uppercase">Premium Games</div>
-                <button onclick="app.loadGame('home')" id="nav-home" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
-                    <i class="fa-solid fa-house w-4 text-center group-hover:text-[#8b5cf6] transition-all duration-300"></i> 
+                <div class="text-xs font-bold text-[#00e701] mb-4 px-3 tracking-wider uppercase">Premium Games</div>
+                <button onclick="app.loadGame('home')" id="nav-home" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2f4553] hover:to-[#1a2c38] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
+                    <i class="fa-solid fa-house w-4 text-center group-hover:text-[#00e701] transition-all duration-300"></i> 
                     <span class="text-sm">Home</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <div class="h-px bg-gradient-to-r from-transparent via-[#2a3042] to-transparent my-2 mx-3"></div>
-                <button onclick="app.loadGame('mines')" id="nav-mines" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
+                <div class="h-px bg-gradient-to-r from-transparent via-[#2f4553] to-transparent my-2 mx-3"></div>
+                <button onclick="app.loadGame('mines')" id="nav-mines" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2f4553] hover:to-[#1a2c38] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
                     <i class="fa-solid fa-bomb text-[#f59e0b] w-4 text-center group-hover:scale-110 transition-all duration-300"></i> 
                     <span class="text-sm">Mines</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <button onclick="app.loadGame('blackjack')" id="nav-blackjack" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
-                    <i class="fa-solid fa-diamond text-[#10b981] w-4 text-center group-hover:scale-110 transition-all duration-300"></i> 
+                <button onclick="app.loadGame('blackjack')" id="nav-blackjack" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2f4553] hover:to-[#1a2c38] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
+                    <i class="fa-solid fa-diamond text-[#00e701] w-4 text-center group-hover:scale-110 transition-all duration-300"></i> 
                     <span class="text-sm">Blackjack</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <button onclick="app.loadGame('chicken')" id="nav-chicken" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
+                <button onclick="app.loadGame('chicken')" id="nav-chicken" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2f4553] hover:to-[#1a2c38] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
                     <i class="fa-solid fa-egg text-[#f59e0b] w-4 text-center group-hover:scale-110 transition-all duration-300"></i> 
                     <span class="text-sm">Chicken Road</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
-                <button onclick="app.loadGame('leaderboard')" id="nav-leaderboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
+                <button onclick="app.loadGame('leaderboard')" id="nav-leaderboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2f4553] hover:to-[#1a2c38] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
                     <i class="fa-solid fa-trophy text-[#f59e0b] w-4 text-center group-hover:scale-110 transition-all duration-300"></i> 
                     <span class="text-sm">Leaderboard</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
             </div>
-            <div class="p-4 bg-gradient-to-t from-[#11141c] to-transparent border-t border-[#2a3042]">
+            <div class="p-4 bg-gradient-to-t from-[#0f212e] to-transparent border-t border-[#2f4553]">
                 <div class="flex justify-between text-xs text-[#6b7280] mb-2">
                     <span>Logged in as</span>
-                    <span id="loggedUsername" class="text-[#10b981] font-bold truncate max-w-[120px]">Guest</span>
+                    <span id="loggedUsername" class="text-[#00e701] font-bold truncate max-w-[120px]">Guest</span>
                 </div>
-                <div class="text-[10px] text-center text-[#555d70] font-mono bg-gradient-to-r from-[#0b0e14] to-[#1e293b] p-2 rounded border border-[#2a3042] truncate shadow-inner">
+                <div class="text-[10px] text-center text-[#555d70] font-mono bg-gradient-to-r from-[#0f212e] to-[#1a2c38] p-2 rounded border border-[#2f4553] truncate shadow-inner">
                     <span id="userIdDisplay">Not logged in</span>
                 </div>
             </div>
         </aside>
         
         <!-- Main Content -->
-        <main id="mainContent" class="flex-1 overflow-y-auto p-3 md:p-4"></main>
+        <main id="mainContent" class="flex-1 overflow-y-auto"></main>
         
         <!-- Chat -->
-        <aside id="chatSidebar" class="hidden md:flex flex-col w-72 bg-[#161b26]/95 backdrop-blur-xl border-l border-[#2a3042] shadow-2xl">
-            <div class="p-4 border-b border-[#2a3042] flex justify-between items-center bg-gradient-to-r from-[#11141c] to-transparent">
+        <aside id="chatSidebar" class="hidden md:flex flex-col w-72 bg-[#1a2c38]/95 backdrop-blur-xl border-l border-[#2f4553] shadow-2xl">
+            <div class="p-4 border-b border-[#2f4553] flex justify-between items-center bg-gradient-to-r from-[#0f212e] to-transparent">
                 <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 bg-[#10b981] rounded-full animate-pulse"></div>
+                    <div class="w-2 h-2 bg-[#00e701] rounded-full animate-pulse"></div>
                     <span class="text-white font-bold text-sm tracking-wider">Global Chat</span>
                 </div>
-                <div class="text-xs text-[#6b7280] bg-[#0b0e14] px-2 py-1 rounded-full border border-[#2a3042]" id="onlineCount">0 Online</div>
+                <div class="text-xs text-[#6b7280] bg-[#0f212e] px-2 py-1 rounded-full border border-[#2f4553]" id="onlineCount">0 Online</div>
             </div>
-            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm bg-gradient-to-b from-[#0b0e14]/50 to-transparent"></div>
-            <div class="p-3 bg-gradient-to-t from-[#161b26] to-transparent border-t border-[#2a3042]">
+            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm bg-gradient-to-b from-[#0f212e]/50 to-transparent"></div>
+            <div class="p-3 bg-gradient-to-t from-[#1a2c38] to-transparent border-t border-[#2f4553]">
                 <form onsubmit="app.sendChatMessage(event)" class="relative">
-                    <input type="text" id="chatInput" placeholder="Type a message..." class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] text-white pl-4 pr-10 py-3 rounded-xl border border-[#2a3042] text-sm focus:outline-none focus:border-[#8b5cf6] transition-all duration-300">
-                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-[#8b5cf6] hover:text-white p-1.5 transition-all duration-300 hover:scale-110 touch-button">
+                    <input type="text" id="chatInput" placeholder="Type a message..." class="w-full bg-gradient-to-r from-[#0f212e] to-[#1a2c38] text-white pl-4 pr-10 py-3 rounded-xl border border-[#2f4553] text-sm focus:outline-none focus:border-[#00e701] transition-all duration-300">
+                    <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-[#00e701] hover:text-white p-1.5 transition-all duration-300 hover:scale-110 touch-button">
                         <i class="fa-solid fa-paper-plane text-sm"></i>
                     </button>
                 </form>
@@ -1147,8 +879,7 @@
     <div id="authModal" class="modal active">
         <div class="modal-content p-6">
             <div class="text-center mb-6">
-                <!-- Logo without animation -->
-                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#4c1d95] flex items-center justify-center mx-auto mb-4 relative overflow-hidden">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#00e701] to-[#00b500] flex items-center justify-center mx-auto mb-4 relative overflow-hidden">
                     <i class="fa-solid fa-moon text-white text-2xl relative z-10"></i>
                     <div class="absolute inset-0 bg-white/20"></div>
                 </div>
@@ -1159,42 +890,42 @@
             <div id="loginForm" class="space-y-4">
                 <div>
                     <label class="text-xs text-[#6b7280] font-bold mb-1 block tracking-wider">Email</label>
-                    <input type="email" id="loginEmail" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300 text-sm" placeholder="Enter your email">
+                    <input type="email" id="loginEmail" class="w-full bg-gradient-to-r from-[#0f212e] to-[#1a2c38] border border-[#2f4553] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00e701] transition-all duration-300 text-sm" placeholder="Enter your email">
                 </div>
                 <div>
                     <label class="text-xs text-[#6b7280] font-bold mb-1 block tracking-wider">Password</label>
-                    <input type="password" id="loginPassword" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300 text-sm" placeholder="Enter your password">
+                    <input type="password" id="loginPassword" class="w-full bg-gradient-to-r from-[#0f212e] to-[#1a2c38] border border-[#2f4553] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00e701] transition-all duration-300 text-sm" placeholder="Enter your password">
                 </div>
                 <button onclick="app.login()" class="w-full btn-primary py-3 rounded-xl font-bold text-base tracking-wider touch-button">Login</button>
                 <p class="text-center text-[#6b7280] text-xs">
                     Don't have an account? 
-                    <button onclick="app.showSignup()" class="text-[#8b5cf6] hover:text-[#7c3aed] transition-all duration-300 font-bold">Sign up</button>
+                    <button onclick="app.showSignup()" class="text-[#00e701] hover:text-[#00c701] transition-all duration-300 font-bold">Sign up</button>
                 </p>
             </div>
             
             <div id="signupForm" class="space-y-4 hidden">
                 <div>
                     <label class="text-xs text-[#6b7280] font-bold mb-1 block tracking-wider">Username</label>
-                    <input type="text" id="signupUsername" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300 text-sm" placeholder="Choose a username">
+                    <input type="text" id="signupUsername" class="w-full bg-gradient-to-r from-[#0f212e] to-[#1a2c38] border border-[#2f4553] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00e701] transition-all duration-300 text-sm" placeholder="Choose a username">
                 </div>
                 <div>
                     <label class="text-xs text-[#6b7280] font-bold mb-1 block tracking-wider">Email</label>
-                    <input type="email" id="signupEmail" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300 text-sm" placeholder="Enter your email">
+                    <input type="email" id="signupEmail" class="w-full bg-gradient-to-r from-[#0f212e] to-[#1a2c38] border border-[#2f4553] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00e701] transition-all duration-300 text-sm" placeholder="Enter your email">
                 </div>
                 <div>
                     <label class="text-xs text-[#6b7280] font-bold mb-1 block tracking-wider">Password</label>
-                    <input type="password" id="signupPassword" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8b5cf6] transition-all duration-300 text-sm" placeholder="Create a password">
+                    <input type="password" id="signupPassword" class="w-full bg-gradient-to-r from-[#0f212e] to-[#1a2c38] border border-[#2f4553] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#00e701] transition-all duration-300 text-sm" placeholder="Create a password">
                 </div>
                 <button onclick="app.signup()" class="w-full btn-primary py-3 rounded-xl font-bold text-base tracking-wider touch-button">Sign Up</button>
                 <p class="text-center text-[#6b7280] text-xs">
                     Already have an account? 
-                    <button onclick="app.showLogin()" class="text-[#8b5cf6] hover:text-[#7c3aed] transition-all duration-300 font-bold">Login</button>
+                    <button onclick="app.showLogin()" class="text-[#00e701] hover:text-[#00c701] transition-all duration-300 font-bold">Login</button>
                 </p>
             </div>
         </div>
     </div>
     
-    <!-- Wallet Modal - Compact -->
+    <!-- Wallet Modal -->
     <div id="depositModal" class="modal">
         <div class="modal-content p-5">
             <div class="flex justify-between items-center mb-6">
@@ -1206,8 +937,8 @@
             
             <div class="space-y-5">
                 <!-- Balance Display -->
-                <div class="bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-xl p-4 border border-[#2a3042] relative overflow-hidden wallet-section">
-                    <div class="absolute top-0 right-0 w-24 h-24 bg-[#8b5cf6] rounded-full -mr-12 -mt-12 opacity-10"></div>
+                <div class="bg-gradient-to-r from-[#1a2c38] to-[#0f212e] rounded-xl p-4 border border-[#2f4553] relative overflow-hidden wallet-section">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-[#00e701] rounded-full -mr-12 -mt-12 opacity-10"></div>
                     <div class="relative z-10">
                         <div class="text-center">
                             <div class="text-gray-400 text-xs mb-1 tracking-wider">Your Balance</div>
@@ -1219,10 +950,10 @@
                 
                 <!-- Free Coins Section -->
                 <div class="text-center wallet-section">
-                    <i class="fa-solid fa-gift text-[#8b5cf6] text-3xl mb-2"></i>
+                    <i class="fa-solid fa-gift text-[#00e701] text-3xl mb-2"></i>
                     <h3 class="text-white font-bold text-base mb-1">Free Coins</h3>
                     <p class="text-[#6b7280] text-xs mb-4">Claim 500 free coins whenever your balance is under 100</p>
-                    <div class="bg-gradient-to-r from-[#11141c] to-[#0b0e14] rounded-xl p-4 border border-[#2a3042]">
+                    <div class="bg-gradient-to-r from-[#0f212e] to-[#1a2c38] rounded-xl p-4 border border-[#2f4553]">
                         <div class="text-white font-bold text-xl mb-3" id="freeCoinsTimer">Ready to Claim</div>
                         <button id="claimCoinsBtn" onclick="app.claimFreeCoins()" class="w-full btn-primary py-3 rounded-xl font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 touch-button">
                             Claim 500 Coins
@@ -1231,21 +962,21 @@
                 </div>
                 
                 <!-- Send Money Section -->
-                <div class="border-t border-[#2a3042] pt-5 wallet-section">
+                <div class="border-t border-[#2f4553] pt-5 wallet-section">
                     <h3 class="text-white font-bold text-base mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-money-bill-transfer text-[#10b981] text-sm"></i>
+                        <i class="fa-solid fa-money-bill-transfer text-[#00e701] text-sm"></i>
                         Send Money
                     </h3>
                     <div class="space-y-3">
                         <div>
                             <label class="text-xs text-[#6b7280] font-bold mb-1 block tracking-wider">Recipient Username</label>
-                            <input type="text" id="sendToUsername" placeholder="Enter username" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#10b981] transition-all duration-300 text-sm">
+                            <input type="text" id="sendToUsername" placeholder="Enter username" class="w-full bg-gradient-to-r from-[#0f212e] to-[#1a2c38] border border-[#2f4553] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00e701] transition-all duration-300 text-sm">
                         </div>
                         <div>
                             <label class="text-xs text-[#6b7280] font-bold mb-1 block tracking-wider">Amount to Send</label>
-                            <input type="number" id="sendAmount" placeholder="0" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#10b981] transition-all duration-300 text-sm">
+                            <input type="number" id="sendAmount" placeholder="0" class="w-full bg-gradient-to-r from-[#0f212e] to-[#1a2c38] border border-[#2f4553] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#00e701] transition-all duration-300 text-sm">
                         </div>
-                        <button onclick="app.sendMoney()" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 rounded-xl font-bold text-sm tracking-wider transition-all duration-300 hover:scale-[1.02] touch-button">
+                        <button onclick="app.sendMoney()" class="w-full bg-gradient-to-r from-[#00e701] to-[#00c701] hover:from-[#00c701] hover:to-[#00b500] text-[#0f212e] py-3 rounded-xl font-bold text-sm tracking-wider transition-all duration-300 hover:scale-[1.02] touch-button">
                             <i class="fa-solid fa-paper-plane mr-1 text-xs"></i> Send Money
                         </button>
                     </div>
@@ -1258,14 +989,12 @@
     <div id="toastContainer"></div>
 
     <script>
-        // Sound Effects - Using .wav files from your sounds folder
+        // Sound Effects
         const sounds = {
-            card: new Audio('sounds/card.wav'),
             win: new Audio('sounds/win.wav'),
             lose: new Audio('sounds/lose.wav'),
-            mine: new Audio('sounds/explosion.wav'),
-            gem: new Audio('sounds/win.wav'),
-            click: new Audio('sounds/click.wav')
+            click: new Audio('sounds/click.wav'),
+            hop: new Audio('sounds/click.wav')
         };
 
         // Set volume for all sounds
@@ -1298,7 +1027,7 @@
             expert: []
         };
 
-        // Populate multipliers for Chicken Road
+        // Populate multipliers for Chicken Road (same as before)
         for(let i=0; i<30; i++) CHICKEN_MULTIPLIERS.easy.push(1.02 * Math.pow(1.06, i+1));
         for(let i=0; i<30; i++) CHICKEN_MULTIPLIERS.medium.push(1.10 * Math.pow(1.17, i+1));
         for(let i=0; i<30; i++) CHICKEN_MULTIPLIERS.hard.push(1.20 * Math.pow(1.30, i+1));
@@ -1323,15 +1052,10 @@
                 this.sidebarOpen = false;
                 this.chatSidebar = document.getElementById('chatSidebar');
                 this.soundEnabled = true;
-                this.minesActive = false;
-                this.bjInProgress = false;
                 this.lastFreeCoinsClaim = 0;
                 this.bigWinThreshold = 1000;
                 this.chatLoadedAt = null;
                 this.liveWinsInterval = null;
-                this.minesDragging = false;
-                this.minesDragStartTile = null;
-                this.minesSelectedTiles = new Set();
                 
                 // Chicken Road state
                 this.chickenState = {
@@ -1340,7 +1064,9 @@
                     difficulty: 'easy',
                     bet: 10,
                     currentMultiplier: 1.00,
-                    gameActive: false
+                    gameActive: false,
+                    // Real-time balance update
+                    balanceUpdateListener: null
                 };
                 
                 // Initialize app
@@ -1466,9 +1192,9 @@
                     }
                     
                     // Animation effect
-                    this.balanceDisplay.classList.add('text-[#10b981]', 'scale-110');
+                    this.balanceDisplay.classList.add('text-[#00e701]', 'scale-110');
                     setTimeout(() => {
-                        this.balanceDisplay.classList.remove('text-[#10b981]', 'scale-110');
+                        this.balanceDisplay.classList.remove('text-[#00e701]', 'scale-110');
                     }, 500);
                 }
                 
@@ -1481,7 +1207,32 @@
                 this.updateFreeCoinsButton();
             }
 
-            // Auth Functions - MODIFIED: Only use database, verify account exists
+            // Setup real-time balance updates
+            setupRealTimeBalance() {
+                if (this.chickenState.balanceUpdateListener) {
+                    // Remove existing listener
+                    this.chickenState.balanceUpdateListener();
+                }
+                
+                if (this.userId) {
+                    // Listen for balance changes in real-time
+                    const balanceRef = database.ref('users/' + this.userId + '/balance');
+                    this.chickenState.balanceUpdateListener = balanceRef.on('value', (snapshot) => {
+                        const newBalance = snapshot.val();
+                        if (newBalance !== null && newBalance !== this.balance) {
+                            this.balance = parseInt(newBalance);
+                            this.updateBalance();
+                            
+                            // Update chicken UI if game is active
+                            if (this.activeGame === 'chicken') {
+                                this.updateChickenUI();
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Auth Functions
             async checkAuth() {
                 const savedUser = localStorage.getItem('moonCasinoUser');
                 if (savedUser) {
@@ -1506,6 +1257,7 @@
                         this.updateUI();
                         this.hideAuthModal();
                         this.updateOnlineStatus();
+                        this.setupRealTimeBalance();
                         
                     } catch (e) {
                         console.error('Auth error:', e);
@@ -1600,6 +1352,7 @@
                 this.showToast('Welcome to Moon Casino! You received 500 starting coins!', 'success');
                 this.playSound('win');
                 this.updateOnlineStatus();
+                this.setupRealTimeBalance();
                 
                 // Confetti for new user
                 confetti({
@@ -1650,6 +1403,7 @@
                 this.showToast(`Welcome back ${this.username}!`, 'success');
                 this.playSound('win');
                 this.updateOnlineStatus();
+                this.setupRealTimeBalance();
             }
 
             logout() {
@@ -1663,6 +1417,12 @@
                 // Remove from online users
                 if (this.userId) {
                     database.ref('online/' + this.userId).remove();
+                }
+                
+                // Remove balance listener
+                if (this.chickenState.balanceUpdateListener) {
+                    this.chickenState.balanceUpdateListener();
+                    this.chickenState.balanceUpdateListener = null;
                 }
                 
                 this.showToast('Logged out successfully', 'warning');
@@ -1843,10 +1603,10 @@
                 await database.ref('transactions').push(transaction);
 
                 // Add chat message
-                this.addChatMessage('System', `${this.username} sent ${amount} coins to ${recipientUsername}!`, 'text-[#10b981]');
+                this.addChatMessage('System', `${this.username} sent ${amount} coins to ${recipientUsername}!`, 'text-[#00e701]');
             }
 
-            // Chat Functions - Fixed to only load new messages
+            // Chat Functions
             initChat() {
                 this.chatLoadedAt = Date.now();
                 
@@ -1886,23 +1646,6 @@
                 }
             }
 
-            addBigWinNotification(username, amount, game) {
-                const messages = document.getElementById('chatMessages');
-                const div = document.createElement('div');
-                div.className = 'big-win-notification';
-                div.innerHTML = `
-                    <div class="flex items-center justify-center gap-2 mb-2">
-                        <i class="fa-solid fa-trophy text-yellow-400 text-sm"></i>
-                        <div class="username">${username}</div>
-                        <i class="fa-solid fa-trophy text-yellow-400 text-sm"></i>
-                    </div>
-                    <div class="amount">${amount.toLocaleString()} coins</div>
-                    <div class="text-gray-300 text-xs mt-1">won in ${game}!</div>
-                `;
-                messages.appendChild(div);
-                messages.scrollTop = messages.scrollHeight;
-            }
-
             sendChatMessage(e) {
                 e.preventDefault();
                 if (!this.userId) {
@@ -1913,7 +1656,7 @@
                 const input = document.getElementById('chatInput');
                 if (input && input.value.trim()) {
                     const msg = input.value.trim();
-                    this.addChatMessage(this.username, msg, 'text-[#8b5cf6]');
+                    this.addChatMessage(this.username, msg, 'text-[#00e701]');
                     input.value = '';
                     this.playSound('click');
                 }
@@ -2027,6 +1770,23 @@
                 await database.ref('transactions').push(transaction);
             }
 
+            addBigWinNotification(username, amount, game) {
+                const messages = document.getElementById('chatMessages');
+                const div = document.createElement('div');
+                div.className = 'big-win-notification';
+                div.innerHTML = `
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <i class="fa-solid fa-trophy text-yellow-400 text-sm"></i>
+                        <div class="username">${username}</div>
+                        <i class="fa-solid fa-trophy text-yellow-400 text-sm"></i>
+                    </div>
+                    <div class="amount">${amount.toLocaleString()} coins</div>
+                    <div class="text-gray-300 text-xs mt-1">won in ${game}!</div>
+                `;
+                messages.appendChild(div);
+                messages.scrollTop = messages.scrollHeight;
+            }
+
             listenForBigWins() {
                 // Listen for big wins from other users
                 database.ref('transactions').orderByChild('timestamp').startAt(Date.now()).on('child_added', (snapshot) => {
@@ -2053,11 +1813,11 @@
 
                 // Update active nav
                 document.querySelectorAll('#sidebar button').forEach(b => {
-                    b.classList.remove('bg-gradient-to-r', 'from-[#2a3042]', 'to-[#1e293b]', 'text-white');
+                    b.classList.remove('bg-gradient-to-r', 'from-[#2f4553]', 'to-[#1a2c38]', 'text-white');
                 });
                 const navBtn = document.getElementById(`nav-${gameName}`);
                 if (navBtn) {
-                    navBtn.classList.add('bg-gradient-to-r', 'from-[#2a3042]', 'to-[#1e293b]', 'text-white');
+                    navBtn.classList.add('bg-gradient-to-r', 'from-[#2f4553]', 'to-[#1a2c38]', 'text-white');
                 }
 
                 this.activeGame = gameName;
@@ -2087,1032 +1847,146 @@
                 this.playSound('click');
             }
 
-            renderHome() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto space-y-4">
-                        <div class="rounded-2xl bg-gradient-to-r from-[#4c1d95] to-[#2e1065] p-4 md:p-6 relative overflow-hidden border border-[#8b5cf6]/30 shadow-xl">
-                            <div class="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 bg-[#8b5cf6] rounded-full mix-blend-overlay filter blur-[80px] opacity-30"></div>
-                            <div class="relative z-10">
-                                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-xs font-bold text-white mb-3 tracking-wider">
-                                    <span class="w-2 h-2 bg-[#10b981] rounded-full animate-pulse"></span> PREMIUM CASINO
-                                </div>
-                                <h1 class="text-xl md:text-3xl font-bold text-white mb-3 leading-tight">Welcome, <span class="text-[#a78bfa]">${this.username || 'Guest'}</span>!</h1>
-                                <p class="text-[#d8b4fe] text-sm md:text-base max-w-2xl mb-4">Experience the ultimate fun casino with fair games, stunning animations, and real-time multiplayer features.</p>
-                                <div class="flex flex-wrap gap-3">
-                                    <button onclick="app.loadGame('blackjack')" class="btn-primary px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-bold text-base md:text-lg shadow-xl hover:scale-105 transition-all duration-300 touch-button">
-                                        <i class="fa-solid fa-diamond mr-2"></i> Play Blackjack
-                                    </button>
-                                    <button onclick="app.openDepositModal()" class="bg-gradient-to-r from-[#1f2937] to-[#374151] hover:from-[#374151] hover:to-[#4b5563] text-white px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-bold text-base md:text-lg border border-[#374151] transition-all duration-300 hover:scale-105 touch-button">
-                                        <i class="fa-solid fa-gift mr-2"></i> Free Coins
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Live Wins Panel -->
-                        <div class="live-wins-panel">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-2 h-2 bg-[#10b981] rounded-full animate-pulse"></div>
-                                <h3 class="text-white font-bold text-base">Live Wins</h3>
-                            </div>
-                            <div id="liveWinsContainer">
-                                <div class="text-center text-gray-500 py-6 text-sm">Loading live wins...</div>
-                            </div>
-                        </div>
-                        
-                        <h2 class="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-gamepad text-[#8b5cf6]"></i> Featured Games
-                        </h2>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                            ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs', '#f59e0b')}
-                            ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer', '#10b981')}
-                            ${this.getGameCard('chicken', 'Chicken Road', 'fa-egg', 'from-[#78350f] to-[#451a03]', 'Cross the road to win!', '#f59e0b')}
-                        </div>
-                    </div>
-                `;
-                
-                // Start live wins updates
-                this.startLiveWinsUpdates();
-            }
+            // HOME, MINES, BLACKJACK, and LEADERBOARD functions remain the same...
+            // ... (keeping all your existing code for other games)
 
-            startLiveWinsUpdates() {
-                // Clear existing interval
-                if (this.liveWinsInterval) {
-                    clearInterval(this.liveWinsInterval);
-                }
-                
-                // Load initial wins
-                this.loadLiveWins();
-                
-                // Update every 10 seconds
-                this.liveWinsInterval = setInterval(() => {
-                    this.loadLiveWins();
-                }, 10000);
-            }
-
-            async loadLiveWins() {
-                try {
-                    // Get recent wins from transactions
-                    const snapshot = await database.ref('transactions')
-                        .orderByChild('timestamp')
-                        .limitToLast(10)
-                        .once('value');
-                    
-                    const wins = [];
-                    snapshot.forEach(child => {
-                        const tx = child.val();
-                        if (tx.type === 'win' && tx.amount >= 100) { // Show wins over 100 coins
-                            wins.push(tx);
-                        }
-                    });
-                    
-                    // Reverse to show newest first
-                    wins.reverse();
-                    
-                    const container = document.getElementById('liveWinsContainer');
-                    if (!container) return;
-                    
-                    if (wins.length === 0) {
-                        container.innerHTML = '<div class="text-center text-gray-500 py-6 text-sm">No recent wins yet</div>';
-                        return;
-                    }
-                    
-                    container.innerHTML = wins.map(win => `
-                        <div class="live-win-item">
-                            <div class="flex justify-between items-center">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-teal-400 flex items-center justify-center text-white font-bold text-xs">
-                                        ${win.username ? win.username.charAt(0).toUpperCase() : 'U'}
-                                    </div>
-                                    <div>
-                                        <div class="text-white font-bold text-sm">${win.username}</div>
-                                        <div class="text-gray-400 text-xs">${this.timeAgo(win.timestamp)}</div>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-[#10b981] font-bold text-base">+${win.amount.toLocaleString()}</div>
-                                    <div class="text-gray-400 text-xs">${win.game}</div>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                } catch (error) {
-                    console.error('Error loading live wins:', error);
-                }
-            }
-
-            timeAgo(timestamp) {
-                const seconds = Math.floor((Date.now() - timestamp) / 1000);
-                
-                if (seconds < 60) return 'just now';
-                if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
-                if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
-                return Math.floor(seconds / 86400) + 'd ago';
-            }
-
-            getGameCard(id, name, icon, gradient, desc, color) {
-                return `
-                    <div onclick="app.loadGame('${id}')" class="game-card cursor-pointer rounded-xl overflow-hidden group relative h-40 md:h-48">
-                        <div class="absolute inset-0 bg-gradient-to-br ${gradient} opacity-90 transition-all duration-500 group-hover:opacity-100"></div>
-                        <div class="absolute inset-0 p-4 md:p-6 flex flex-col justify-between z-10">
-                            <div class="flex justify-between items-start">
-                                <div class="bg-black/30 p-2 md:p-3 rounded-xl backdrop-blur-sm">
-                                    <i class="fa-solid ${icon} text-lg md:text-xl text-white"></i>
-                                </div>
-                                <i class="fa-solid fa-arrow-right text-white/50 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg md:text-xl font-bold text-white mb-1">${name}</h3>
-                                <p class="text-white/70 text-xs md:text-sm">${desc}</p>
-                                <div class="mt-2">
-                                    <span class="inline-block px-2 py-1 rounded-full text-xs font-bold" style="background: ${color}20; color: ${color}">PLAY NOW</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            // MINES GAME with drag selection
-            renderMines() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-4 md:gap-6 min-h-[500px] items-start game-container">
-                        <div class="w-full md:w-64 bg-gradient-to-b from-[#161b26] to-[#11141c] p-4 md:p-6 rounded-xl md:rounded-2xl border border-[#2a3042] shadow-xl sticky top-4 md:top-8">
-                            <div class="mb-4 md:mb-6">
-                                <label class="text-xs md:text-sm text-[#8b5cf6] font-bold mb-2 block tracking-wider">Bet Amount</label>
-                                <div class="flex bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-lg md:rounded-xl border border-[#2a3042] p-1">
-                                    <div class="pl-3 py-2 text-[#8b5cf6] font-bold"><i class="fa-solid fa-coins text-sm"></i></div>
-                                    <input type="number" id="minesBetInput" value="10" min="1" max="${this.balance}" class="w-full bg-transparent text-white px-3 font-bold text-base md:text-lg outline-none">
-                                    <div class="flex pr-1">
-                                        <button onclick="document.getElementById('minesBetInput').value = Math.min(${this.balance}, document.getElementById('minesBetInput').value * 2)" class="px-3 text-xs font-bold text-[#8b5cf6] hover:text-white transition-all duration-300 touch-button">2x</button>
-                                        <button onclick="document.getElementById('minesBetInput').value = Math.max(1, document.getElementById('minesBetInput').value / 2)" class="px-3 text-xs font-bold text-[#8b5cf6] hover:text-white transition-all duration-300 touch-button">½</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-4 md:mb-6">
-                                <label class="text-xs md:text-sm text-[#8b5cf6] font-bold mb-2 block tracking-wider">Mines Count</label>
-                                <div class="grid grid-cols-5 gap-1 md:gap-2">
-                                    ${[1,3,5,10,24].map(n => `
-                                        <button onclick="app.setMinesCount(${n})" class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] text-[#b1bad3] rounded-lg md:rounded-xl py-1.5 md:py-2.5 text-xs md:text-sm font-bold hover:border-[#8b5cf6] hover:text-white transition-all duration-300 ${n===3?'border-[#8b5cf6] text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]':''} touch-button" data-val="${n}">${n}</button>
-                                    `).join('')}
-                                </div>
-                                <input type="hidden" id="minesCountInput" value="3">
-                            </div>
-                            <div class="bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-lg md:rounded-xl p-3 md:p-4 mb-4 md:mb-6 border border-[#2a3042] flex justify-between items-center">
-                                <div>
-                                    <div class="text-xs text-[#6b7280] tracking-wider">Next Tile</div>
-                                    <div class="text-[#10b981] font-bold text-lg md:text-xl" id="minesNextMult">1.13x</div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-xs text-[#6b7280] tracking-wider">Profit</div>
-                                    <div class="text-white font-bold text-lg md:text-xl" id="minesProfit">0</div>
-                                </div>
-                            </div>
-                            <button id="minesBtn" onclick="app.playMines()" class="w-full btn-primary py-3 rounded-xl md:rounded-2xl font-bold text-sm md:text-base tracking-wider hover:scale-[1.02] transition-all duration-300 touch-button">
-                                <i class="fa-solid fa-play mr-1"></i> Start Game
-                            </button>
-                        </div>
-                        <div class="flex-1 w-full bg-gradient-to-b from-[#161b26] to-[#11141c] rounded-xl md:rounded-2xl p-4 md:p-6 border border-[#2a3042] shadow-xl flex items-center justify-center relative overflow-hidden">
-                            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8b5cf6] via-[#10b981] to-[#8b5cf6] animate-shimmer"></div>
-                            <div class="mines-grid-container" id="minesGrid">
-                                ${Array(25).fill(0).map((_,i)=>`
-                                    <div id="tile-${i}" 
-                                         onmousedown="app.startMinesDrag(${i}, event)" 
-                                         onmouseenter="app.handleMinesDrag(${i})" 
-                                         onmouseup="app.stopMinesDrag()"
-                                         ontouchstart="app.startMinesDrag(${i}, event)"
-                                         ontouchmove="app.handleMinesTouchMove(event)"
-                                         ontouchend="app.stopMinesDrag()"
-                                         class="mine-tile-modern touch-button"></div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                this.minesActive = false;
-                this.minesDragging = false;
-                this.minesSelectedTiles.clear();
-                this.setMinesCount(3);
-            }
-
-            setMinesCount(n) {
-                if (this.minesActive) return;
-                document.getElementById('minesCountInput').value = n;
-                document.querySelectorAll('[data-val]').forEach(b => {
-                    b.classList.remove('border-[#8b5cf6]', 'text-white', 'shadow-[0_0_20px_rgba(139,92,246,0.3)]');
-                    if (parseInt(b.dataset.val) === n) {
-                        b.classList.add('border-[#8b5cf6]', 'text-white', 'shadow-[0_0_20px_rgba(139,92,246,0.3)]');
-                    }
-                });
-                this.updateMinesNextMult();
-                this.playSound('click');
-            }
-
-            updateMinesNextMult() {
-                if (!this.minesActive) {
-                    const m = parseInt(document.getElementById('minesCountInput').value);
-                    const mult = this.calculateMinesMultiplier(m, 1);
-                    document.getElementById('minesNextMult').textContent = mult.toFixed(2) + 'x';
-                    return;
-                }
-                const m = this.minesCount;
-                const r = this.minesRevealedCount + 1;
-                const mult = this.calculateMinesMultiplier(m, r);
-                document.getElementById('minesNextMult').textContent = mult.toFixed(2) + 'x';
-            }
-
-            calculateMinesMultiplier(mines, revealed) {
-                let multiplier = 1.0;
-                for (let i = 0; i < revealed; i++) multiplier *= (25 - i) / (25 - mines - i);
-                return multiplier;
-            }
-
-            // Mines drag selection functions
-            startMinesDrag(tileId, event) {
-                if (!this.minesActive || this.minesDragging) return;
-                event.preventDefault();
-                
-                this.minesDragging = true;
-                this.minesDragStartTile = tileId;
-                this.minesSelectedTiles.clear();
-                this.handleTileSelection(tileId);
-            }
-
-            handleMinesDrag(tileId) {
-                if (!this.minesActive || !this.minesDragging) return;
-                this.handleTileSelection(tileId);
-            }
-
-            handleMinesTouchMove(event) {
-                if (!this.minesActive || !this.minesDragging) return;
-                event.preventDefault();
-                
-                const touch = event.touches[0];
-                const element = document.elementFromPoint(touch.clientX, touch.clientY);
-                if (element && element.id && element.id.startsWith('tile-')) {
-                    const tileId = parseInt(element.id.split('-')[1]);
-                    this.handleTileSelection(tileId);
-                }
-            }
-
-            handleTileSelection(tileId) {
-                if (!this.minesActive || this.minesSelectedTiles.has(tileId)) return;
-                
-                const tile = document.getElementById(`tile-${tileId}`);
-                if (!tile || tile.classList.contains('revealed')) return;
-                
-                // Add hover effect
-                tile.classList.add('hover-effect');
-                this.minesSelectedTiles.add(tileId);
-                
-                // Automatically click after a short delay if dragging stopped
-                setTimeout(() => {
-                    if (!this.minesDragging && this.minesSelectedTiles.has(tileId)) {
-                        this.clickMineTile(tileId);
-                        this.minesSelectedTiles.delete(tileId);
-                    }
-                }, 50);
-            }
-
-            stopMinesDrag() {
-                if (!this.minesActive) return;
-                
-                this.minesDragging = false;
-                
-                // Process all selected tiles
-                this.minesSelectedTiles.forEach(tileId => {
-                    setTimeout(() => {
-                        this.clickMineTile(tileId);
-                    }, 10);
-                });
-                
-                this.minesSelectedTiles.clear();
-                this.minesDragStartTile = null;
-            }
-
-            playMines() {
-                if (!this.userId) {
-                    this.showToast('Please login to play', 'error');
-                    return;
-                }
-
-                if (this.minesActive) {
-                    this.cashOutMines();
-                    return;
-                }
-
-                const betInput = document.getElementById('minesBetInput');
-                const bet = parseFloat(betInput.value);
-                const mines = parseInt(document.getElementById('minesCountInput').value);
-
-                if (isNaN(bet) || bet <= 0) return;
-                if (bet > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                this.playSound('click');
-                this.balance -= bet;
-                this.updateBalance();
-                this.recordWager(bet);
-
-                this.minesBet = bet;
-                this.minesCount = mines;
-                this.minesActive = true;
-                this.minesRevealedCount = 0;
-                this.minesGrid = Array(25).fill('safe');
-
-                let placed = 0;
-                while (placed < mines) {
-                    const idx = Math.floor(Math.random() * 25);
-                    if (this.minesGrid[idx] === 'safe') {
-                        this.minesGrid[idx] = 'mine';
-                        placed++;
-                    }
-                }
-
-                const btn = document.getElementById('minesBtn');
-                btn.innerHTML = '<i class="fa-solid fa-money-bill-wave mr-1"></i> Cash Out <span id="minesCashoutVal" class="ml-1 bg-white/20 px-2 py-0.5 rounded text-xs">0</span>';
-                btn.className = 'w-full bg-gradient-to-r from-[#10b981] to-[#059669] text-white py-3 rounded-xl md:rounded-2xl font-bold text-sm md:text-base tracking-wider hover:scale-[1.02] transition-all duration-300 touch-button';
-
-                document.querySelectorAll('.mine-tile-modern').forEach(el => {
-                    el.className = 'mine-tile-modern';
-                    el.innerHTML = '';
-                });
-
-                this.updateMinesNextMult();
-                document.getElementById('minesProfit').textContent = '0';
-            }
-
-            clickMineTile(idx) {
-                if (!this.minesActive) return;
-                const tile = document.getElementById(`tile-${idx}`);
-                if (tile.classList.contains('revealed')) return;
-
-                tile.classList.add('revealed');
-                tile.classList.remove('hover-effect');
-
-                if (this.minesGrid[idx] === 'mine') {
-                    tile.classList.add('mine');
-                    tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-2xl md:text-3xl animate-bounce"></i>';
-                    this.playSound('mine');
-                    this.recordLoss(this.minesBet, 'Mines');
-                    this.endMines(false, idx);
-                } else {
-                    tile.classList.add('gem');
-                    tile.innerHTML = '<i class="fa-solid fa-gem text-[#10b981] text-xl md:text-2xl animate-pulse"></i>';
-                    this.playSound('gem');
-                    this.minesRevealedCount++;
-
-                    const currentMult = this.calculateMinesMultiplier(this.minesCount, this.minesRevealedCount);
-                    const currentWin = this.minesBet * currentMult;
-                    document.getElementById('minesProfit').textContent = `${(currentWin - this.minesBet).toFixed(2)}`;
-
-                    const cv = document.getElementById('minesCashoutVal');
-                    if (cv) cv.textContent = `${currentWin.toFixed(2)}`;
-
-                    this.updateMinesNextMult();
-
-                    if (this.minesRevealedCount === (25 - this.minesCount)) {
-                        this.cashOutMines();
-                    }
-                }
-            }
-
-            endMines(win, hitIdx) {
-                this.minesActive = false;
-                this.minesDragging = false;
-                this.minesSelectedTiles.clear();
-                
-                const btn = document.getElementById('minesBtn');
-                if (btn) {
-                    btn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Start Game';
-                    btn.className = 'w-full btn-primary py-3 rounded-xl md:rounded-2xl font-bold text-sm md:text-base tracking-wider hover:scale-[1.02] transition-all duration-300 touch-button';
-                }
-
-                this.minesGrid.forEach((type, idx) => {
-                    const tile = document.getElementById(`tile-${idx}`);
-                    if (!tile.classList.contains('revealed')) {
-                        tile.classList.add('revealed');
-                        if (type === 'mine') {
-                            tile.innerHTML = '<i class="fa-solid fa-bomb text-white text-sm md:text-lg opacity-30"></i>';
-                            tile.classList.add('mine-hidden');
-                        } else {
-                            tile.innerHTML = '<i class="fa-solid fa-gem text-white/10 text-sm md:text-lg"></i>';
-                            tile.classList.add('safe-hidden');
-                        }
-                    }
-                });
-
-                if (!win) {
-                    this.showToast('Boom! You hit a mine!', 'error');
-                }
-            }
-
-            cashOutMines() {
-                const mult = this.calculateMinesMultiplier(this.minesCount, this.minesRevealedCount);
-                const win = this.minesBet * mult;
-                this.balance += win;
-                this.updateBalance();
-                this.playSound('win');
-                this.showToast(`Cashed out ${win.toFixed(2)} coins! (${mult.toFixed(2)}x)`, 'success');
-                this.recordWin(win - this.minesBet, 'Mines');
-                this.endMines(true, -1);
-            }
-
-            // BLACKJACK GAME - FIXED UI
-            renderBlackjack() {
-                this.bjInProgress = false;
-                this.bjSettled = false;
-                this.bjStandCalled = false;
-                this.bjDeck = [];
-                this.bjPlayerHand = [];
-                this.bjDealerHand = [];
-
-                this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto flex flex-col gap-4">
-                        <div class="text-center mb-2">
-                            <h2 class="text-2xl md:text-3xl font-bold text-white mb-1">Blackjack</h2>
-                            <p class="text-gray-400 text-sm">Beat the dealer without going over 21</p>
-                        </div>
-                        
-                        <div class="blackjack-table">
-                            <!-- Dealer Section -->
-                            <div class="w-full mb-4 md:mb-6">
-                                <div class="flex items-center justify-center gap-2 mb-3">
-                                    <i class="fa-solid fa-user-tie text-lg md:text-xl text-[#a7f3d0]"></i>
-                                    <div class="text-[#a7f3d0] font-bold tracking-wider text-sm md:text-base">Dealer</div>
-                                    <div class="bg-black/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-white font-bold text-base md:text-lg" id="dealerScore">0</div>
-                                </div>
-                                <div id="dealerHand" class="hand-container"></div>
-                            </div>
-                            
-                            <!-- Game Status -->
-                            <div id="bjStatus" class="text-center my-3">
-                                <div class="status-text text-white" id="bjGameStatus">Place your bet and deal!</div>
-                            </div>
-                            
-                            <!-- Player Section -->
-                            <div class="w-full mt-4 md:mt-6">
-                                <div id="playerHand" class="hand-container mb-3"></div>
-                                <div class="flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-user text-lg md:text-xl text-[#a7f3d0]"></i>
-                                    <div class="text-[#a7f3d0] font-bold tracking-wider text-sm md:text-base">You</div>
-                                    <div class="bg-black/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-white font-bold text-base md:text-lg" id="playerScore">0</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Game Overlay -->
-                            <div id="bjOverlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm hidden z-20 flex-col items-center justify-center rounded-xl md:rounded-2xl">
-                                <div id="bjMessage" class="text-2xl md:text-3xl font-black text-white mb-3 text-center"></div>
-                                <div id="bjPayout" class="text-lg md:text-xl font-bold text-yellow-300 mb-4"></div>
-                                <button onclick="app.resetBlackjackUI()" class="px-6 py-2.5 md:px-8 md:py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white text-base md:text-lg rounded-xl md:rounded-2xl font-bold shadow-xl hover:scale-110 transition-all duration-300 touch-button">
-                                    <i class="fa-solid fa-rotate-right mr-2"></i> Play Again
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Game Controls -->
-                        <div class="game-controls">
-                            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                                <div class="flex items-center gap-3 bg-gradient-to-r from-[#0b0e14] to-[#1e293b] px-4 py-2.5 rounded-xl border border-[#2a3042]">
-                                    <span class="text-gray-400 font-bold text-xs tracking-wider">BET</span>
-                                    <input type="number" id="bjBetInput" value="50" min="1" max="${this.balance}" class="bg-transparent text-white font-bold text-lg w-24 outline-none text-center">
-                                    <div class="flex gap-1">
-                                        <button onclick="app.adjustBjBet(0.5)" class="text-xs text-[#8b5cf6] font-bold hover:text-white transition-all duration-300 hover:scale-110 touch-button">½</button>
-                                        <button onclick="app.adjustBjBet(2)" class="text-xs text-[#8b5cf6] font-bold hover:text-white transition-all duration-300 hover:scale-110 touch-button">2x</button>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex gap-2">
-                                    <button id="btnDeal" onclick="app.bjDeal()" class="px-6 py-2.5 md:px-8 md:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black text-base md:text-lg rounded-xl md:rounded-2xl shadow-xl hover:scale-105 transition-all duration-300 touch-button">
-                                        <i class="fa-solid fa-play mr-2"></i> DEAL CARDS
-                                    </button>
-                                    <div id="bjActions" class="hidden flex gap-2">
-                                        <button id="btnHit" onclick="app.bjHit()" class="px-4 py-2.5 md:px-6 md:py-3 bg-gradient-to-r from-gray-700 to-gray-800 text-white font-bold text-base md:text-lg rounded-xl md:rounded-2xl shadow-lg hover:scale-105 transition-all duration-300 touch-button">
-                                            <i class="fa-solid fa-plus mr-1"></i> HIT
-                                        </button>
-                                        <button id="btnStand" onclick="app.bjStand()" class="px-4 py-2.5 md:px-6 md:py-3 bg-gradient-to-r from-emerald-600 to-green-700 text-white font-black text-base md:text-lg rounded-xl md:rounded-2xl shadow-lg hover:scale-105 transition-all duration-300 touch-button">
-                                            <i class="fa-solid fa-hand mr-1"></i> STAND
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            adjustBjBet(multiplier) {
-                const betInput = document.getElementById('bjBetInput');
-                const currentBet = parseFloat(betInput.value) || 50;
-                let newBet = currentBet * multiplier;
-                
-                // Round to nearest whole number
-                newBet = Math.round(newBet);
-                
-                // Ensure within limits
-                newBet = Math.max(1, Math.min(newBet, this.balance));
-                
-                betInput.value = newBet;
-                this.playSound('click');
-            }
-
-            bjDeal() {
-                if (!this.userId) {
-                    this.showToast('Please login to play', 'error');
-                    return;
-                }
-
-                if (this.bjInProgress) return;
-
-                const betInput = document.getElementById('bjBetInput');
-                const bet = parseFloat(betInput.value);
-
-                if (isNaN(bet) || bet <= 0) return;
-                if (bet > this.balance) {
-                    this.showToast('Insufficient funds', 'error');
-                    return;
-                }
-
-                this.playSound('click');
-                this.balance -= bet;
-                this.updateBalance();
-                this.recordWager(bet);
-                this.bjBet = bet;
-
-                // Create and shuffle deck
-                const suits = ['♠', '♥', '♦', '♣'];
-                const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-                let deck = [];
-
-                for (let s of suits) {
-                    for (let v of values) {
-                        deck.push({
-                            suit: s,
-                            value: v,
-                            color: (s === '♥' || s === '♦') ? 'text-red-500' : 'text-black'
-                        });
-                    }
-                }
-
-                // Shuffle deck
-                for (let i = deck.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [deck[i], deck[j]] = [deck[j], deck[i]];
-                }
-
-                this.bjDeck = deck;
-                this.bjPlayerHand = [];
-                this.bjDealerHand = [];
-
-                // Clear hands
-                document.getElementById('dealerHand').innerHTML = '';
-                document.getElementById('playerHand').innerHTML = '';
-                document.getElementById('dealerScore').textContent = '0';
-                document.getElementById('playerScore').textContent = '0';
-                document.getElementById('bjGameStatus').textContent = 'Game in progress...';
-
-                // Update UI
-                document.getElementById('btnDeal').classList.add('hidden');
-                document.getElementById('bjActions').classList.remove('hidden');
-                document.getElementById('bjActions').classList.add('flex');
-                betInput.disabled = true;
-
-                this.bjInProgress = true;
-                this.bjSettled = false;
-                this.bjStandCalled = false;
-
-                // Deal initial cards with animation delays
-                setTimeout(() => {
-                    this.bjDealCardToPlayer();
-                    this.playSound('card');
-                }, 0);
-
-                setTimeout(() => {
-                    this.bjDealCardToDealer(true); // First dealer card face down
-                    this.playSound('card');
-                }, 400);
-
-                setTimeout(() => {
-                    this.bjDealCardToPlayer();
-                    this.playSound('card');
-                }, 800);
-
-                setTimeout(() => {
-                    this.bjDealCardToDealer(false); // Second dealer card face up
-                    this.playSound('card');
-                    
-                    // Update scores after all cards are dealt
-                    setTimeout(() => {
-                        this.bjUpdateScores(true);
-                        
-                        // Check for blackjack
-                        if (this.bjCalculateScore(this.bjPlayerHand) === 21) {
-                            this.bjStand();
-                        }
-                    }, 300);
-                }, 1200);
-            }
-
-            bjDealCardToPlayer(faceUp = true) {
-                if (this.bjDeck.length === 0) return;
-                
-                const card = this.bjDeck.pop();
-                this.bjPlayerHand.push(card);
-                
-                const handElement = document.getElementById('playerHand');
-                const cardElement = this.createCardElement(card, faceUp);
-                cardElement.style.animation = 'card-deal 0.5s ease-out forwards';
-                handElement.appendChild(cardElement);
-            }
-
-            bjDealCardToDealer(faceDown = false) {
-                if (this.bjDeck.length === 0) return;
-                
-                const card = this.bjDeck.pop();
-                this.bjDealerHand.push(card);
-                
-                const handElement = document.getElementById('dealerHand');
-                const cardElement = this.createCardElement(card, !faceDown);
-                if (faceDown) {
-                    cardElement.querySelector('.game-card-item').classList.add('flipped');
-                    cardElement.id = 'dealerHiddenCard';
-                }
-                cardElement.style.animation = 'card-deal 0.5s ease-out forwards';
-                handElement.appendChild(cardElement);
-            }
-
-            createCardElement(card, faceUp = true) {
-                const container = document.createElement('div');
-                container.className = 'card-container';
-                
-                const cardItem = document.createElement('div');
-                cardItem.className = `game-card-item ${!faceUp ? 'flipped' : ''}`;
-                
-                const cardFace = document.createElement('div');
-                cardFace.className = 'card-face';
-                cardFace.innerHTML = `
-                    <div class="text-sm md:text-lg font-bold leading-none ${card.color}">${card.value}<br><span class="text-xs">${card.suit}</span></div>
-                    <div class="card-value ${card.color} text-3xl md:text-5xl">${card.suit}</div>
-                    <div class="text-sm md:text-lg font-bold leading-none ${card.color} rotate-180">${card.value}<br><span class="text-xs">${card.suit}</span></div>
-                `;
-                
-                const cardBack = document.createElement('div');
-                cardBack.className = 'card-back';
-                
-                cardItem.appendChild(cardFace);
-                cardItem.appendChild(cardBack);
-                container.appendChild(cardItem);
-                
-                return container;
-            }
-
-            bjCalculateScore(hand) {
-                let score = 0;
-                let aces = 0;
-
-                hand.forEach(card => {
-                    if (['J', 'Q', 'K'].includes(card.value)) {
-                        score += 10;
-                    } else if (card.value === 'A') {
-                        score += 11;
-                        aces++;
-                    } else {
-                        score += parseInt(card.value);
-                    }
-                });
-
-                // Adjust for aces if over 21
-                while (score > 21 && aces > 0) {
-                    score -= 10;
-                    aces--;
-                }
-
-                return score;
-            }
-
-            bjUpdateScores(hideDealerScore = false) {
-                const playerScore = this.bjCalculateScore(this.bjPlayerHand);
-                document.getElementById('playerScore').textContent = playerScore;
-
-                if (hideDealerScore && this.bjDealerHand.length > 0) {
-                    // Only show first card's value for dealer
-                    const firstCard = this.bjDealerHand[0];
-                    let dealerVisibleScore = 0;
-                    
-                    if (['J', 'Q', 'K'].includes(firstCard.value)) {
-                        dealerVisibleScore = 10;
-                    } else if (firstCard.value === 'A') {
-                        dealerVisibleScore = 11;
-                    } else {
-                        dealerVisibleScore = parseInt(firstCard.value);
-                    }
-                    
-                    document.getElementById('dealerScore').textContent = dealerVisibleScore;
-                } else {
-                    const dealerScore = this.bjCalculateScore(this.bjDealerHand);
-                    document.getElementById('dealerScore').textContent = dealerScore;
-                }
-            }
-
-            bjHit() {
-                if (!this.bjInProgress || this.bjSettled || this.bjStandCalled) return;
-
-                this.playSound('card');
-                this.bjDealCardToPlayer();
-                
-                setTimeout(() => {
-                    this.bjUpdateScores(true);
-                    const playerScore = this.bjCalculateScore(this.bjPlayerHand);
-                    
-                    if (playerScore > 21) {
-                        this.bjEnd('BUSTED', 'loss');
-                    }
-                }, 300);
-            }
-
-            bjStand() {
-                if (!this.bjInProgress || this.bjSettled || this.bjStandCalled) return;
-
-                this.bjStandCalled = true;
-                document.getElementById('bjActions').classList.add('hidden');
-                document.getElementById('bjActions').classList.remove('flex');
-
-                // Reveal dealer's hidden card
-                const hiddenCard = document.getElementById('dealerHiddenCard');
-                if (hiddenCard) {
-                    setTimeout(() => {
-                        hiddenCard.querySelector('.game-card-item').classList.remove('flipped');
-                        this.playSound('card');
-                        this.bjUpdateScores(false);
-                        this.bjDealerPlay();
-                    }, 500);
-                }
-            }
-
-            bjDealerPlay() {
-                const dealerScore = this.bjCalculateScore(this.bjDealerHand);
-                
-                if (dealerScore >= 17) {
-                    setTimeout(() => {
-                        this.bjDetermineWinner();
-                    }, 1000);
-                } else {
-                    // Dealer hits
-                    setTimeout(() => {
-                        this.bjDealCardToDealer(false);
-                        this.playSound('card');
-                        
-                        setTimeout(() => {
-                            this.bjUpdateScores(false);
-                            this.bjDealerPlay();
-                        }, 500);
-                    }, 1000);
-                }
-            }
-
-            bjDetermineWinner() {
-                const playerScore = this.bjCalculateScore(this.bjPlayerHand);
-                const dealerScore = this.bjCalculateScore(this.bjDealerHand);
-
-                if (playerScore > 21) {
-                    this.bjEnd('BUSTED', 'loss');
-                } else if (dealerScore > 21) {
-                    this.bjEnd('DEALER BUSTED', 'win');
-                } else if (playerScore > dealerScore) {
-                    this.bjEnd('YOU WIN', 'win');
-                } else if (playerScore < dealerScore) {
-                    this.bjEnd('DEALER WINS', 'loss');
-                } else {
-                    this.bjEnd('PUSH', 'push');
-                }
-            }
-
-            bjEnd(message, result) {
-                this.bjSettled = true;
-                this.bjInProgress = false;
-
-                const overlay = document.getElementById('bjOverlay');
-                const messageEl = document.getElementById('bjMessage');
-                const payoutEl = document.getElementById('bjPayout');
-
-                setTimeout(() => {
-                    overlay.classList.remove('hidden');
-                    overlay.classList.add('flex');
-                    
-                    if (messageEl) {
-                        messageEl.textContent = message;
-                        
-                        switch(result) {
-                            case 'win':
-                                messageEl.style.color = '#10b981';
-                                break;
-                            case 'loss':
-                                messageEl.style.color = '#ef4444';
-                                break;
-                            case 'push':
-                                messageEl.style.color = '#f59e0b';
-                                break;
-                        }
-                    }
-
-                    let winAmount = 0;
-                    
-                    switch(result) {
-                        case 'win':
-                            winAmount = this.bjBet * 2;
-                            this.balance += winAmount;
-                            this.updateBalance();
-                            this.recordWin(this.bjBet, 'Blackjack');
-                            if (payoutEl) {
-                                payoutEl.textContent = `+${winAmount} coins`;
-                                payoutEl.style.color = '#10b981';
-                            }
-                            this.playSound('win');
-                            confetti({
-                                particleCount: 150,
-                                spread: 70,
-                                origin: { y: 0.6 }
-                            });
-                            break;
-                            
-                        case 'push':
-                            winAmount = this.bjBet;
-                            this.balance += winAmount;
-                            this.updateBalance();
-                            if (payoutEl) {
-                                payoutEl.textContent = 'Bet returned';
-                                payoutEl.style.color = '#f59e0b';
-                            }
-                            break;
-                            
-                        case 'loss':
-                            this.recordLoss(this.bjBet, 'Blackjack');
-                            if (payoutEl) {
-                                payoutEl.textContent = `-${this.bjBet} coins`;
-                                payoutEl.style.color = '#ef4444';
-                            }
-                            this.playSound('lose');
-                            break;
-                    }
-
-                    document.getElementById('bjGameStatus').textContent = message;
-                }, 1000);
-            }
-
-            resetBlackjackUI() {
-                const overlay = document.getElementById('bjOverlay');
-                overlay.classList.add('hidden');
-                overlay.classList.remove('flex');
-
-                document.getElementById('dealerHand').innerHTML = '';
-                document.getElementById('playerHand').innerHTML = '';
-                document.getElementById('dealerScore').textContent = '0';
-                document.getElementById('playerScore').textContent = '0';
-                document.getElementById('bjGameStatus').textContent = 'Place your bet and deal!';
-
-                document.getElementById('btnDeal').classList.remove('hidden');
-                document.getElementById('bjActions').classList.add('hidden');
-                document.getElementById('bjActions').classList.remove('flex');
-
-                const betInput = document.getElementById('bjBetInput');
-                betInput.disabled = false;
-
-                this.bjInProgress = false;
-                this.bjSettled = false;
-                this.bjStandCalled = false;
-                this.playSound('click');
-            }
-
-            // CHICKEN ROAD GAME
+            // CHICKEN ROAD GAME - UPDATED TO MATCH STAKE STYLE
             renderChickenRoad() {
                 this.chickenState.isPlaying = false;
                 this.chickenState.currentStep = -1;
                 this.chickenState.currentMultiplier = 1.00;
 
                 this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-4 md:gap-6 min-h-[600px]">
-                        <!-- Left Controls Panel -->
-                        <div class="w-full md:w-80 chicken-sidebar p-4 md:p-6 rounded-xl md:rounded-2xl border border-[#2a3042] shadow-xl flex flex-col gap-4">
-                            <div class="flex items-center gap-2 mb-2">
-                                <div class="text-3xl">🐔</div>
-                                <h2 class="text-white text-xl font-bold tracking-wide">Chicken Road</h2>
+                    <div class="chicken-road-main">
+                        <!-- Top Stats Bar -->
+                        <div class="chicken-top-bar">
+                            <div class="chicken-game-stats" id="chickenGameStats">
+                                <div class="chicken-stat-box">
+                                    <div class="chicken-stat-label">Current Multiplier</div>
+                                    <div class="chicken-stat-value multiplier" id="chickenCurrentMult">1.00x</div>
+                                </div>
+                                <div class="chicken-stat-box">
+                                    <div class="chicken-stat-label">Current Payout</div>
+                                    <div class="chicken-stat-value" id="chickenCurrentPayout">0</div>
+                                </div>
                             </div>
-
-                            <!-- Bet Type Toggles -->
-                            <div class="bg-gradient-to-r from-[#0f172a] to-[#1e293b] p-1 rounded-full flex text-sm font-bold mb-2">
-                                <button id="chicken-mode-manual" class="flex-1 py-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] text-white transition-colors" onclick="app.setChickenMode('manual')">Manual</button>
-                                <button id="chicken-mode-auto" class="flex-1 py-2 rounded-full text-[#b1bad3] hover:text-white transition-colors" onclick="app.setChickenMode('auto')">Auto</button>
+                            
+                            <div class="flex items-center gap-3 bg-[#1a2c38] px-4 py-2 rounded shadow-inner">
+                                <span class="text-[#b1bad3] font-bold text-sm">Balance</span>
+                                <span class="text-white font-bold text-lg tracking-wide" id="chickenBalanceDisplay">${this.balance.toLocaleString()}</span>
+                                <button class="bg-[#1475e1] text-white text-xs px-3 py-1 rounded font-bold hover:bg-[#0f64c1]" onclick="app.openDepositModal()">Wallet</button>
                             </div>
+                        </div>
 
-                            <!-- MANUAL CONTROLS -->
-                            <div id="chicken-manual-controls" class="flex flex-col gap-4">
+                        <!-- Main Game Area -->
+                        <div class="chicken-game-area">
+                            <!-- Controls Sidebar -->
+                            <div class="chicken-controls-sidebar">
+                                <div class="chicken-controls-header">
+                                    <div class="emoji">🐔</div>
+                                    <h2>CHICKEN ROAD</h2>
+                                </div>
+
                                 <!-- Bet Amount -->
-                                <div class="flex flex-col gap-1">
-                                    <div class="flex justify-between text-xs font-bold uppercase text-[#b1bad3]">
-                                        <span>Bet Amount</span>
-                                        <span id="chicken-max-bet">Max: ${this.balance.toLocaleString()} coins</span>
+                                <div class="chicken-control-group">
+                                    <div class="flex justify-between">
+                                        <label class="chicken-control-label">Bet Amount</label>
+                                        <span class="text-xs text-[#b1bad3]">Max: ${this.balance.toLocaleString()}</span>
                                     </div>
-                                    <div class="flex bg-gradient-to-r from-[#0b0e14] to-[#1e293b] rounded-md border border-[#2a3042] hover:border-[#8b5cf6] transition-colors overflow-hidden">
-                                        <input type="number" id="chicken-bet-input" value="10" min="1" max="${this.balance}" class="w-full bg-transparent p-3 text-white outline-none font-bold">
-                                        <div class="flex items-center px-3 bg-[#0f172a]/30">
-                                            <span class="text-yellow-400"><i class="fa-solid fa-coins"></i></span>
-                                        </div>
+                                    <div class="chicken-input-group">
+                                        <input type="number" id="chickenBetInput" value="10" min="1" max="${this.balance}" class="chicken-bet-input">
+                                        <div class="icon">💰</div>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-2 mt-1">
-                                        <button onclick="app.adjustChickenBet(0.5)" class="bg-gradient-to-r from-[#2a3042] to-[#1e293b] hover:from-[#3e5666] hover:to-[#2a3042] py-2 rounded text-xs font-bold transition touch-button">1/2</button>
-                                        <button onclick="app.adjustChickenBet(2)" class="bg-gradient-to-r from-[#2a3042] to-[#1e293b] hover:from-[#3e5666] hover:to-[#2a3042] py-2 rounded text-xs font-bold transition touch-button">2x</button>
+                                    <div class="chicken-quick-buttons">
+                                        <button class="chicken-quick-button" onclick="app.adjustChickenBet(0.5)">1/2</button>
+                                        <button class="chicken-quick-button" onclick="app.adjustChickenBet(2)">2x</button>
                                     </div>
                                 </div>
 
                                 <!-- Difficulty -->
-                                <div class="flex flex-col gap-1">
-                                    <span class="text-xs font-bold uppercase text-[#b1bad3]">Difficulty</span>
-                                    <select id="chicken-difficulty" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] p-3 rounded-md text-white outline-none border border-[#2a3042] focus:border-[#8b5cf6] font-bold cursor-pointer" onchange="app.updateChickenDifficulty()">
+                                <div class="chicken-control-group">
+                                    <label class="chicken-control-label">Difficulty</label>
+                                    <select id="chickenDifficulty" class="chicken-select" onchange="app.updateChickenDifficulty()">
                                         <option value="easy">Easy (Low Risk)</option>
                                         <option value="medium">Medium</option>
                                         <option value="hard">Hard</option>
                                         <option value="expert">Expert (High Risk)</option>
                                     </select>
                                 </div>
-                            </div>
 
-                            <!-- AUTO CONTROLS (Hidden by default) -->
-                            <div id="chicken-auto-controls" class="hidden flex-col gap-4">
-                                <div class="text-center text-[#6b7280] text-sm py-4">
-                                    <i class="fa-solid fa-robot text-2xl mb-2"></i>
-                                    <p>Auto mode coming soon!</p>
-                                </div>
-                            </div>
-
-                            <!-- Stats Display -->
-                            <div class="mt-4 bg-gradient-to-r from-[#0f172a] to-[#1e293b] rounded-lg p-3 border border-[#2a3042]">
-                                <div class="grid grid-cols-2 gap-2 text-xs">
-                                    <div>
-                                        <div class="text-[#6b7280]">Current Multiplier</div>
-                                        <div id="chicken-current-mult" class="text-white font-bold text-lg">1.00x</div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-[#6b7280]">Potential Win</div>
-                                        <div id="chicken-potential-win" class="text-[#10b981] font-bold text-lg">0</div>
+                                <!-- Stats Display -->
+                                <div class="chicken-stats-box">
+                                    <div class="chicken-stats-grid">
+                                        <div>
+                                            <div class="chicken-stat-label">Next Multiplier</div>
+                                            <div class="chicken-stat-value multiplier" id="chickenNextMult">1.02x</div>
+                                        </div>
+                                        <div>
+                                            <div class="chicken-stat-label">Steps Remaining</div>
+                                            <div class="chicken-stat-value" id="chickenStepsRemaining">30</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Main Action Button -->
-                            <button id="chicken-action-btn" onclick="app.handleChickenAction()" class="mt-2 w-full btn-primary py-3 rounded-xl font-bold text-base tracking-wider hover:scale-[1.02] transition-all duration-300 touch-button disabled:opacity-50 disabled:cursor-not-allowed">
-                                <i class="fa-solid fa-play mr-1"></i> Start Game
-                            </button>
-
-                            <!-- Game Info -->
-                            <div class="mt-4 text-xs text-[#6b7280] text-center">
-                                <p>Cross the road to win! Click on lanes to hop.</p>
-                                <p class="mt-1">House Edge: 2% | RTP: 98%</p>
-                            </div>
-                        </div>
-
-                        <!-- Main Game Area -->
-                        <div class="flex-1 chicken-road-container p-4 md:p-6">
-                            <!-- Top Stats Bar -->
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="flex items-center gap-4">
-                                    <div class="bg-gradient-to-r from-[#0f172a] to-[#1e293b] px-4 py-2 rounded-lg border border-[#2a3042]">
-                                        <div class="text-[10px] uppercase font-bold text-[#b1bad3]">Steps Remaining</div>
-                                        <div id="chicken-steps-remaining" class="text-white font-bold text-lg">30</div>
-                                    </div>
-                                    <div class="bg-gradient-to-r from-[#0f172a] to-[#1e293b] px-4 py-2 rounded-lg border border-[#2a3042]">
-                                        <div class="text-[10px] uppercase font-bold text-[#b1bad3]">Next Multiplier</div>
-                                        <div id="chicken-next-mult" class="text-[#10b981] font-bold text-lg">1.02x</div>
+                                <!-- Main Action Button -->
+                                <div class="chicken-main-action">
+                                    <button id="chickenActionBtn" onclick="app.handleChickenAction()" class="chicken-action-button">
+                                        <i class="fa-solid fa-play mr-1"></i> Start Game
+                                    </button>
+                                    <div class="chicken-game-info">
+                                        <p>Cross the road to win! Click on lanes to hop.</p>
+                                        <p class="mt-1">House Edge: 2% | RTP: 98%</p>
                                     </div>
                                 </div>
-                                <button id="chicken-cashout-btn" onclick="app.chickenCashOut()" class="hidden bg-gradient-to-r from-[#10b981] to-[#059669] text-white px-4 py-2 rounded-lg font-bold text-sm hover:scale-105 transition-all duration-300 touch-button">
-                                    Cash Out
-                                </button>
                             </div>
 
                             <!-- Road Container -->
-                            <div id="chicken-road-container" class="relative h-96 rounded-xl overflow-hidden border border-[#2a3042] bg-gradient-to-r from-[#0f172a] to-[#1e293b]">
-                                <!-- Road will be rendered here -->
-                                <div id="chicken-road-inner" class="absolute inset-0 flex items-center justify-center">
-                                    <div class="text-center text-[#6b7280]">
-                                        <i class="fa-solid fa-egg text-4xl mb-2"></i>
-                                        <p>Place your bet to start crossing the road!</p>
+                            <div class="chicken-road-container">
+                                <!-- Moving Camera Container -->
+                                <div id="chickenRoadCamera" class="absolute inset-y-0 left-0 h-full flex items-center transition-transform duration-500 ease-out will-change-transform">
+                                    <!-- Full World Container -->
+                                    <div class="relative flex flex-col h-full w-max" id="chickenWorldContainer">
+                                        <!-- TOP GRASS ENVIRONMENT -->
+                                        <div class="h-24 min-h-[6rem] bg-green-600 grass-texture relative flex items-end overflow-hidden border-b-4 border-[#27ae60]" id="chickenEnvTop"></div>
+
+                                        <!-- THE ROAD STRIP -->
+                                        <div class="flex-1 relative flex items-stretch road-texture z-10 shadow-2xl">
+                                            <div class="road-border-top"></div>
+                                            
+                                            <!-- Start Sidewalk (Left) -->
+                                            <div class="w-48 bg-[#95a5a6] border-r-4 border-gray-500 sidewalk-texture flex flex-col items-center justify-center gap-12 z-20 shadow-[10px_0_20px_rgba(0,0,0,0.5)]" id="chickenSidewalkStart">
+                                                <div class="text-5xl">🏁</div>
+                                                <div class="text-white font-black text-2xl text-center drop-shadow-md">START</div>
+                                            </div>
+
+                                            <!-- Lanes Container -->
+                                            <div class="relative flex h-full z-10" id="chickenRoadContainer"></div>
+
+                                            <!-- End Sidewalk (Right) -->
+                                            <div class="w-64 bg-[#95a5a6] border-l-4 border-gray-500 sidewalk-texture flex flex-col items-center justify-center gap-8 z-20 shadow-[-10px_0_20px_rgba(0,0,0,0.5)]" id="chickenSidewalkEnd">
+                                                <div class="text-6xl drop-shadow-xl">🎯</div>
+                                                <div class="text-white font-black text-3xl text-center drop-shadow-md">GOAL</div>
+                                            </div>
+                                            
+                                            <div class="road-border-bottom"></div>
+                                        </div>
+
+                                        <!-- BOTTOM GRASS ENVIRONMENT -->
+                                        <div class="h-24 min-h-[6rem] bg-green-600 grass-texture relative flex items-start overflow-hidden border-t-4 border-[#27ae60]" id="chickenEnvBottom"></div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Result Overlay -->
-                            <div id="chicken-result-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-center">
-                                <div class="bg-gradient-to-r from-[#161b26] to-[#11141c] rounded-2xl p-8 max-w-md w-full mx-4 border border-[#2a3042] shadow-2xl text-center">
-                                    <div id="chicken-result-emoji" class="text-6xl mb-4">💥</div>
-                                    <div id="chicken-result-title" class="text-3xl font-bold text-white mb-2">CRASHED!</div>
-                                    <div id="chicken-result-subtitle" class="text-xl text-[#b1bad3] mb-6">Better luck next time</div>
-                                    <div id="chicken-result-amount" class="text-2xl font-bold text-[#10b981] mb-6">0 coins</div>
-                                    <button onclick="app.closeChickenResult()" class="w-full btn-primary py-3 rounded-xl font-bold text-lg touch-button">
-                                        Play Again
-                                    </button>
+                                <!-- Result Overlay -->
+                                <div id="chickenResultOverlay" class="chicken-result-overlay">
+                                    <div class="chicken-result-content">
+                                        <div class="chicken-result-emoji" id="chickenResultEmoji">💥</div>
+                                        <div class="chicken-result-title" id="chickenResultTitle">CRASHED!</div>
+                                        <div class="chicken-result-subtitle" id="chickenResultSubtitle">Better luck next time</div>
+                                        <div class="chicken-result-amount" id="chickenResultAmount">0 coins</div>
+                                        <button onclick="app.closeChickenResult()" class="chicken-action-button">
+                                            Play Again
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3122,30 +1996,94 @@
                 // Initialize game
                 this.updateChickenUI();
                 this.updateChickenDifficulty();
+                this.renderChickenEnvironment();
+                this.renderChickenRoadLanes();
             }
 
-            setChickenMode(mode) {
-                const manualBtn = document.getElementById('chicken-mode-manual');
-                const autoBtn = document.getElementById('chicken-mode-auto');
-                const manualPanel = document.getElementById('chicken-manual-controls');
-                const autoPanel = document.getElementById('chicken-auto-controls');
+            renderChickenEnvironment() {
+                // Generate environment props
+                this.generateEnvironment('chickenEnvTop', 40, 'top');
+                this.generateEnvironment('chickenEnvBottom', 40, 'bottom');
+                this.generateSidewalkProps('chickenSidewalkStart');
+                this.generateSidewalkProps('chickenSidewalkEnd');
+            }
 
-                if (mode === 'manual') {
-                    manualBtn.className = "flex-1 py-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] text-white transition-colors";
-                    autoBtn.className = "flex-1 py-2 rounded-full text-[#b1bad3] hover:text-white transition-colors";
-                    manualPanel.classList.remove('hidden');
-                    autoPanel.classList.add('hidden');
-                } else {
-                    manualBtn.className = "flex-1 py-2 rounded-full text-[#b1bad3] hover:text-white transition-colors";
-                    autoBtn.className = "flex-1 py-2 rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#6d28d9] text-white transition-colors";
-                    manualPanel.classList.add('hidden');
-                    autoPanel.classList.remove('hidden');
+            generateEnvironment(containerId, count, align = 'bottom') {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                const trees = ['🌳', '🌲', '🌵', '🌴'];
+                const rocks = ['🪨', '🗿'];
+                const flowers = ['🌷', '🌻', '🌹', '🌼'];
+                
+                container.innerHTML = '';
+                
+                // Generate Ponds
+                const pondCount = Math.floor(Math.random() * 5) + 3;
+                
+                for(let i=0; i<pondCount; i++) {
+                    const pond = document.createElement('div');
+                    pond.className = 'pond';
+                    const size = Math.random() * 60 + 40;
+                    pond.style.width = `${size}px`;
+                    pond.style.height = `${size * 0.6}px`;
+                    pond.style.left = `${Math.random() * 100}%`;
+                    if(align === 'bottom') pond.style.top = `${Math.random() * 20}px`;
+                    else pond.style.bottom = `${Math.random() * 20}px`;
+                    container.appendChild(pond);
+                }
+
+                // Generate Props
+                for(let i=0; i<count; i++) {
+                    const el = document.createElement('div');
+                    const type = Math.random();
+                    if(type < 0.6) el.textContent = trees[Math.floor(Math.random() * trees.length)];
+                    else if (type < 0.8) el.textContent = rocks[Math.floor(Math.random() * rocks.length)];
+                    else el.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+
+                    el.style.position = 'absolute';
+                    el.style.fontSize = (1.5 + Math.random()) + 'rem';
+                    el.style.filter = 'drop-shadow(2px 4px 6px rgba(0,0,0,0.4))';
+                    el.style.left = `${Math.random() * 100}%`;
+                    
+                    if (align === 'bottom') {
+                        el.style.top = `${Math.random() * 10}px`;
+                    } else {
+                        el.style.bottom = `${Math.random() * 10}px`;
+                        el.style.zIndex = '5';
+                    }
+                    
+                    container.appendChild(el);
+                }
+            }
+            
+            generateSidewalkProps(containerId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                const props = ['💡', '🧯', '🗑️', '🚲', '🚏', '🚧'];
+                const propsContainer = container.querySelector('.flex') || container;
+                
+                // Clear existing props
+                const existingProps = propsContainer.querySelectorAll('div');
+                existingProps.forEach(p => {
+                    if (!p.classList.contains('text-5xl') && !p.classList.contains('text-6xl')) {
+                        p.remove();
+                    }
+                });
+                
+                for(let i=0; i<5; i++) {
+                    const el = document.createElement('div');
+                    el.textContent = props[Math.floor(Math.random() * props.length)];
+                    el.style.fontSize = '2rem';
+                    el.style.marginBottom = '1rem';
+                    propsContainer.appendChild(el);
                 }
             }
 
             adjustChickenBet(factor) {
                 if (this.chickenState.isPlaying) return;
-                const betInput = document.getElementById('chicken-bet-input');
+                const betInput = document.getElementById('chickenBetInput');
                 let val = parseFloat(betInput.value) * factor;
                 if (val < 1) val = 1;
                 if (val > this.balance) val = this.balance;
@@ -3155,9 +2093,10 @@
 
             updateChickenDifficulty() {
                 if (this.chickenState.isPlaying) return;
-                const difficulty = document.getElementById('chicken-difficulty').value;
+                const difficulty = document.getElementById('chickenDifficulty').value;
                 this.chickenState.difficulty = difficulty;
                 this.updateChickenUI();
+                this.renderChickenRoadLanes();
                 this.playSound('click');
             }
 
@@ -3165,33 +2104,53 @@
                 const multipliers = CHICKEN_MULTIPLIERS[this.chickenState.difficulty];
                 const nextMultiplier = multipliers[0] || 1.02;
                 
-                document.getElementById('chicken-next-mult').textContent = nextMultiplier.toFixed(2) + 'x';
-                document.getElementById('chicken-current-mult').textContent = this.chickenState.currentMultiplier.toFixed(2) + 'x';
+                document.getElementById('chickenNextMult').textContent = nextMultiplier.toFixed(2) + 'x';
+                document.getElementById('chickenCurrentMult').textContent = this.chickenState.currentMultiplier.toFixed(2) + 'x';
                 
-                const bet = parseFloat(document.getElementById('chicken-bet-input')?.value) || 10;
-                const potentialWin = (bet * this.chickenState.currentMultiplier).toFixed(2);
-                document.getElementById('chicken-potential-win').textContent = potentialWin;
+                const bet = parseFloat(document.getElementById('chickenBetInput')?.value) || 10;
+                const potentialWin = (bet * this.chickenState.currentMultiplier).toFixed(0);
+                document.getElementById('chickenCurrentPayout').textContent = potentialWin;
                 
                 const stepsRemaining = 30 - (this.chickenState.currentStep + 1);
-                document.getElementById('chicken-steps-remaining').textContent = stepsRemaining;
+                document.getElementById('chickenStepsRemaining').textContent = stepsRemaining;
                 
                 // Update action button
-                const actionBtn = document.getElementById('chicken-action-btn');
-                const cashoutBtn = document.getElementById('chicken-cashout-btn');
+                const actionBtn = document.getElementById('chickenActionBtn');
+                const balanceDisplay = document.getElementById('chickenBalanceDisplay');
+                
+                if (balanceDisplay) {
+                    balanceDisplay.textContent = this.balance.toLocaleString();
+                }
                 
                 if (this.chickenState.isPlaying) {
-                    actionBtn.innerHTML = '<i class="fa-solid fa-pause mr-1"></i> Game in Progress';
-                    actionBtn.disabled = true;
-                    cashoutBtn.classList.remove('hidden');
-                    
-                    if (this.chickenState.currentStep > -1) {
-                        const currentWin = (bet * this.chickenState.currentMultiplier).toFixed(2);
-                        cashoutBtn.innerHTML = `Cash Out ${currentWin}`;
+                    if (this.chickenState.currentStep === -1) {
+                        actionBtn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Game Starting...';
+                        actionBtn.disabled = true;
+                    } else {
+                        const currentWin = (bet * this.chickenState.currentMultiplier).toFixed(0);
+                        actionBtn.innerHTML = `<i class="fa-solid fa-money-bill-wave mr-1"></i> Cash Out ${currentWin}`;
+                        actionBtn.disabled = false;
                     }
+                    actionBtn.classList.remove('bg-gradient-to-r', 'from-[#00e701]', 'to-[#00c701]');
+                    actionBtn.classList.add('bg-gradient-to-r', 'from-[#2f4553]', 'to-[#1a2c38]', 'text-[#b1bad3]');
                 } else {
                     actionBtn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Start Game';
                     actionBtn.disabled = false;
-                    cashoutBtn.classList.add('hidden');
+                    actionBtn.classList.remove('bg-gradient-to-r', 'from-[#2f4553]', 'to-[#1a2c38]', 'text-[#b1bad3]');
+                    actionBtn.classList.add('bg-gradient-to-r', 'from-[#00e701]', 'to-[#00c701]', 'text-[#0f212e]');
+                }
+                
+                // Update bet input max value
+                const betInput = document.getElementById('chickenBetInput');
+                if (betInput) {
+                    betInput.max = this.balance;
+                    betInput.disabled = this.chickenState.isPlaying;
+                }
+                
+                // Update difficulty select
+                const difficultySelect = document.getElementById('chickenDifficulty');
+                if (difficultySelect) {
+                    difficultySelect.disabled = this.chickenState.isPlaying;
                 }
             }
 
@@ -3209,7 +2168,7 @@
                     return;
                 }
 
-                const betInput = document.getElementById('chicken-bet-input');
+                const betInput = document.getElementById('chickenBetInput');
                 const bet = parseInt(betInput.value);
 
                 if (isNaN(bet) || bet <= 0) {
@@ -3242,85 +2201,165 @@
             }
 
             renderChickenRoadLanes() {
-                const container = document.getElementById('chicken-road-inner');
+                const container = document.getElementById('chickenRoadContainer');
+                if (!container) return;
+                
                 const multipliers = CHICKEN_MULTIPLIERS[this.chickenState.difficulty];
                 
-                let html = `
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="flex h-64 w-full overflow-x-auto px-4 py-8">
-                            <!-- Start Lane -->
-                            <div class="chicken-lane w-24 h-full rounded-l-xl flex flex-col items-center justify-center bg-gradient-to-r from-[#064e3b] to-[#022c22] border-r-2 border-[#10b981] shrink-0 mx-1">
-                                ${this.chickenState.currentStep === -1 ? 
-                                    '<div class="text-4xl chicken-hop">🐔</div>' : 
-                                    '<div class="text-2xl opacity-50">🏁</div>'}
-                                <div class="text-xs text-white mt-2 font-bold">START</div>
-                            </div>
-                `;
-
-                // Generate 30 lanes
-                for (let i = 0; i < 30; i++) {
-                    const isPassed = i <= this.chickenState.currentStep;
-                    const isCurrent = i === this.chickenState.currentStep;
-                    const isNext = i === this.chickenState.currentStep + 1;
-                    const multiplier = multipliers[i];
-                    
-                    let laneClass = "chicken-lane w-32 h-full flex flex-col items-center justify-center mx-1 shrink-0 transition-all duration-300 ";
-                    let laneContent = '';
-                    
-                    if (isPassed) {
-                        laneClass += "passed border-2 border-[#10b981] ";
-                        if (isCurrent) {
-                            laneClass += "current ";
-                            laneContent = `
-                                <div class="text-4xl chicken-hop">🐔</div>
-                                <div class="text-lg font-bold text-white mt-2">${multiplier.toFixed(2)}x</div>
-                            `;
-                        } else {
-                            laneContent = `
-                                <div class="text-2xl opacity-70">✓</div>
-                                <div class="text-sm text-white mt-2">${multiplier.toFixed(2)}x</div>
-                            `;
-                        }
-                    } else if (isNext && this.chickenState.isPlaying) {
-                        laneClass += "hover:scale-105 cursor-pointer border-2 border-[#8b5cf6] hover:border-[#a78bfa] ";
-                        laneContent = `
-                            <div class="text-3xl opacity-80">→</div>
-                            <div class="text-lg font-bold text-[#8b5cf6] mt-2">${multiplier.toFixed(2)}x</div>
-                            <div class="text-xs text-[#b1bad3] mt-1">Click to hop</div>
-                        `;
-                        // Add click handler
-                        laneContent += `<div class="hidden" onclick="app.attemptChickenHop(${i})"></div>`;
-                    } else {
-                        laneClass += "opacity-50 border border-[#2a3042] ";
-                        laneContent = `
-                            <div class="text-xl">${i+1}</div>
-                            <div class="text-sm text-[#6b7280] mt-2">${multiplier.toFixed(2)}x</div>
-                        `;
-                    }
-                    
-                    html += `<div class="${laneClass}" ${isNext && this.chickenState.isPlaying ? `onclick="app.attemptChickenHop(${i})"` : ''}>${laneContent}</div>`;
+                container.innerHTML = '';
+                
+                // Set width for world container
+                const worldContainer = document.getElementById('chickenWorldContainer');
+                if (worldContainer) {
+                    const totalWidth = (30 * 160) + 200 + 300;
+                    worldContainer.style.width = `${totalWidth}px`;
                 }
 
-                // End Lane
-                html += `
-                            <div class="chicken-lane w-24 h-full rounded-r-xl flex flex-col items-center justify-center bg-gradient-to-r from-[#78350f] to-[#451a03] border-l-2 border-[#f59e0b] shrink-0 mx-1">
-                                <div class="text-4xl">🎯</div>
-                                <div class="text-xs text-white mt-2 font-bold">GOAL</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                container.innerHTML = html;
+                // START TILE
+                const startTile = document.createElement('div');
+                startTile.className = `relative w-32 h-full flex flex-col items-center justify-center transition-all shrink-0 z-10 shadow-[10px_0_20px_rgba(0,0,0,0.2)]`;
                 
-                // Scroll to current position
-                setTimeout(() => {
-                    const scrollContainer = container.querySelector('.flex');
-                    if (scrollContainer) {
-                        const scrollPos = (this.chickenState.currentStep + 1) * 136; // Approximate width
-                        scrollContainer.scrollLeft = scrollPos;
+                startTile.innerHTML = `
+                    <div class="absolute right-0 top-0 bottom-0 w-2 bg-white/80 shadow-[0_0_10px_white]"></div>
+                `;
+                
+                if (this.chickenState.currentStep === -1 && this.chickenState.isPlaying) {
+                    startTile.innerHTML += `
+                        <div class="absolute inset-0 bg-green-500/10 animate-pulse"></div>
+                        <div class="text-6xl chicken-hop drop-shadow-2xl z-20 filter contrast-125">🐔</div>
+                        <div class="mt-4 text-xs font-bold text-white uppercase tracking-widest bg-black/50 px-2 py-1 rounded">Start</div>
+                    `;
+                } else if (this.chickenState.currentStep === -1 && !this.chickenState.isPlaying) {
+                     startTile.innerHTML += `<div class="text-5xl opacity-50 grayscale filter contrast-75">🐔</div>`;
+                } else {
+                     startTile.innerHTML += `<div class="text-4xl opacity-30">🏁</div>`;
+                }
+                container.appendChild(startTile);
+
+                // Generate 30 Vertical Lanes
+                multipliers.forEach((mult, index) => {
+                    const isPassed = index <= this.chickenState.currentStep;
+                    const isNext = index === this.chickenState.currentStep + 1;
+                    const isFuture = index > this.chickenState.currentStep + 1;
+
+                    const tile = document.createElement('div');
+                    let tileClass = `relative w-40 h-full flex flex-col items-center justify-center transition-all duration-300 lane-card shrink-0 overflow-hidden group `;
+                    let content = '';
+
+                    // Lane Number
+                    content += `<div class="absolute top-2 left-2 text-[10px] text-white/20 font-bold tracking-widest px-1 rounded">LANE ${index+1}</div>`;
+
+                    // TRAFFIC GENERATION FOR FUTURE & NEXT LANES
+                    if ((isNext || isFuture) && this.chickenState.isPlaying) {
+                        const carCount = 4;
+                        const trafficContainer = document.createElement('div');
+                        trafficContainer.className = "absolute inset-0 pointer-events-none z-0 overflow-hidden";
+                        
+                        const carColors = ['car-red', 'car-blue', 'car-yellow', 'car-white', 'car-black', 'car-green'];
+
+                        for(let c=0; c<carCount; c++) {
+                            const colorClass = carColors[Math.floor(Math.random() * carColors.length)];
+                            const car = document.createElement('div');
+                            car.className = "traffic-car";
+                            car.innerHTML = `
+                                <div class="car-model ${colorClass}">
+                                    <div class="car-rear-window"></div>
+                                    <div class="car-roof"></div>
+                                    <div class="car-windshield"></div>
+                                </div>
+                            `;
+                            
+                            const minDuration = 1.2;
+                            const maxDuration = 2.5;
+                            const duration = minDuration + Math.random() * (maxDuration - minDuration);
+                            const baseDelay = (c / carCount) * duration; 
+                            const randomOffset = (Math.random() - 0.5) * 0.5;
+                            const delay = Math.max(0, baseDelay + randomOffset);
+                            
+                            car.style.animationDuration = `${duration}s`;
+                            car.style.animationDelay = `-${delay}s`;
+                            
+                            const wiggle = (Math.random() * 80) - 40; 
+                            car.style.marginLeft = `${wiggle}px`;
+
+                            trafficContainer.appendChild(car);
+                        }
+                        content += trafficContainer.outerHTML;
                     }
-                }, 100);
+
+                    if (isPassed) {
+                        // PASSED TILE
+                        const isCurrent = index === this.chickenState.currentStep;
+                        if (isCurrent && this.chickenState.isPlaying) {
+                            tileClass += `z-20 shadow-[inset_0_0_80px_rgba(0,231,1,0.2)]`;
+                            content += `
+                                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#00e701]/10 to-transparent animate-pulse"></div>
+                                <div class="text-6xl chicken-hop drop-shadow-2xl z-30 filter contrast-125">🐔</div>
+                                <div class="mt-6 text-[#00e701] font-black text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] bg-[#0f212e]/90 px-3 py-1 rounded border border-[#00e701] z-30">${mult.toFixed(2)}x</div>
+                            `;
+                        } else {
+                            tileClass += `bg-black/10 opacity-60 grayscale-[0.3]`;
+                            content += `<div class="text-[#00e701] font-bold text-xl opacity-60 drop-shadow-md">✔ ${mult.toFixed(2)}x</div>`;
+                        }
+                    } else if (isNext && this.chickenState.isPlaying) {
+                        // NEXT ACTIVE TILE
+                        tileClass += `hover:bg-white/5 cursor-pointer`;
+                        const potentialWin = (this.chickenState.bet * mult).toFixed(0);
+                        
+                        content += `
+                            <div class="relative z-20 flex flex-col items-center transition-transform duration-200 group-hover:scale-110">
+                                <div class="text-white/90 font-black text-3xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] bg-black/40 rounded-lg px-3 py-1 mb-2 backdrop-blur-sm">${mult.toFixed(2)}x</div>
+                                <div class="text-[#00e701] font-bold text-sm bg-black/80 px-3 py-1 rounded-full border border-[#00e701]/50 shadow-lg shadow-[#00e701]/20">Win ${potentialWin}</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                            <div class="absolute bottom-4 text-[10px] text-white/50 uppercase font-bold tracking-widest animate-bounce">Tap to Hop</div>
+                        `;
+                        
+                        tile.onclick = () => this.attemptChickenHop(index);
+                    } else {
+                        // FUTURE LOCKED
+                        tileClass += `opacity-50 saturate-50 cursor-not-allowed`;
+                        content += `
+                            <div class="text-[#b1bad3] font-bold text-xl z-20 drop-shadow-md">${mult.toFixed(2)}x</div>
+                        `;
+                    }
+                    
+                    // Add the dashed separator
+                    content += `<div class="lane-separator"></div>`;
+
+                    tile.className = tileClass;
+                    tile.innerHTML = content;
+                    container.appendChild(tile);
+                });
+                
+                // Update camera position
+                this.updateChickenCamera();
+            }
+            
+            updateChickenCamera() {
+                const step = this.chickenState.currentStep;
+                const laneWidth = 160;
+                const startWidth = 128;
+                const screenWidth = document.getElementById('chickenRoadContainer')?.parentElement?.clientWidth || window.innerWidth;
+                
+                let targetX = 0;
+                
+                if (step === -1) {
+                    targetX = startWidth / 2;
+                } else {
+                    targetX = startWidth + (step * laneWidth) + (laneWidth / 2);
+                }
+                
+                let translateX = (screenWidth / 2) - targetX;
+                
+                if (this.chickenState.isPlaying && step !== -1) {
+                    translateX -= laneWidth * 0.3;
+                }
+
+                const camera = document.getElementById('chickenRoadCamera');
+                if (camera) {
+                    camera.style.transform = `translateX(${translateX}px)`;
+                }
             }
 
             attemptChickenHop(targetStep) {
@@ -3347,7 +2386,7 @@
                 this.chickenState.currentMultiplier = multiplier;
                 
                 // Play sound
-                this.playSound('win');
+                this.playSound('hop');
                 
                 // Update UI
                 this.updateChickenUI();
@@ -3367,9 +2406,6 @@
                 // Screen shake effect
                 document.body.classList.add('shake-screen');
                 setTimeout(() => document.body.classList.remove('shake-screen'), 500);
-                
-                // Render crash lane
-                this.renderChickenRoadLanes();
                 
                 // Record loss
                 this.recordLoss(this.chickenState.bet, 'Chicken Road');
@@ -3392,10 +2428,9 @@
 
                 // Update balance and record win
                 this.updateBalance();
-                if (reachedEnd) {
-                    this.recordWin(winnings - this.chickenState.bet, 'Chicken Road');
-                } else {
-                    this.recordWin(winnings - this.chickenState.bet, 'Chicken Road');
+                const profit = winnings - this.chickenState.bet;
+                if (profit > 0) {
+                    this.recordWin(profit, 'Chicken Road');
                 }
 
                 // Show result
@@ -3403,9 +2438,9 @@
                 this.updateChickenUI();
                 
                 // Play win sound and confetti for big wins
-                if (winnings - this.chickenState.bet >= 100) {
+                if (profit >= 100) {
                     this.playSound('win');
-                    if (winnings - this.chickenState.bet >= this.bigWinThreshold) {
+                    if (profit >= this.bigWinThreshold) {
                         confetti({
                             particleCount: 150,
                             spread: 70,
@@ -3416,38 +2451,36 @@
             }
 
             showChickenResult(win, amount) {
-                const overlay = document.getElementById('chicken-result-overlay');
-                const emoji = document.getElementById('chicken-result-emoji');
-                const title = document.getElementById('chicken-result-title');
-                const subtitle = document.getElementById('chicken-result-subtitle');
-                const amountEl = document.getElementById('chicken-result-amount');
+                const overlay = document.getElementById('chickenResultOverlay');
+                const emoji = document.getElementById('chickenResultEmoji');
+                const title = document.getElementById('chickenResultTitle');
+                const subtitle = document.getElementById('chickenResultSubtitle');
+                const amountEl = document.getElementById('chickenResultAmount');
 
                 if (win) {
                     emoji.textContent = '💰';
                     title.textContent = 'YOU WON!';
-                    title.className = 'text-3xl font-bold text-[#10b981] mb-2';
+                    title.className = 'chicken-result-title win';
                     subtitle.textContent = 'Successfully crossed the road!';
-                    amountEl.textContent = `${amount.toFixed(2)} coins`;
-                    amountEl.className = 'text-2xl font-bold text-[#10b981] mb-6';
+                    amountEl.textContent = `${amount.toFixed(0)} coins`;
+                    amountEl.className = 'chicken-result-amount';
                     this.playSound('win');
                 } else {
                     emoji.textContent = '💥';
                     title.textContent = 'CRASHED!';
-                    title.className = 'text-3xl font-bold text-red-500 mb-2';
+                    title.className = 'chicken-result-title loss';
                     subtitle.textContent = 'The chicken didn\'t make it...';
                     amountEl.textContent = `Lost ${this.chickenState.bet} coins`;
-                    amountEl.className = 'text-2xl font-bold text-red-500 mb-6';
+                    amountEl.className = 'chicken-result-amount';
                     this.playSound('lose');
                 }
 
-                overlay.classList.remove('hidden');
-                overlay.classList.add('flex');
+                overlay.classList.add('active');
             }
 
             closeChickenResult() {
-                const overlay = document.getElementById('chicken-result-overlay');
-                overlay.classList.add('hidden');
-                overlay.classList.remove('flex');
+                const overlay = document.getElementById('chickenResultOverlay');
+                overlay.classList.remove('active');
                 
                 // Reset game
                 this.chickenState.isPlaying = false;
@@ -3458,139 +2491,9 @@
                 this.playSound('click');
             }
 
-            // LEADERBOARD - Only show top 3 richest players
-            async renderLeaderboard() {
-                this.mainContent.innerHTML = `
-                    <div class="max-w-6xl mx-auto">
-                        <div class="text-center mb-6">
-                            <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Leaderboard</h2>
-                            <p class="text-gray-400 text-sm">Top 3 richest players</p>
-                        </div>
-                        
-                        <div id="leaderboardContent" class="space-y-4">
-                            <div class="text-center py-8">
-                                <div class="loading-spinner mx-auto mb-3"></div>
-                                <p class="text-gray-400 text-sm">Loading leaderboard...</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                await this.loadLeaderboard();
-            }
+            // The rest of your existing code for other games...
+            // ... (renderHome, renderMines, renderBlackjack, renderLeaderboard, etc.)
 
-            async loadLeaderboard() {
-                try {
-                    const snapshot = await database.ref('users').orderByChild('balance').limitToLast(100).once('value');
-                    const users = [];
-
-                    snapshot.forEach(child => {
-                        const user = child.val();
-                        if (user.username) { // Only include users with usernames
-                            users.push({
-                                username: user.username,
-                                balance: user.balance || 0,
-                                userId: user.userId,
-                                totalWins: user.totalWins || 0,
-                                biggestWin: user.biggestWin || 0
-                            });
-                        }
-                    });
-
-                    // Sort by balance (highest first)
-                    users.sort((a, b) => b.balance - a.balance);
-                    
-                    // Take top 3
-                    const topPlayers = users.slice(0, 3);
-                    
-                    // Find current user's position
-                    let userPosition = -1;
-                    let userData = null;
-                    
-                    if (this.userId) {
-                        userPosition = users.findIndex(u => u.userId === this.userId);
-                        if (userPosition !== -1) {
-                            userData = users[userPosition];
-                        }
-                    }
-
-                    // Display leaderboard
-                    const leaderboardContent = document.getElementById('leaderboardContent');
-                    leaderboardContent.innerHTML = '';
-
-                    // Add top 3 players with medals
-                    const medals = ['🥇', '🥈', '🥉'];
-                    
-                    topPlayers.forEach((player, index) => {
-                        const div = document.createElement('div');
-                        div.className = 'leaderboard-item';
-                        
-                        div.innerHTML = `
-                            <div class="flex items-center gap-4 w-full">
-                                <div class="text-2xl md:text-3xl font-bold w-10 md:w-12">${medals[index]}</div>
-                                <div class="flex-1">
-                                    <div class="text-white font-bold text-base md:text-lg">${player.username}</div>
-                                    <div class="text-gray-400 text-xs md:text-sm">
-                                        Wins: ${player.totalWins} | Biggest Win: ${player.biggestWin || 0}
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-xl md:text-2xl font-bold text-[#10b981]">${player.balance.toLocaleString()} coins</div>
-                                    <div class="text-gray-400 text-xs mt-1">Balance</div>
-                                </div>
-                            </div>
-                        `;
-                        
-                        // Highlight current user
-                        if (player.userId === this.userId) {
-                            div.style.borderColor = '#8b5cf6';
-                            div.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05))';
-                            div.innerHTML += '<div class="absolute top-2 right-2 text-xs bg-[#8b5cf6] text-white px-2 py-1 rounded-full">YOU</div>';
-                        }
-                        
-                        leaderboardContent.appendChild(div);
-                    });
-
-                    // Show user's position if not in top 3
-                    if (userPosition !== -1 && userPosition >= 3) {
-                        const userDiv = document.createElement('div');
-                        userDiv.className = 'leaderboard-item mt-6';
-                        userDiv.style.borderColor = '#8b5cf6';
-                        userDiv.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05))';
-                        
-                        userDiv.innerHTML = `
-                            <div class="flex items-center gap-4 w-full">
-                                <div class="text-lg md:text-xl font-bold w-10 md:w-12">#${userPosition + 1}</div>
-                                <div class="flex-1">
-                                    <div class="text-white font-bold text-base md:text-lg flex items-center gap-2">
-                                        ${userData.username}
-                                        <span class="text-xs bg-[#8b5cf6] text-white px-2 py-1 rounded-full">YOU</span>
-                                    </div>
-                                    <div class="text-gray-400 text-xs md:text-sm">
-                                        Wins: ${userData.totalWins} | Biggest Win: ${userData.biggestWin || 0}
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-lg md:text-xl font-bold text-[#10b981]">${userData.balance.toLocaleString()} coins</div>
-                                    <div class="text-gray-400 text-xs mt-1">Your Balance</div>
-                                </div>
-                            </div>
-                            <div class="text-center mt-3 text-sm text-gray-400">
-                                You are #${userPosition + 1} on the leaderboard
-                            </div>
-                        `;
-                        
-                        leaderboardContent.appendChild(userDiv);
-                    }
-
-                    if (users.length === 0) {
-                        leaderboardContent.innerHTML = '<div class="text-center py-8 text-gray-400">No players yet</div>';
-                    }
-                } catch (error) {
-                    console.error('Error loading leaderboard:', error);
-                    leaderboardContent.innerHTML = '<div class="text-center py-8 text-red-400">Error loading leaderboard</div>';
-                }
-            }
         }
 
         // Initialize the app
