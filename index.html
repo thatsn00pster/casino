@@ -1029,50 +1029,6 @@
             font-family: 'Fredoka', sans-serif;
         }
         
-        .chicken-top-bar {
-            height: 64px;
-            padding: 0 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #0f212e;
-            border-bottom: 1px solid #2f4553;
-            z-index: 10;
-        }
-        
-        .chicken-game-stats {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        .chicken-stat-box {
-            background: #1a2c38;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid #2f4553;
-            min-width: 120px;
-        }
-        
-        .chicken-stat-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #b1bad3;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        
-        .chicken-stat-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: white;
-            margin-top: 0.25rem;
-        }
-        
-        .chicken-stat-value.multiplier {
-            color: #00e701;
-        }
-        
         /* Main Game Area */
         .chicken-game-area {
             flex: 1;
@@ -1134,7 +1090,7 @@
         }
         
         .chicken-input-group:focus-within {
-            border-color: #00e701;
+            border-color: #8b5cf6;
         }
         
         .chicken-input-group input {
@@ -1198,7 +1154,7 @@
         }
         
         .chicken-select:focus {
-            border-color: #00e701;
+            border-color: #8b5cf6;
         }
         
         .chicken-stats-box {
@@ -1220,8 +1176,8 @@
         
         .chicken-action-button {
             width: 100%;
-            background: linear-gradient(135deg, #00e701 0%, #00c701 100%);
-            color: #0f212e;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            color: white;
             border: none;
             border-radius: 8px;
             padding: 1rem;
@@ -1230,17 +1186,17 @@
             cursor: pointer;
             transition: all 0.2s;
             font-family: 'Fredoka', sans-serif;
-            box-shadow: 0 4px 0 #00b500;
+            box-shadow: 0 4px 0 #5b21b6;
         }
         
         .chicken-action-button:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 0 #00b500;
+            box-shadow: 0 6px 0 #5b21b6;
         }
         
         .chicken-action-button:active:not(:disabled) {
             transform: translateY(2px);
-            box-shadow: 0 2px 0 #00b500;
+            box-shadow: 0 2px 0 #5b21b6;
         }
         
         .chicken-action-button:disabled {
@@ -1317,8 +1273,8 @@
         }
         
         .chicken-result-title.win {
-            color: #00e701;
-            text-shadow: 0 0 10px rgba(0, 231, 1, 0.5);
+            color: #8b5cf6;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
         }
         
         .chicken-result-title.loss {
@@ -1334,7 +1290,7 @@
         .chicken-result-amount {
             font-size: 2rem;
             font-weight: 700;
-            color: #00e701;
+            color: #8b5cf6;
             margin-bottom: 2rem;
         }
         
@@ -1359,21 +1315,17 @@
         }
         
         @media (max-width: 640px) {
-            .chicken-top-bar {
-                flex-direction: column;
-                height: auto;
+            .chicken-controls-sidebar {
                 padding: 1rem;
-                gap: 1rem;
             }
             
-            .chicken-game-stats {
-                width: 100%;
-                justify-content: space-between;
+            .chicken-controls-header h2 {
+                font-size: 1.25rem;
             }
             
-            .chicken-stat-box {
-                min-width: auto;
-                flex: 1;
+            .chicken-action-button {
+                padding: 0.75rem;
+                font-size: 1rem;
             }
         }
     </style>
@@ -3066,7 +3018,7 @@
                 document.getElementById('playerHand').innerHTML = '';
                 document.getElementById('dealerScore').textContent = '0';
                 document.getElementById('playerScore').textContent = '0';
-                document.getElementById('bjGameStatus').textContent = 'Game in progress...';
+                document.getElementById('bjGameStatus').textContent = 'Place your bet and deal!';
 
                 // Update UI
                 document.getElementById('btnDeal').classList.add('hidden');
@@ -3388,26 +3340,6 @@
 
                 this.mainContent.innerHTML = `
                     <div class="chicken-road-main">
-                        <!-- Top Stats Bar -->
-                        <div class="chicken-top-bar">
-                            <div class="chicken-game-stats" id="chickenGameStats">
-                                <div class="chicken-stat-box">
-                                    <div class="chicken-stat-label">Current Multiplier</div>
-                                    <div class="chicken-stat-value multiplier" id="chickenCurrentMult">1.00x</div>
-                                </div>
-                                <div class="chicken-stat-box">
-                                    <div class="chicken-stat-label">Current Payout</div>
-                                    <div class="chicken-stat-value" id="chickenCurrentPayout">0</div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center gap-3 bg-[#1a2c38] px-4 py-2 rounded shadow-inner">
-                                <span class="text-[#b1bad3] font-bold text-sm">Balance</span>
-                                <span class="text-white font-bold text-lg tracking-wide" id="chickenBalanceDisplay">${this.balance.toLocaleString()}</span>
-                                <button class="bg-[#1475e1] text-white text-xs px-3 py-1 rounded font-bold hover:bg-[#0f64c1]" onclick="app.openDepositModal()">Wallet</button>
-                            </div>
-                        </div>
-
                         <!-- Main Game Area -->
                         <div class="chicken-game-area">
                             <!-- Controls Sidebar -->
@@ -3448,24 +3380,44 @@
                                 <div class="chicken-stats-box">
                                     <div class="chicken-stats-grid">
                                         <div>
+                                            <div class="chicken-stat-label">Current Multiplier</div>
+                                            <div class="chicken-stat-value text-[#8b5cf6]" id="chickenCurrentMult">1.00x</div>
+                                        </div>
+                                        <div>
+                                            <div class="chicken-stat-label">Current Payout</div>
+                                            <div class="chicken-stat-value text-[#10b981]" id="chickenCurrentPayout">0</div>
+                                        </div>
+                                    </div>
+                                    <div class="chicken-stats-grid mt-3">
+                                        <div>
                                             <div class="chicken-stat-label">Next Multiplier</div>
-                                            <div class="chicken-stat-value multiplier" id="chickenNextMult">1.02x</div>
+                                            <div class="chicken-stat-value text-[#8b5cf6]" id="chickenNextMult">1.02x</div>
                                         </div>
                                         <div>
                                             <div class="chicken-stat-label">Steps Remaining</div>
-                                            <div class="chicken-stat-value" id="chickenStepsRemaining">30</div>
+                                            <div class="chicken-stat-value text-white" id="chickenStepsRemaining">30</div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- Balance Display -->
+                                <div class="chicken-control-group mt-2">
+                                    <div class="flex items-center justify-between bg-gradient-to-r from-[#1e293b] to-[#0f172a] rounded-lg p-3 border border-[#2a3042]">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fa-solid fa-wallet text-[#8b5cf6] text-sm"></i>
+                                            <span class="text-[#b1bad3] font-bold text-sm">Balance</span>
+                                        </div>
+                                        <span class="text-white font-bold text-lg" id="chickenBalanceDisplay">${this.balance.toLocaleString()}</span>
                                     </div>
                                 </div>
 
                                 <!-- Main Action Button -->
                                 <div class="chicken-main-action">
-                                    <button id="chickenActionBtn" onclick="app.handleChickenAction()" class="chicken-action-button">
+                                    <button id="chickenActionBtn" onclick="app.handleChickenAction()" class="chicken-action-button" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 0 #5b21b6; color: white;">
                                         <i class="fa-solid fa-play mr-1"></i> Start Game
                                     </button>
                                     <div class="chicken-game-info">
                                         <p>Cross the road to win! Click on lanes to hop.</p>
-                                        <p class="mt-1">House Edge: 2% | RTP: 98%</p>
                                     </div>
                                 </div>
                             </div>
@@ -3477,14 +3429,14 @@
                                     <!-- Full World Container -->
                                     <div class="relative flex flex-col h-full w-max" id="chickenWorldContainer">
                                         <!-- TOP GRASS ENVIRONMENT -->
-                                        <div class="h-24 min-h-[6rem] bg-green-600 grass-texture relative flex items-end overflow-hidden border-b-4 border-[#27ae60]" id="chickenEnvTop"></div>
+                                        <div class="h-24 min-h-[6rem] bg-gradient-to-b from-[#064e3b] to-[#022c22] relative flex items-end overflow-hidden border-b-4 border-[#10b981]" id="chickenEnvTop"></div>
 
                                         <!-- THE ROAD STRIP -->
                                         <div class="flex-1 relative flex items-stretch road-texture z-10 shadow-2xl">
                                             <div class="road-border-top"></div>
                                             
                                             <!-- Start Sidewalk (Left) -->
-                                            <div class="w-48 bg-[#95a5a6] border-r-4 border-gray-500 sidewalk-texture flex flex-col items-center justify-center gap-12 z-20 shadow-[10px_0_20px_rgba(0,0,0,0.5)]" id="chickenSidewalkStart">
+                                            <div class="w-48 bg-gradient-to-b from-[#374151] to-[#1f2937] border-r-4 border-[#4b5563] sidewalk-texture flex flex-col items-center justify-center gap-12 z-20 shadow-[10px_0_20px_rgba(0,0,0,0.5)]" id="chickenSidewalkStart">
                                                 <div class="text-5xl">🏁</div>
                                                 <div class="text-white font-black text-2xl text-center drop-shadow-md">START</div>
                                             </div>
@@ -3493,7 +3445,7 @@
                                             <div class="relative flex h-full z-10" id="chickenRoadContainer"></div>
 
                                             <!-- End Sidewalk (Right) -->
-                                            <div class="w-64 bg-[#95a5a6] border-l-4 border-gray-500 sidewalk-texture flex flex-col items-center justify-center gap-8 z-20 shadow-[-10px_0_20px_rgba(0,0,0,0.5)]" id="chickenSidewalkEnd">
+                                            <div class="w-64 bg-gradient-to-b from-[#374151] to-[#1f2937] border-l-4 border-[#4b5563] sidewalk-texture flex flex-col items-center justify-center gap-8 z-20 shadow-[-10px_0_20px_rgba(0,0,0,0.5)]" id="chickenSidewalkEnd">
                                                 <div class="text-6xl drop-shadow-xl">🎯</div>
                                                 <div class="text-white font-black text-3xl text-center drop-shadow-md">GOAL</div>
                                             </div>
@@ -3502,7 +3454,7 @@
                                         </div>
 
                                         <!-- BOTTOM GRASS ENVIRONMENT -->
-                                        <div class="h-24 min-h-[6rem] bg-green-600 grass-texture relative flex items-start overflow-hidden border-t-4 border-[#27ae60]" id="chickenEnvBottom"></div>
+                                        <div class="h-24 min-h-[6rem] bg-gradient-to-t from-[#064e3b] to-[#022c22] relative flex items-start overflow-hidden border-t-4 border-[#10b981]" id="chickenEnvBottom"></div>
                                     </div>
                                 </div>
 
@@ -3513,7 +3465,7 @@
                                         <div class="chicken-result-title" id="chickenResultTitle">CRASHED!</div>
                                         <div class="chicken-result-subtitle" id="chickenResultSubtitle">Better luck next time</div>
                                         <div class="chicken-result-amount" id="chickenResultAmount">0 coins</div>
-                                        <button onclick="app.closeChickenResult()" class="chicken-action-button">
+                                        <button onclick="app.closeChickenResult()" class="chicken-action-button" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 0 #5b21b6; color: white;">
                                             Play Again
                                         </button>
                                     </div>
@@ -3656,18 +3608,23 @@
                     if (this.chickenState.currentStep === -1) {
                         actionBtn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Game Starting...';
                         actionBtn.disabled = true;
+                        actionBtn.style.background = 'linear-gradient(135deg, #2f4553 0%, #1a2c38 100%)';
+                        actionBtn.style.color = '#b1bad3';
+                        actionBtn.style.boxShadow = 'none';
                     } else {
                         const currentWin = (bet * this.chickenState.currentMultiplier).toFixed(0);
                         actionBtn.innerHTML = `<i class="fa-solid fa-money-bill-wave mr-1"></i> Cash Out ${currentWin}`;
                         actionBtn.disabled = false;
+                        actionBtn.style.background = 'linear-gradient(135deg, #2f4553 0%, #1a2c38 100%)';
+                        actionBtn.style.color = '#b1bad3';
+                        actionBtn.style.boxShadow = 'none';
                     }
-                    actionBtn.classList.remove('bg-gradient-to-r', 'from-[#00e701]', 'to-[#00c701]');
-                    actionBtn.classList.add('bg-gradient-to-r', 'from-[#2f4553]', 'to-[#1a2c38]', 'text-[#b1bad3]');
                 } else {
                     actionBtn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Start Game';
                     actionBtn.disabled = false;
-                    actionBtn.classList.remove('bg-gradient-to-r', 'from-[#2f4553]', 'to-[#1a2c38]', 'text-[#b1bad3]');
-                    actionBtn.classList.add('bg-gradient-to-r', 'from-[#00e701]', 'to-[#00c701]', 'text-[#0f212e]');
+                    actionBtn.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)';
+                    actionBtn.style.boxShadow = '0 4px 0 #5b21b6';
+                    actionBtn.style.color = 'white';
                 }
                 
                 // Update bet input max value
@@ -3755,7 +3712,7 @@
                 
                 if (this.chickenState.currentStep === -1 && this.chickenState.isPlaying) {
                     startTile.innerHTML += `
-                        <div class="absolute inset-0 bg-green-500/10 animate-pulse"></div>
+                        <div class="absolute inset-0 bg-[#8b5cf6]/10 animate-pulse"></div>
                         <div class="text-6xl chicken-hop drop-shadow-2xl z-20 filter contrast-125">🐔</div>
                         <div class="mt-4 text-xs font-bold text-white uppercase tracking-widest bg-black/50 px-2 py-1 rounded">Start</div>
                     `;
@@ -3821,15 +3778,15 @@
                         // PASSED TILE
                         const isCurrent = index === this.chickenState.currentStep;
                         if (isCurrent && this.chickenState.isPlaying) {
-                            tileClass += `z-20 shadow-[inset_0_0_80px_rgba(0,231,1,0.2)]`;
+                            tileClass += `z-20 shadow-[inset_0_0_80px_rgba(139,92,246,0.2)]`;
                             content += `
-                                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#00e701]/10 to-transparent animate-pulse"></div>
+                                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#8b5cf6]/10 to-transparent animate-pulse"></div>
                                 <div class="text-6xl chicken-hop drop-shadow-2xl z-30 filter contrast-125">🐔</div>
-                                <div class="mt-6 text-[#00e701] font-black text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] bg-[#0f212e]/90 px-3 py-1 rounded border border-[#00e701] z-30">${mult.toFixed(2)}x</div>
+                                <div class="mt-6 text-[#8b5cf6] font-black text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] bg-[#0f212e]/90 px-3 py-1 rounded border border-[#8b5cf6] z-30">${mult.toFixed(2)}x</div>
                             `;
                         } else {
                             tileClass += `bg-black/10 opacity-60 grayscale-[0.3]`;
-                            content += `<div class="text-[#00e701] font-bold text-xl opacity-60 drop-shadow-md">✔ ${mult.toFixed(2)}x</div>`;
+                            content += `<div class="text-[#8b5cf6] font-bold text-xl opacity-60 drop-shadow-md">✔ ${mult.toFixed(2)}x</div>`;
                         }
                     } else if (isNext && this.chickenState.isPlaying) {
                         // NEXT ACTIVE TILE
@@ -3839,7 +3796,7 @@
                         content += `
                             <div class="relative z-20 flex flex-col items-center transition-transform duration-200 group-hover:scale-110">
                                 <div class="text-white/90 font-black text-3xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] bg-black/40 rounded-lg px-3 py-1 mb-2 backdrop-blur-sm">${mult.toFixed(2)}x</div>
-                                <div class="text-[#00e701] font-bold text-sm bg-black/80 px-3 py-1 rounded-full border border-[#00e701]/50 shadow-lg shadow-[#00e701]/20">Win ${potentialWin}</div>
+                                <div class="text-[#10b981] font-bold text-sm bg-black/80 px-3 py-1 rounded-full border border-[#10b981]/50 shadow-lg shadow-[#10b981]/20">Win ${potentialWin}</div>
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                             <div class="absolute bottom-4 text-[10px] text-white/50 uppercase font-bold tracking-widest animate-bounce">Tap to Hop</div>
