@@ -333,6 +333,104 @@
             opacity: 0.5;
         }
 
+        /* Coinflip Game Specific Styles */
+        .coin-container {
+            perspective: 1000px;
+        }
+
+        .coin {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .coin-side {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .coin-side-heads {
+            background: radial-gradient(circle at 30% 30%, #f59e0b, #d97706);
+            color: #78350f;
+            transform: rotateY(0deg);
+            border: 8px solid #f59e0b;
+        }
+        
+        .coin-side-heads::after {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border: 2px dashed #b45309;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .coin-side-tails {
+            background: radial-gradient(circle at 30% 30%, #e5e7eb, #9ca3af);
+            color: #1f2937;
+            transform: rotateY(180deg);
+            border: 8px solid #6b7280;
+        }
+        
+        .coin-side-tails::after {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border: 2px dashed #4b5563;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .coin-icon {
+            width: 80px;
+            height: 80px;
+            color: currentColor;
+        }
+
+        /* Coinflip Game Controls */
+        .coinflip-controls {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 12px;
+            border: 1px solid #334155;
+            padding: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .coinflip-history-item {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .coinflip-side-btn {
+            transition: all 0.2s;
+        }
+        
+        .coinflip-side-btn:active {
+            transform: scale(0.96);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .coinflip-roadmap-dot {
+            transition: all 0.3s ease;
+        }
+
+        .coinflip-roadmap-dot.active {
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -780,6 +878,22 @@
             .btn-primary, button {
                 font-size: 14px !important;
                 padding: 12px 16px !important;
+            }
+            
+            /* Coinflip responsive */
+            .coin {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .coin-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .coinflip-side-btn {
+                width: 100px;
+                height: 100px;
             }
         }
         
@@ -1502,6 +1616,12 @@
                     <span class="text-sm">Chicken Road</span>
                     <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
                 </button>
+                <!-- Added Coinflip Game -->
+                <button onclick="app.loadGame('coinflip')" id="nav-coinflip" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
+                    <i class="fa-solid fa-coins text-[#f59e0b] w-4 text-center group-hover:scale-110 transition-all duration-300"></i> 
+                    <span class="text-sm">Coinflip</span>
+                    <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 ml-auto"></i>
+                </button>
                 <button onclick="app.loadGame('leaderboard')" id="nav-leaderboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-[#2a3042] hover:to-[#1e293b] text-[#b1bad3] hover:text-white font-medium transition-all duration-300 group touch-button">
                     <i class="fa-solid fa-trophy text-[#f59e0b] w-4 text-center group-hover:scale-110 transition-all duration-300"></i> 
                     <span class="text-sm">Leaderboard</span>
@@ -1666,7 +1786,8 @@
             mine: new Audio('sounds/explosion.wav'),
             gem: new Audio('sounds/win.wav'),
             click: new Audio('sounds/click.wav'),
-            hop: new Audio('sounds/click.wav')
+            hop: new Audio('sounds/click.wav'),
+            coinflip: new Audio('sounds/click.wav')
         };
 
         // Set volume for all sounds
@@ -1744,6 +1865,18 @@
                     gameActive: false,
                     // Real-time balance update
                     balanceUpdateListener: null
+                };
+                
+                // Coinflip state
+                this.coinflipState = {
+                    isGameActive: false,
+                    isFlipping: false,
+                    currentBet: 0,
+                    accumulatedValue: 0,
+                    streak: 0,
+                    history: [],
+                    coinRotation: 0,
+                    HOUSE_EDGE: 1.95
                 };
                 
                 // Initialize app
@@ -1931,6 +2064,10 @@
                                 // Update chicken UI if game is active
                                 if (this.activeGame === 'chicken') {
                                     this.updateChickenUI();
+                                }
+                                // Update coinflip UI if game is active
+                                if (this.activeGame === 'coinflip') {
+                                    this.updateCoinflipUI();
                                 }
                             }
                         }
@@ -2635,6 +2772,9 @@
                     case 'chicken':
                         this.renderChickenRoad();
                         break;
+                    case 'coinflip':
+                        this.renderCoinflip();
+                        break;
                     case 'leaderboard':
                         this.renderLeaderboard();
                         break;
@@ -2686,6 +2826,7 @@
                             ${this.getGameCard('mines', 'Mines', 'fa-bomb', 'from-[#451a03] to-[#2a1205]', 'Reveal gems, avoid bombs', '#f59e0b')}
                             ${this.getGameCard('blackjack', 'Blackjack', 'fa-diamond', 'from-[#064e3b] to-[#022c22]', 'Classic 21 vs Dealer', '#10b981')}
                             ${this.getGameCard('chicken', 'Chicken Road', 'fa-egg', 'from-[#78350f] to-[#451a03]', 'Cross the road to win!', '#f59e0b')}
+                            ${this.getGameCard('coinflip', 'Coinflip', 'fa-coins', 'from-[#78350f] to-[#451a03]', 'Heads or Tails!', '#f59e0b')}
                         </div>
                     </div>
                 `;
@@ -4175,6 +4316,491 @@
                         });
                     }
                 }
+            }
+
+            // COINFLIP GAME - FULLY INTEGRATED
+            renderCoinflip() {
+                this.mainContent.innerHTML = `
+                    <div class="max-w-6xl mx-auto">
+                        <div class="text-center mb-6">
+                            <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">Coinflip</h2>
+                            <p class="text-gray-400 text-sm">Heads or Tails - Flip to win!</p>
+                        </div>
+                        
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            <!-- Left/Center: Game Board -->
+                            <div class="flex-1 flex flex-col relative bg-[#0f1923] rounded-2xl border border-[#2a3042] shadow-xl overflow-hidden min-h-[500px]">
+                                
+                                <!-- Main Game Area -->
+                                <div class="flex-1 flex flex-col items-center justify-center relative w-full p-4">
+                                    
+                                    <!-- Result Overlay -->
+                                    <div id="coinflip-result-overlay" class="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 transition-opacity duration-300">
+                                        <span id="coinflip-result-text" class="text-6xl font-black uppercase tracking-widest drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] text-white">WIN</span>
+                                    </div>
+
+                                    <!-- The Coin -->
+                                    <div class="coin-container mb-8">
+                                        <div id="coinflip-coin" class="coin">
+                                            <div class="coin-side coin-side-heads">
+                                                <i class="fa-solid fa-crown coin-icon"></i>
+                                            </div>
+                                            <div class="coin-side coin-side-tails">
+                                                <i class="fa-solid fa-flag coin-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- In-Game Controls (Heads/Tails Buttons) -->
+                                    <div id="coinflip-game-controls" class="flex gap-6 transition-all duration-300 opacity-0 pointer-events-none transform translate-y-4 mb-8">
+                                        <button onclick="app.coinflipFlip('heads')" id="coinflip-btn-head-select" class="coinflip-side-btn group relative w-32 h-32 rounded-full bg-gradient-to-b from-[#1e293b] to-[#0f172a] border-4 border-[#334155] hover:border-[#f59e0b] hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] flex flex-col items-center justify-center gap-2 transition-all">
+                                            <div class="w-12 h-12 rounded-full bg-[#f59e0b] shadow-inner flex items-center justify-center text-yellow-900 font-bold text-xl">H</div>
+                                            <span class="font-bold text-gray-300 group-hover:text-[#f59e0b] uppercase tracking-wide">Heads</span>
+                                        </button>
+                                        
+                                        <button onclick="app.coinflipFlip('tails')" id="coinflip-btn-tail-select" class="coinflip-side-btn group relative w-32 h-32 rounded-full bg-gradient-to-b from-[#1e293b] to-[#0f172a] border-4 border-[#334155] hover:border-gray-400 hover:shadow-[0_0_20px_rgba(156,163,175,0.4)] flex flex-col items-center justify-center gap-2 transition-all">
+                                            <div class="w-12 h-12 rounded-full bg-gray-300 shadow-inner flex items-center justify-center text-gray-800 font-bold text-xl">T</div>
+                                            <span class="font-bold text-gray-300 group-hover:text-white uppercase tracking-wide">Tails</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div id="coinflip-waiting-message" class="text-gray-500 font-medium animate-pulse">
+                                        Press Start to play
+                                    </div>
+
+                                </div>
+
+                                <!-- History & Multiplier Roadmap (Bottom) -->
+                                <div class="w-full bg-[#0f1923] border-t border-[#2a3042] p-4">
+                                    <div class="max-w-4xl mx-auto">
+                                        <div class="flex items-center gap-2 mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                            <span>Round History</span>
+                                            <div class="h-px bg-[#2a3042] flex-1"></div>
+                                        </div>
+                                        
+                                        <!-- History Icons -->
+                                        <div id="coinflip-history-row" class="flex gap-3 mb-4 h-10 items-center overflow-x-auto scrollbar-hide">
+                                            <span class="text-gray-600 text-sm italic">No flips yet...</span>
+                                        </div>
+
+                                        <!-- Multiplier Roadmap -->
+                                        <div class="relative pt-4">
+                                            <div class="absolute top-0 left-0 w-full h-px bg-[#2a3042]"></div>
+                                            <div id="coinflip-multiplier-roadmap" class="flex justify-between text-xs font-mono text-gray-400">
+                                                <div class="text-center relative">
+                                                    <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-gray-600"></div>
+                                                    <span>1.95×</span>
+                                                </div>
+                                                <div class="text-center relative">
+                                                    <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2a3042]"></div>
+                                                    <span>3.80×</span>
+                                                </div>
+                                                <div class="text-center relative">
+                                                    <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2a3042]"></div>
+                                                    <span>7.41×</span>
+                                                </div>
+                                                <div class="text-center relative">
+                                                    <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2a3042]"></div>
+                                                    <span>14.45×</span>
+                                                </div>
+                                                <div class="text-center relative">
+                                                    <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2a3042]"></div>
+                                                    <span>28.18×</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Control Panel -->
+                            <div class="w-full lg:w-[350px] bg-[#1a242d] flex flex-col rounded-2xl border border-[#2a3042] shadow-2xl relative z-30">
+                                
+                                <!-- Balance Header -->
+                                <div class="p-6 bg-[#212b36] border-b border-[#2a3042] rounded-t-2xl">
+                                    <div class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">Balance</div>
+                                    <div class="flex items-center gap-1">
+                                        <span class="text-[#10b981] font-bold text-lg">$</span>
+                                        <span id="coinflip-balance-display" class="text-2xl font-mono font-bold text-white">${this.balance.toLocaleString()}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Controls Content -->
+                                <div class="p-6 flex-1 flex flex-col gap-6">
+                                    
+                                    <!-- Bet Input Section -->
+                                    <div id="coinflip-bet-controls" class="space-y-4">
+                                        <div class="space-y-1">
+                                            <label class="text-xs text-gray-400 font-bold uppercase tracking-wide">Bet Amount</label>
+                                            <div class="flex bg-[#0f1923] border border-[#2a3042] rounded overflow-hidden focus-within:border-[#10b981] focus-within:ring-1 focus-within:ring-[#10b981]">
+                                                <span class="px-4 py-3 text-gray-400 font-bold select-none border-r border-[#2a3042] bg-[#151e26]">$</span>
+                                                <input type="number" id="coinflip-bet-input" value="10" min="0.01" step="0.01" class="w-full bg-transparent text-white font-mono p-3 outline-none">
+                                            </div>
+                                            
+                                            <!-- Quick Bet Buttons -->
+                                            <div class="grid grid-cols-4 gap-2 mt-2">
+                                                <button onclick="app.coinflipAdjustBet(0.5)" class="bg-[#2a3042] hover:bg-[#374151] text-gray-300 text-xs font-bold py-2 rounded transition-all duration-300 touch-button">1/2</button>
+                                                <button onclick="app.coinflipAdjustBet(2)" class="bg-[#2a3042] hover:bg-[#374151] text-gray-300 text-xs font-bold py-2 rounded transition-all duration-300 touch-button">2x</button>
+                                                <button onclick="app.coinflipSetBet(10)" class="bg-[#2a3042] hover:bg-[#374151] text-gray-300 text-xs font-bold py-2 rounded transition-all duration-300 touch-button">Min</button>
+                                                <button onclick="app.coinflipSetBet(${this.balance})" class="bg-[#2a3042] hover:bg-[#374151] text-gray-300 text-xs font-bold py-2 rounded transition-all duration-300 touch-button">Max</button>
+                                            </div>
+                                        </div>
+
+                                        <button id="coinflip-btn-start" onclick="app.coinflipStartGame()" class="btn-primary w-full py-4 rounded-xl font-bold text-xl tracking-wide mt-4 touch-button">
+                                            Start Game
+                                        </button>
+                                    </div>
+
+                                    <!-- Active Game Stats -->
+                                    <div id="coinflip-active-game-stats" class="hidden flex-col gap-4">
+                                        <div class="bg-[#0f1923] p-4 rounded border border-[#2a3042] space-y-3">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-gray-400 text-xs uppercase font-bold">Current Streak</span>
+                                                <span id="coinflip-streak-display" class="font-mono text-white font-bold">0</span>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-gray-400 text-xs uppercase font-bold">Multiplier</span>
+                                                <span id="coinflip-multiplier-display" class="font-mono text-[#f59e0b] font-bold">1.00×</span>
+                                            </div>
+                                            <div class="w-full h-px bg-[#2a3042] my-2"></div>
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-gray-400 text-xs uppercase font-bold">Profit on Win</span>
+                                                <span id="coinflip-profit-display" class="font-mono text-[#10b981] font-bold">$0.00</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center space-y-2 mt-4">
+                                            <div class="text-xs text-gray-500 font-bold uppercase">Total Accumulated</div>
+                                            <div id="coinflip-accumulated-display" class="text-3xl font-mono font-bold text-white">$0.00</div>
+                                        </div>
+
+                                        <button id="coinflip-btn-cashout" onclick="app.coinflipCashOut()" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:scale-[1.02] transition-all duration-300 uppercase tracking-wide mt-auto touch-button">
+                                            Cash Out
+                                        </button>
+                                    </div>
+
+                                    <!-- Footer Info -->
+                                    <div class="mt-auto text-center pt-6">
+                                        <p class="text-[10px] text-gray-600 font-medium uppercase tracking-widest">
+                                            House Edge: 5% | Payout: 1.95×
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Reset coinflip state
+                this.coinflipState.isGameActive = false;
+                this.coinflipState.isFlipping = false;
+                this.coinflipState.currentBet = 0;
+                this.coinflipState.accumulatedValue = 0;
+                this.coinflipState.streak = 0;
+                this.coinflipState.history = [];
+                this.coinflipState.coinRotation = 0;
+            }
+
+            // Coinflip Game Functions
+            updateCoinflipUI() {
+                const balanceDisplay = document.getElementById('coinflip-balance-display');
+                if (balanceDisplay) {
+                    balanceDisplay.textContent = this.balance.toLocaleString();
+                }
+                
+                if (this.coinflipState.isGameActive) {
+                    const streakDisplay = document.getElementById('coinflip-streak-display');
+                    const multiplierDisplay = document.getElementById('coinflip-multiplier-display');
+                    const profitDisplay = document.getElementById('coinflip-profit-display');
+                    const accumulatedDisplay = document.getElementById('coinflip-accumulated-display');
+                    
+                    if (streakDisplay) streakDisplay.textContent = this.coinflipState.streak;
+                    
+                    const currentMult = (this.coinflipState.accumulatedValue / this.coinflipState.currentBet) || 1;
+                    if (multiplierDisplay) multiplierDisplay.textContent = `${currentMult.toFixed(2)}×`;
+                    
+                    const nextVal = this.coinflipState.accumulatedValue * this.coinflipState.HOUSE_EDGE;
+                    const profit = nextVal - this.coinflipState.accumulatedValue;
+                    if (profitDisplay) profitDisplay.textContent = `+$${profit.toFixed(2)}`;
+                    if (accumulatedDisplay) accumulatedDisplay.textContent = `$${this.coinflipState.accumulatedValue.toFixed(2)}`;
+                }
+            }
+
+            coinflipStartGame() {
+                if (!this.userId) {
+                    this.showToast('Please login to play', 'error');
+                    return;
+                }
+
+                const betInput = document.getElementById('coinflip-bet-input');
+                const betAmount = parseFloat(betInput.value);
+
+                if (isNaN(betAmount) || betAmount <= 0) {
+                    this.showToast("Please enter a valid bet amount.", "error");
+                    return;
+                }
+                if (betAmount > this.balance) {
+                    this.showToast("Insufficient balance.", "error");
+                    return;
+                }
+
+                // Deduct initial bet
+                this.balance -= betAmount;
+                this.updateBalance();
+                this.recordWager(betAmount);
+
+                // Set Game State
+                this.coinflipState.isGameActive = true;
+                this.coinflipState.currentBet = betAmount;
+                this.coinflipState.accumulatedValue = betAmount;
+                this.coinflipState.streak = 0;
+                this.coinflipState.history = [];
+
+                // UI Updates
+                const betControls = document.getElementById('coinflip-bet-controls');
+                const activeGameStats = document.getElementById('coinflip-active-game-stats');
+                const gameControls = document.getElementById('coinflip-game-controls');
+                const waitingMessage = document.getElementById('coinflip-waiting-message');
+                const btnStart = document.getElementById('coinflip-btn-start');
+
+                if (betControls) betControls.classList.add('hidden');
+                if (activeGameStats) {
+                    activeGameStats.classList.remove('hidden');
+                    activeGameStats.classList.add('flex');
+                }
+                
+                if (waitingMessage) waitingMessage.classList.add('hidden');
+                if (gameControls) {
+                    gameControls.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+                    gameControls.classList.add('opacity-100', 'pointer-events-auto');
+                }
+                
+                if (btnStart) {
+                    btnStart.textContent = 'Game Active';
+                    btnStart.classList.remove('btn-primary');
+                    btnStart.classList.add('bg-[#2a3042]', 'text-gray-400', 'cursor-not-allowed');
+                }
+
+                this.coinflipClearHistoryUI();
+                this.coinflipUpdateRoadmap();
+                this.updateCoinflipUI();
+                this.playSound('click');
+            }
+
+            coinflipFlip(choice) {
+                if (!this.coinflipState.isGameActive || this.coinflipState.isFlipping) return;
+
+                this.coinflipState.isFlipping = true;
+                
+                const gameControls = document.getElementById('coinflip-game-controls');
+                if (gameControls) {
+                    gameControls.style.pointerEvents = 'none';
+                    gameControls.style.opacity = '0.5';
+                }
+
+                // Determine Result
+                const random = Math.random();
+                const result = random < 0.5 ? 'heads' : 'tails';
+                const isWin = (choice === result);
+
+                // Animate Coin
+                const coinElement = document.getElementById('coinflip-coin');
+                const spins = 5;
+                const degreesPerSpin = 360;
+                const targetOffset = result === 'heads' ? 0 : 180;
+                
+                let nextRotation = this.coinflipState.coinRotation + (spins * degreesPerSpin);
+                const remainder = nextRotation % 360;
+                const adjustment = targetOffset - remainder;
+                nextRotation += adjustment;
+
+                if (nextRotation <= this.coinflipState.coinRotation) nextRotation += 360;
+
+                this.coinflipState.coinRotation = nextRotation;
+                coinElement.style.transform = `rotateY(${this.coinflipState.coinRotation}deg)`;
+
+                // Wait for animation
+                setTimeout(() => {
+                    this.coinflipHandleResult(result, isWin);
+                }, 1000);
+            }
+
+            coinflipHandleResult(resultSide, isWin) {
+                this.coinflipState.isFlipping = false;
+                const gameControls = document.getElementById('coinflip-game-controls');
+                if (gameControls) {
+                    gameControls.style.pointerEvents = 'auto';
+                    gameControls.style.opacity = '1';
+                }
+
+                // Add to history
+                this.coinflipAddToHistory(resultSide);
+
+                if (isWin) {
+                    // Win logic
+                    this.coinflipState.streak++;
+                    this.coinflipState.accumulatedValue = this.coinflipState.accumulatedValue * this.coinflipState.HOUSE_EDGE;
+                    
+                    this.coinflipShowResultOverlay("WIN", "text-[#10b981]");
+                    this.coinflipUpdateRoadmap();
+                    this.playSound('win');
+                } else {
+                    // Loss logic
+                    this.coinflipState.accumulatedValue = 0;
+                    this.coinflipShowResultOverlay("LOSS", "text-[#ef4444]");
+                    this.playSound('lose');
+                    
+                    // End Game automatically on loss
+                    setTimeout(() => this.coinflipEndGame(), 1000);
+                }
+
+                this.updateCoinflipUI();
+            }
+
+            coinflipCashOut() {
+                if (!this.coinflipState.isGameActive) return;
+
+                const winnings = this.coinflipState.accumulatedValue;
+                this.balance += winnings;
+                this.updateBalance();
+                
+                const profit = winnings - this.coinflipState.currentBet;
+                if (profit > 0) {
+                    this.recordWin(profit, 'Coinflip');
+                    if (profit >= this.bigWinThreshold) {
+                        confetti({
+                            particleCount: 150,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    }
+                }
+                
+                this.coinflipShowResultOverlay(`+$${winnings.toFixed(2)}`, "text-[#f59e0b]");
+                this.coinflipEndGame();
+                this.playSound('win');
+            }
+
+            coinflipEndGame() {
+                this.coinflipState.isGameActive = false;
+                this.coinflipState.streak = 0;
+                this.coinflipState.currentBet = 0;
+                this.coinflipState.accumulatedValue = 0;
+
+                // Reset UI
+                const betControls = document.getElementById('coinflip-bet-controls');
+                const activeGameStats = document.getElementById('coinflip-active-game-stats');
+                const gameControls = document.getElementById('coinflip-game-controls');
+                const waitingMessage = document.getElementById('coinflip-waiting-message');
+                const btnStart = document.getElementById('coinflip-btn-start');
+
+                if (betControls) betControls.classList.remove('hidden');
+                if (activeGameStats) {
+                    activeGameStats.classList.add('hidden');
+                    activeGameStats.classList.remove('flex');
+                }
+
+                if (gameControls) {
+                    gameControls.classList.add('hidden', 'opacity-0', 'pointer-events-none');
+                    gameControls.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+                if (waitingMessage) waitingMessage.classList.remove('hidden');
+                
+                if (btnStart) {
+                    btnStart.textContent = 'Start Game';
+                    btnStart.classList.add('btn-primary');
+                    btnStart.classList.remove('bg-[#2a3042]', 'text-gray-400', 'cursor-not-allowed');
+                }
+            }
+
+            coinflipAdjustBet(multiplier) {
+                const betInput = document.getElementById('coinflip-bet-input');
+                if (!betInput) return;
+                
+                let val = parseFloat(betInput.value) || 0;
+                val = val * multiplier;
+                betInput.value = val.toFixed(2);
+                this.playSound('click');
+            }
+
+            coinflipSetBet(amount) {
+                const betInput = document.getElementById('coinflip-bet-input');
+                if (betInput) {
+                    betInput.value = Math.min(amount, this.balance).toFixed(2);
+                    this.playSound('click');
+                }
+            }
+
+            coinflipShowResultOverlay(text, colorClass) {
+                const resultOverlay = document.getElementById('coinflip-result-overlay');
+                const resultText = document.getElementById('coinflip-result-text');
+                
+                if (!resultOverlay || !resultText) return;
+                
+                resultText.textContent = text;
+                resultText.className = `text-6xl font-black uppercase tracking-widest drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] ${colorClass}`;
+                
+                resultOverlay.classList.remove('opacity-0');
+                resultOverlay.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                
+                setTimeout(() => {
+                    resultOverlay.classList.add('opacity-0');
+                    resultOverlay.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 800);
+            }
+
+            coinflipAddToHistory(side) {
+                const historyRow = document.getElementById('coinflip-history-row');
+                if (!historyRow) return;
+                
+                this.coinflipState.history.push(side);
+                
+                if (this.coinflipState.history.length === 0) {
+                    historyRow.innerHTML = '';
+                }
+                
+                const item = document.createElement('div');
+                item.className = 'coinflip-history-item flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border-2';
+                
+                if (side === 'heads') {
+                    item.classList.add('bg-[#f59e0b]', 'border-[#d97706]', 'text-yellow-900');
+                    item.textContent = 'H';
+                } else {
+                    item.classList.add('bg-gray-400', 'border-gray-300', 'text-gray-900');
+                    item.textContent = 'T';
+                }
+                
+                historyRow.appendChild(item);
+                historyRow.scrollLeft = historyRow.scrollWidth;
+            }
+
+            coinflipClearHistoryUI() {
+                const historyRow = document.getElementById('coinflip-history-row');
+                if (historyRow) {
+                    historyRow.innerHTML = '<span class="text-gray-600 text-sm italic">No flips yet...</span>';
+                }
+            }
+
+            coinflipUpdateRoadmap() {
+                const roadmap = document.getElementById('coinflip-multiplier-roadmap');
+                if (!roadmap) return;
+                
+                const startStreak = this.coinflipState.streak;
+                let html = '';
+                
+                for (let i = 1; i <= 5; i++) {
+                    const stepIndex = startStreak + i;
+                    const multiplier = Math.pow(this.coinflipState.HOUSE_EDGE, stepIndex);
+                    
+                    html += `
+                        <div class="text-center relative flex flex-col items-center">
+                            <div class="coinflip-roadmap-dot w-2 h-2 rounded-full mb-2 ${i === 1 ? 'active' : 'bg-[#2a3042]'}"></div>
+                            <span class="${i === 1 ? 'text-white font-bold' : 'text-gray-500'}">${multiplier.toFixed(2)}×</span>
+                        </div>
+                    `;
+                }
+                
+                roadmap.innerHTML = html;
             }
 
             // LEADERBOARD - Only show top 3 richest players
