@@ -1859,6 +1859,12 @@
             }
 
             updateBalance() {
+                // SECURITY CHECK: Verify current user session
+                if (!this.validateCurrentUser()) {
+                    this.showToast('Security error: Unauthorized action', 'error');
+                    return;
+                }
+                
                 if (this.balanceDisplay) {
                     this.balanceDisplay.textContent = this.balance.toLocaleString();
                     
@@ -1875,13 +1881,33 @@
                     }, 500);
                 }
                 
-                // Save to database only
+                // Save to database with session verification
                 if (this.userId && this.username) {
-                    database.ref('users/' + this.userId + '/balance').set(this.balance);
+                    // Use transaction to prevent race conditions
+                    database.ref('users/' + this.userId).transaction((currentUser) => {
+                        if (currentUser && currentUser.userId === this.userId) {
+                            currentUser.balance = this.balance;
+                            return currentUser;
+                        }
+                        return; // Abort transaction if user doesn't match
+                    });
                 }
                 
                 // Update free coins button
                 this.updateFreeCoinsButton();
+            }
+
+            // SECURITY: Validate current user session
+            validateCurrentUser() {
+                const savedUser = localStorage.getItem('moonCasinoUser');
+                if (!savedUser) return false;
+                
+                try {
+                    const user = JSON.parse(savedUser);
+                    return user.userId === this.userId;
+                } catch (e) {
+                    return false;
+                }
             }
 
             // Setup real-time balance updates
@@ -1897,29 +1923,38 @@
                     this.chickenState.balanceUpdateListener = balanceRef.on('value', (snapshot) => {
                         const newBalance = snapshot.val();
                         if (newBalance !== null && newBalance !== this.balance) {
-                            this.balance = parseInt(newBalance);
-                            this.updateBalance();
-                            
-                            // Update chicken UI if game is active
-                            if (this.activeGame === 'chicken') {
-                                this.updateChickenUI();
+                            // SECURITY CHECK: Only update if session is valid
+                            if (this.validateCurrentUser()) {
+                                this.balance = parseInt(newBalance);
+                                this.updateBalance();
+                                
+                                // Update chicken UI if game is active
+                                if (this.activeGame === 'chicken') {
+                                    this.updateChickenUI();
+                                }
                             }
                         }
                     });
                 }
             }
 
-            // Auth Functions - MODIFIED: Only use database, verify account exists
+            // Auth Functions - FIXED WITH SESSION MANAGEMENT
             async checkAuth() {
                 const savedUser = localStorage.getItem('moonCasinoUser');
                 if (savedUser) {
                     try {
                         const user = JSON.parse(savedUser);
                         
+                        // SECURITY: Check session is still valid
+                        if (!this.validateSession(user.userId)) {
+                            this.logout();
+                            this.showToast('Session expired. Please login again.', 'warning');
+                            return;
+                        }
+                        
                         // Check if user still exists in database
                         const userSnapshot = await database.ref('users/' + user.userId).once('value');
                         if (!userSnapshot.exists()) {
-                            // Account was deleted or doesn't exist, log out
                             this.logout();
                             this.showToast('Account no longer exists', 'error');
                             return;
@@ -1942,6 +1977,29 @@
                     }
                 } else {
                     this.showAuthModal();
+                }
+            }
+
+            // SECURITY: Session validation function
+            async validateSession(userId) {
+                try {
+                    const sessionRef = database.ref('sessions/' + userId);
+                    const snapshot = await sessionRef.once('value');
+                    const sessionData = snapshot.val();
+                    
+                    if (!sessionData) return false;
+                    
+                    // Check if session is expired (24 hours)
+                    const now = Date.now();
+                    if (now - sessionData.createdAt > 24 * 60 * 60 * 1000) {
+                        await sessionRef.remove();
+                        return false;
+                    }
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Session validation error:', error);
+                    return false;
                 }
             }
 
@@ -1995,7 +2053,7 @@
                 }
 
                 // Create user
-                const userId = 'user_' + Date.now();
+                const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 const userData = {
                     userId,
                     username,
@@ -2015,6 +2073,13 @@
                 };
 
                 await database.ref('users/' + userId).set(userData);
+
+                // Create session
+                await database.ref('sessions/' + userId).set({
+                    userId: userId,
+                    createdAt: Date.now(),
+                    lastActivity: Date.now()
+                });
 
                 // Save locally (only for auto-login, balance comes from database)
                 localStorage.setItem('moonCasinoUser', JSON.stringify({ userId, username }));
@@ -2064,6 +2129,13 @@
                     return;
                 }
 
+                // Update session
+                await database.ref('sessions/' + userFound.userId).set({
+                    userId: userFound.userId,
+                    createdAt: Date.now(),
+                    lastActivity: Date.now()
+                });
+
                 // Save locally (only for auto-login, balance comes from database)
                 localStorage.setItem('moonCasinoUser', JSON.stringify({
                     userId: userFound.userId,
@@ -2094,6 +2166,11 @@
                 // Remove from online users
                 if (this.userId) {
                     database.ref('online/' + this.userId).remove();
+                }
+                
+                // Remove session
+                if (this.userId) {
+                    database.ref('sessions/' + this.userId).remove();
                 }
                 
                 // Remove balance listener
@@ -2176,6 +2253,12 @@
             async claimFreeCoins() {
                 if (!this.userId) return;
 
+                // SECURITY CHECK
+                if (!this.validateCurrentUser()) {
+                    this.showToast('Security error: Invalid session', 'error');
+                    return;
+                }
+
                 // Check if balance is under 100
                 if (this.balance >= 100) {
                     this.showToast('You must have less than 100 coins to claim', 'error');
@@ -2185,13 +2268,15 @@
                 this.balance += 500;
                 this.lastFreeCoinsClaim = Date.now();
 
-                // Update in database
-                if (this.username) {
-                    await database.ref('users/' + this.userId).update({
-                        balance: this.balance,
-                        lastFreeCoins: this.lastFreeCoinsClaim
-                    });
-                }
+                // Update in database with transaction
+                await database.ref('users/' + this.userId).transaction((currentUser) => {
+                    if (currentUser && currentUser.userId === this.userId) {
+                        currentUser.balance = this.balance;
+                        currentUser.lastFreeCoins = this.lastFreeCoinsClaim;
+                        return currentUser;
+                    }
+                    return;
+                });
 
                 this.updateBalance();
                 this.updateFreeCoinsButton();
@@ -2206,9 +2291,16 @@
                 });
             }
 
+            // FIXED: Secure money transfer with database transaction
             async sendMoney() {
                 if (!this.userId) return;
-
+                
+                // SECURITY VALIDATION
+                if (!this.validateCurrentUser()) {
+                    this.showToast('Security alert: Invalid session', 'error');
+                    return;
+                }
+                
                 const recipientUsername = document.getElementById('sendToUsername').value.trim();
                 const amount = parseFloat(document.getElementById('sendAmount').value);
 
@@ -2232,55 +2324,78 @@
                     return;
                 }
 
-                // Find recipient
-                const snapshot = await database.ref('users').orderByChild('username').equalTo(recipientUsername).once('value');
+                try {
+                    // Use database transaction to prevent race conditions and duplication
+                    const result = await database.ref().transaction((currentData) => {
+                        if (!currentData) return;
+                        
+                        const users = currentData.users || {};
+                        const sender = users[this.userId];
+                        let recipient = null;
+                        let recipientId = null;
+                        
+                        // Find recipient
+                        Object.keys(users).forEach(id => {
+                            if (users[id].username === recipientUsername) {
+                                recipient = users[id];
+                                recipientId = id;
+                            }
+                        });
+                        
+                        // Validate users exist
+                        if (!recipient || !sender) {
+                            return; // Abort if users not found
+                        }
+                        
+                        // Verify sender has enough balance
+                        if (sender.balance < amount) {
+                            return; // Abort if insufficient funds
+                        }
+                        
+                        // Perform the transfer
+                        sender.balance -= amount;
+                        recipient.balance = (recipient.balance || 0) + amount;
+                        
+                        // Update both users in the transaction
+                        users[this.userId] = sender;
+                        users[recipientId] = recipient;
+                        
+                        currentData.users = users;
+                        
+                        return currentData;
+                    });
+                    
+                    if (result.committed) {
+                        // Update local balance
+                        this.balance -= amount;
+                        this.updateBalance();
+                        this.showToast(`Sent ${amount} coins to ${recipientUsername}`, 'success');
+                        this.playSound('click');
+                        
+                        // Clear form
+                        document.getElementById('sendToUsername').value = '';
+                        document.getElementById('sendAmount').value = '';
+                        
+                        // Add transaction record
+                        const transaction = {
+                            from: this.username,
+                            to: recipientUsername,
+                            amount: amount,
+                            timestamp: Date.now(),
+                            type: 'transfer'
+                        };
 
-                if (!snapshot.exists()) {
-                    this.showToast('User not found', 'error');
-                    return;
+                        await database.ref('transactions').push(transaction);
+                        
+                        // Add chat message
+                        this.addChatMessage('System', `${this.username} sent ${amount} coins to ${recipientUsername}!`, 'text-[#10b981]');
+                    } else {
+                        this.showToast('Transaction failed. Please try again.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Money transfer error:', error);
+                    this.showToast('Transaction error occurred', 'error');
                 }
-
-                let recipientId = null;
-                let recipient = null;
-                snapshot.forEach(child => {
-                    recipientId = child.key;
-                    recipient = child.val();
-                });
-
-                if (!recipientId) {
-                    this.showToast('User not found', 'error');
-                    return;
-                }
-
-                // Update balances
-                this.balance -= amount;
-                const newRecipientBalance = (recipient.balance || 0) + amount;
-
-                // Update in database
-                await database.ref('users/' + this.userId + '/balance').set(this.balance);
-                await database.ref('users/' + recipientId + '/balance').set(newRecipientBalance);
-
-                this.updateBalance();
-                this.showToast(`Sent ${amount} coins to ${recipientUsername}`, 'success');
-                this.playSound('click');
-
-                // Clear form
-                document.getElementById('sendToUsername').value = '';
-                document.getElementById('sendAmount').value = '';
-
-                // Add transaction record
-                const transaction = {
-                    from: this.username,
-                    to: recipientUsername,
-                    amount: amount,
-                    timestamp: Date.now(),
-                    type: 'transfer'
-                };
-
-                await database.ref('transactions').push(transaction);
-
-                // Add chat message
-                this.addChatMessage('System', `${this.username} sent ${amount} coins to ${recipientUsername}!`, 'text-[#10b981]');
             }
 
             // Chat Functions - Fixed to only load new messages
@@ -2391,6 +2506,9 @@
             async recordWin(amount, game) {
                 if (!this.userId || amount <= 0) return;
 
+                // SECURITY CHECK
+                if (!this.validateCurrentUser()) return;
+
                 // Update user stats
                 const userRef = database.ref('users/' + this.userId);
                 const snapshot = await userRef.once('value');
@@ -2439,6 +2557,9 @@
 
             async recordLoss(amount, game) {
                 if (!this.userId || amount <= 0) return;
+
+                // SECURITY CHECK
+                if (!this.validateCurrentUser()) return;
 
                 // Update user stats
                 const userRef = database.ref('users/' + this.userId);
