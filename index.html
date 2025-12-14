@@ -988,13 +988,14 @@
             }
         }
         
-        /* Chicken Road Styles - UPDATED TO MATCH MAIN UI */
+        /* Chicken Road Styles - FIXED CAMERA POSITION */
         .chicken-road-main {
             display: flex;
             flex-direction: column;
             height: calc(100vh - 64px);
             background: #0b0e14;
             font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
         }
         
         /* Main Game Area */
@@ -1015,6 +1016,8 @@
             flex-direction: column;
             gap: 1.5rem;
             overflow-y: auto;
+            z-index: 20;
+            flex-shrink: 0;
         }
         
         .chicken-controls-header {
@@ -1198,7 +1201,7 @@
             margin-top: 1rem;
         }
         
-        /* Road Container */
+        /* Road Container - FIXED POSITIONING */
         .chicken-road-container {
             flex: 1;
             position: relative;
@@ -1206,12 +1209,160 @@
             overflow: hidden;
         }
         
-        .chicken-road-inner {
+        /* FIXED: Camera should always show the chicken */
+        .chicken-road-camera-container {
             position: absolute;
             inset: 0;
+            overflow: hidden;
+        }
+        
+        #chickenRoadCamera {
+            position: absolute;
+            inset-y: 0;
+            left: 0;
+            height: 100%;
             display: flex;
             align-items: center;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+        
+        /* World Container */
+        #chickenWorldContainer {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: max-content;
+            min-width: 100%;
+        }
+        
+        /* TOP GRASS ENVIRONMENT */
+        .chicken-env-top {
+            height: 6rem;
+            min-height: 6rem;
+            background: linear-gradient(to bottom, #064e3b, #022c22);
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+            border-bottom: 4px solid #10b981;
+            flex-shrink: 0;
+        }
+        
+        /* BOTTOM GRASS ENVIRONMENT */
+        .chicken-env-bottom {
+            height: 6rem;
+            min-height: 6rem;
+            background: linear-gradient(to top, #064e3b, #022c22);
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            overflow: hidden;
+            border-top: 4px solid #10b981;
+            flex-shrink: 0;
+        }
+        
+        /* ROAD AREA - FIXED LAYOUT */
+        .chicken-road-area {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: stretch;
+            background: #2d3436;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.5), inset 0 -10px 20px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        
+        .road-border-top {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 6px;
+            background: #ecf0f1;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            z-index: 15;
+        }
+        
+        .road-border-bottom {
+            position: absolute;
+            bottom: 0; left: 0; right: 0; height: 6px;
+            background: #ecf0f1;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            z-index: 15;
+        }
+        
+        /* Start Sidewalk */
+        .chicken-sidewalk-start {
+            width: 120px;
+            background: linear-gradient(to bottom, #374151, #1f2937);
+            border-right: 4px solid #4b5563;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
+            gap: 1rem;
+            z-index: 20;
+            box-shadow: 10px 0 20px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+        }
+        
+        /* End Sidewalk */
+        .chicken-sidewalk-end {
+            width: 120px;
+            background: linear-gradient(to bottom, #374151, #1f2937);
+            border-left: 4px solid #4b5563;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            z-index: 20;
+            box-shadow: -10px 0 20px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+        }
+        
+        /* Lanes Container - FIXED WIDTH */
+        #chickenRoadContainer {
+            position: relative;
+            display: flex;
+            height: 100%;
+            min-width: 4800px; /* 30 lanes * 160px each */
+            z-index: 10;
+        }
+        
+        /* Individual Lane - FIXED SIZE */
+        .chicken-lane {
+            width: 160px;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: inset 10px 0 20px -10px rgba(0,0,0,0.5), inset -10px 0 20px -10px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        
+        .lane-separator {
+            position: absolute;
+            right: 0;
+            top: 10%;
+            bottom: 10%;
+            width: 4px;
+            background: repeating-linear-gradient(
+                to bottom,
+                #ecf0f1,
+                #ecf0f1 40px,
+                transparent 40px,
+                transparent 80px
+            );
+            z-index: 5;
+            opacity: 0.5;
         }
         
         /* Result Overlay */
@@ -1279,14 +1430,6 @@
             margin-bottom: 2rem;
         }
         
-        .glass-panel {
-            background: rgba(15, 33, 46, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .glow-text { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-        
         @media (max-width: 1024px) {
             .chicken-game-area {
                 flex-direction: column;
@@ -1296,6 +1439,20 @@
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid #2a3042;
+                max-height: 300px;
+                overflow-y: auto;
+            }
+            
+            .chicken-road-container {
+                min-height: 400px;
+            }
+            
+            #chickenRoadContainer {
+                min-width: 4800px;
+            }
+            
+            .chicken-lane {
+                width: 120px;
             }
         }
         
@@ -1311,6 +1468,19 @@
             .chicken-action-button {
                 padding: 0.75rem;
                 font-size: 1rem;
+            }
+            
+            .chicken-sidewalk-start,
+            .chicken-sidewalk-end {
+                width: 80px;
+            }
+            
+            #chickenRoadContainer {
+                min-width: 3600px; /* 30 lanes * 120px each */
+            }
+            
+            .chicken-lane {
+                width: 120px;
             }
         }
     </style>
@@ -3318,7 +3488,7 @@
                 this.playSound('click');
             }
 
-            // CHICKEN ROAD GAME - FIXED AND UPDATED
+            // CHICKEN ROAD GAME - COMPLETELY FIXED
             renderChickenRoad() {
                 this.chickenState.isPlaying = false;
                 this.chickenState.currentStep = -1;
@@ -3410,37 +3580,39 @@
 
                             <!-- Road Container -->
                             <div class="chicken-road-container">
-                                <!-- Moving Camera Container -->
-                                <div id="chickenRoadCamera" class="absolute inset-y-0 left-0 h-full flex items-center transition-transform duration-500 ease-out will-change-transform">
-                                    <!-- Full World Container -->
-                                    <div class="relative flex flex-col h-full w-max" id="chickenWorldContainer">
-                                        <!-- TOP GRASS ENVIRONMENT -->
-                                        <div class="h-24 min-h-[6rem] bg-gradient-to-b from-[#064e3b] to-[#022c22] relative flex items-end overflow-hidden border-b-4 border-[#10b981]" id="chickenEnvTop"></div>
-
-                                        <!-- THE ROAD STRIP -->
-                                        <div class="flex-1 relative flex items-stretch road-texture z-10 shadow-2xl">
-                                            <div class="road-border-top"></div>
+                                <!-- Camera Container -->
+                                <div class="chicken-road-camera-container">
+                                    <div id="chickenRoadCamera" class="chicken-road-camera">
+                                        <!-- World Container -->
+                                        <div id="chickenWorldContainer" class="chicken-world-container">
+                                            <!-- Top Environment -->
+                                            <div class="chicken-env-top" id="chickenEnvTop"></div>
                                             
-                                            <!-- Start Sidewalk (Left) -->
-                                            <div class="w-48 bg-gradient-to-b from-[#374151] to-[#1f2937] border-r-4 border-[#4b5563] sidewalk-texture flex flex-col items-center justify-center gap-12 z-20 shadow-[10px_0_20px_rgba(0,0,0,0.5)]" id="chickenSidewalkStart">
-                                                <div class="text-5xl">🏁</div>
-                                                <div class="text-white font-black text-2xl text-center drop-shadow-md">START</div>
-                                            </div>
-
-                                            <!-- Lanes Container -->
-                                            <div class="relative flex h-full z-10" id="chickenRoadContainer"></div>
-
-                                            <!-- End Sidewalk (Right) -->
-                                            <div class="w-64 bg-gradient-to-b from-[#374151] to-[#1f2937] border-l-4 border-[#4b5563] sidewalk-texture flex flex-col items-center justify-center gap-8 z-20 shadow-[-10px_0_20px_rgba(0,0,0,0.5)]" id="chickenSidewalkEnd">
-                                                <div class="text-6xl drop-shadow-xl">🎯</div>
-                                                <div class="text-white font-black text-3xl text-center drop-shadow-md">GOAL</div>
+                                            <!-- Road Area -->
+                                            <div class="chicken-road-area">
+                                                <!-- Road Borders -->
+                                                <div class="road-border-top"></div>
+                                                <div class="road-border-bottom"></div>
+                                                
+                                                <!-- Start Sidewalk -->
+                                                <div class="chicken-sidewalk-start" id="chickenSidewalkStart">
+                                                    <div class="text-5xl">🏁</div>
+                                                    <div class="text-white font-black text-2xl text-center drop-shadow-md">START</div>
+                                                </div>
+                                                
+                                                <!-- Lanes Container -->
+                                                <div id="chickenRoadContainer" class="chicken-road-lanes"></div>
+                                                
+                                                <!-- End Sidewalk -->
+                                                <div class="chicken-sidewalk-end" id="chickenSidewalkEnd">
+                                                    <div class="text-6xl drop-shadow-xl">🎯</div>
+                                                    <div class="text-white font-black text-3xl text-center drop-shadow-md">GOAL</div>
+                                                </div>
                                             </div>
                                             
-                                            <div class="road-border-bottom"></div>
+                                            <!-- Bottom Environment -->
+                                            <div class="chicken-env-bottom" id="chickenEnvBottom"></div>
                                         </div>
-
-                                        <!-- BOTTOM GRASS ENVIRONMENT -->
-                                        <div class="h-24 min-h-[6rem] bg-gradient-to-t from-[#064e3b] to-[#022c22] relative flex items-start overflow-hidden border-t-4 border-[#10b981]" id="chickenEnvBottom"></div>
                                     </div>
                                 </div>
 
@@ -3466,6 +3638,8 @@
                 this.updateChickenDifficulty();
                 this.renderChickenEnvironment();
                 this.renderChickenRoadLanes();
+                // Set initial camera position
+                setTimeout(() => this.updateChickenCamera(), 100);
             }
 
             renderChickenEnvironment() {
@@ -3530,12 +3704,12 @@
                 if (!container) return;
                 
                 const props = ['💡', '🧯', '🗑️', '🚲', '🚏', '🚧'];
-                const propsContainer = container.querySelector('.flex') || container;
+                const propsContainer = container;
                 
-                // Clear existing props
+                // Clear existing props (keep the start/goal text)
                 const existingProps = propsContainer.querySelectorAll('div');
                 existingProps.forEach(p => {
-                    if (!p.classList.contains('text-5xl') && !p.classList.contains('text-6xl')) {
+                    if (!p.classList.contains('text-5xl') && !p.classList.contains('text-6xl') && !p.classList.contains('text-white')) {
                         p.remove();
                     }
                 });
@@ -3543,8 +3717,8 @@
                 for(let i=0; i<5; i++) {
                     const el = document.createElement('div');
                     el.textContent = props[Math.floor(Math.random() * props.length)];
-                    el.style.fontSize = '2rem';
-                    el.style.marginBottom = '1rem';
+                    el.style.fontSize = '1.5rem';
+                    el.style.marginBottom = '0.5rem';
                     propsContainer.appendChild(el);
                 }
             }
@@ -3668,14 +3842,10 @@
                 // Update UI
                 this.updateChickenUI();
                 this.renderChickenRoadLanes();
+                this.updateChickenCamera();
 
                 this.showToast('Game started! Click lanes to cross the road.', 'success');
                 this.playSound('click');
-                
-                // Force a re-render of the road lanes
-                setTimeout(() => {
-                    this.renderChickenRoadLanes();
-                }, 50);
             }
 
             renderChickenRoadLanes() {
@@ -3685,106 +3855,61 @@
                 const multipliers = CHICKEN_MULTIPLIERS[this.chickenState.difficulty];
                 
                 container.innerHTML = '';
+                container.className = 'chicken-road-lanes';
                 
-                // Set width for world container
-                const worldContainer = document.getElementById('chickenWorldContainer');
-                if (worldContainer) {
-                    const totalWidth = (30 * 160) + 200 + 300;
-                    worldContainer.style.width = `${totalWidth}px`;
-                }
-
-                // START TILE
-                const startTile = document.createElement('div');
-                startTile.className = `relative w-32 h-full flex flex-col items-center justify-center transition-all shrink-0 z-10 shadow-[10px_0_20px_rgba(0,0,0,0.2)]`;
-                
-                startTile.innerHTML = `
-                    <div class="absolute right-0 top-0 bottom-0 w-2 bg-white/80 shadow-[0_0_10px_white]"></div>
-                `;
-                
-                if (this.chickenState.currentStep === -1 && this.chickenState.isPlaying) {
-                    startTile.innerHTML += `
-                        <div class="absolute inset-0 bg-[#8b5cf6]/10 animate-pulse"></div>
-                        <div class="text-6xl chicken-hop drop-shadow-2xl z-20 filter contrast-125">🐔</div>
-                        <div class="mt-4 text-xs font-bold text-white uppercase tracking-widest bg-black/50 px-2 py-1 rounded">Start</div>
-                    `;
-                } else if (this.chickenState.currentStep === -1 && !this.chickenState.isPlaying) {
-                     startTile.innerHTML += `<div class="text-5xl opacity-50 grayscale filter contrast-75">🐔</div>`;
-                } else {
-                     startTile.innerHTML += `<div class="text-4xl opacity-30">🏁</div>`;
-                }
-                container.appendChild(startTile);
-
-                // Generate 30 Vertical Lanes
-                multipliers.forEach((mult, index) => {
-                    const isPassed = index <= this.chickenState.currentStep;
-                    const isNext = index === this.chickenState.currentStep + 1;
-                    const isFuture = index > this.chickenState.currentStep + 1;
-
-                    const tile = document.createElement('div');
-                    let tileClass = `relative w-40 h-full flex flex-col items-center justify-center transition-all duration-300 lane-card shrink-0 overflow-hidden group `;
-                    let content = '';
-
-                    // Lane Number
-                    content += `<div class="absolute top-2 left-2 text-[10px] text-white/20 font-bold tracking-widest px-1 rounded">LANE ${index+1}</div>`;
-
-                    // TRAFFIC GENERATION FOR FUTURE & NEXT LANES
-                    if ((isNext || isFuture) && this.chickenState.isPlaying) {
-                        const carCount = 4;
-                        const trafficContainer = document.createElement('div');
-                        trafficContainer.className = "absolute inset-0 pointer-events-none z-0 overflow-hidden";
-                        
-                        const carColors = ['car-red', 'car-blue', 'car-yellow', 'car-white', 'car-black', 'car-green'];
-
-                        for(let c=0; c<carCount; c++) {
-                            const colorClass = carColors[Math.floor(Math.random() * carColors.length)];
-                            const car = document.createElement('div');
-                            car.className = "traffic-car";
-                            car.innerHTML = `
-                                <div class="car-model ${colorClass}">
-                                    <div class="car-rear-window"></div>
-                                    <div class="car-roof"></div>
-                                    <div class="car-windshield"></div>
-                                </div>
-                            `;
-                            
-                            const minDuration = 1.2;
-                            const maxDuration = 2.5;
-                            const duration = minDuration + Math.random() * (maxDuration - minDuration);
-                            const baseDelay = (c / carCount) * duration; 
-                            const randomOffset = (Math.random() - 0.5) * 0.5;
-                            const delay = Math.max(0, baseDelay + randomOffset);
-                            
-                            car.style.animationDuration = `${duration}s`;
-                            car.style.animationDelay = `-${delay}s`;
-                            
-                            const wiggle = (Math.random() * 80) - 40; 
-                            car.style.marginLeft = `${wiggle}px`;
-
-                            trafficContainer.appendChild(car);
-                        }
-                        content += trafficContainer.outerHTML;
-                    }
-
+                // Generate 30 lanes
+                for (let i = 0; i < 30; i++) {
+                    const lane = document.createElement('div');
+                    lane.className = 'chicken-lane';
+                    lane.id = `chicken-lane-${i}`;
+                    
+                    const mult = multipliers[i];
+                    const isPassed = i <= this.chickenState.currentStep;
+                    const isCurrent = i === this.chickenState.currentStep;
+                    const isNext = i === this.chickenState.currentStep + 1;
+                    
+                    // Add lane separator
+                    const separator = document.createElement('div');
+                    separator.className = 'lane-separator';
+                    lane.appendChild(separator);
+                    
+                    // Add lane number
+                    const laneNumber = document.createElement('div');
+                    laneNumber.className = 'absolute top-2 left-2 text-[10px] text-white/20 font-bold tracking-widest px-1 rounded';
+                    laneNumber.textContent = `LANE ${i + 1}`;
+                    lane.appendChild(laneNumber);
+                    
+                    // Add multiplier display
+                    const multDisplay = document.createElement('div');
+                    multDisplay.className = 'text-white font-bold text-xl z-20 drop-shadow-md';
+                    multDisplay.textContent = `${mult.toFixed(2)}x`;
+                    lane.appendChild(multDisplay);
+                    
+                    // Set lane state
                     if (isPassed) {
-                        // PASSED TILE
-                        const isCurrent = index === this.chickenState.currentStep;
                         if (isCurrent && this.chickenState.isPlaying) {
-                            tileClass += `z-20 shadow-[inset_0_0_80px_rgba(139,92,246,0.2)]`;
-                            content += `
+                            // Current active lane with chicken
+                            lane.style.background = 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1))';
+                            lane.innerHTML += `
                                 <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#8b5cf6]/10 to-transparent animate-pulse"></div>
                                 <div class="text-6xl chicken-hop drop-shadow-2xl z-30 filter contrast-125">🐔</div>
                                 <div class="mt-6 text-[#8b5cf6] font-black text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] bg-[#0b0e14]/90 px-3 py-1 rounded border border-[#8b5cf6] z-30">${mult.toFixed(2)}x</div>
                             `;
                         } else {
-                            tileClass += `bg-black/10 opacity-60 grayscale-[0.3]`;
-                            content += `<div class="text-[#8b5cf6] font-bold text-xl opacity-60 drop-shadow-md">✔ ${mult.toFixed(2)}x</div>`;
+                            // Passed lane
+                            lane.style.background = 'rgba(0, 0, 0, 0.1)';
+                            lane.style.opacity = '0.6';
+                            lane.style.filter = 'grayscale(0.3)';
+                            multDisplay.innerHTML = `✔ ${mult.toFixed(2)}x`;
+                            multDisplay.style.color = '#8b5cf6';
                         }
                     } else if (isNext && this.chickenState.isPlaying) {
-                        // NEXT ACTIVE TILE
-                        tileClass += `hover:bg-white/5 cursor-pointer`;
-                        const potentialWin = (this.chickenState.bet * mult).toFixed(0);
+                        // Next active lane
+                        lane.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05))';
+                        lane.style.cursor = 'pointer';
                         
-                        content += `
+                        const potentialWin = (this.chickenState.bet * mult).toFixed(0);
+                        lane.innerHTML = `
                             <div class="relative z-20 flex flex-col items-center transition-transform duration-200 group-hover:scale-110">
                                 <div class="text-white/90 font-black text-3xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] bg-black/40 rounded-lg px-3 py-1 mb-2 backdrop-blur-sm">${mult.toFixed(2)}x</div>
                                 <div class="text-[#10b981] font-bold text-sm bg-black/80 px-3 py-1 rounded-full border border-[#10b981]/50 shadow-lg shadow-[#10b981]/20">Win ${potentialWin}</div>
@@ -3793,51 +3918,60 @@
                             <div class="absolute bottom-4 text-[10px] text-white/50 uppercase font-bold tracking-widest animate-bounce">Tap to Hop</div>
                         `;
                         
-                        tile.onclick = () => this.attemptChickenHop(index);
+                        lane.onclick = () => this.attemptChickenHop(i);
                     } else {
-                        // FUTURE LOCKED
-                        tileClass += `opacity-50 saturate-50 cursor-not-allowed`;
-                        content += `
-                            <div class="text-[#b1bad3] font-bold text-xl z-20 drop-shadow-md">${mult.toFixed(2)}x</div>
-                        `;
+                        // Future lane (locked)
+                        lane.style.background = 'rgba(0, 0, 0, 0.2)';
+                        lane.style.opacity = '0.5';
+                        lane.style.filter = 'saturate(0.5)';
+                        lane.style.cursor = 'not-allowed';
                     }
                     
-                    // Add the dashed separator
-                    content += `<div class="lane-separator"></div>`;
-
-                    tile.className = tileClass;
-                    tile.innerHTML = content;
-                    container.appendChild(tile);
-                });
+                    container.appendChild(lane);
+                }
                 
-                // Update camera position
+                // Update camera after rendering lanes
                 this.updateChickenCamera();
             }
             
             updateChickenCamera() {
-                const step = this.chickenState.currentStep;
-                const laneWidth = 160;
-                const startWidth = 128;
-                const screenWidth = document.getElementById('chickenRoadContainer')?.parentElement?.clientWidth || window.innerWidth;
+                const camera = document.getElementById('chickenRoadCamera');
+                if (!camera) return;
                 
+                const step = this.chickenState.currentStep;
+                const laneWidth = 160; // Width of each lane
+                const startWidth = 120; // Width of start sidewalk
+                const container = document.querySelector('.chicken-road-container');
+                if (!container) return;
+                
+                const containerWidth = container.clientWidth;
+                
+                // Calculate target position to center the current lane
                 let targetX = 0;
                 
                 if (step === -1) {
-                    targetX = startWidth / 2;
+                    // Start position - center the start area
+                    targetX = -(startWidth / 2) + (containerWidth / 2);
                 } else {
-                    targetX = startWidth + (step * laneWidth) + (laneWidth / 2);
+                    // Calculate position to center the current lane
+                    const lanesPassed = step + 1; // Include current lane
+                    const totalLaneWidthPassed = startWidth + (lanesPassed * laneWidth);
+                    const centerOfCurrentLane = totalLaneWidthPassed - (laneWidth / 2);
+                    targetX = -centerOfCurrentLane + (containerWidth / 2);
+                    
+                    // Add a little extra offset to show more of the next lane
+                    targetX += laneWidth * 0.3;
                 }
                 
-                let translateX = (screenWidth / 2) - targetX;
+                // Ensure we don't go past the end
+                const worldContainer = document.getElementById('chickenWorldContainer');
+                if (worldContainer) {
+                    const worldWidth = worldContainer.scrollWidth;
+                    const maxOffset = containerWidth - worldWidth;
+                    targetX = Math.min(0, Math.max(maxOffset, targetX));
+                }
                 
-                if (this.chickenState.isPlaying && step !== -1) {
-                    translateX -= laneWidth * 0.3;
-                }
-
-                const camera = document.getElementById('chickenRoadCamera');
-                if (camera) {
-                    camera.style.transform = `translateX(${translateX}px)`;
-                }
+                camera.style.transform = `translateX(${targetX}px)`;
             }
 
             attemptChickenHop(targetStep) {
@@ -3869,6 +4003,7 @@
                 // Update UI
                 this.updateChickenUI();
                 this.renderChickenRoadLanes();
+                this.updateChickenCamera();
                 
                 // Check if reached the end
                 if (step === 29) {
@@ -3894,6 +4029,7 @@
                 }, 800);
                 
                 this.updateChickenUI();
+                this.renderChickenRoadLanes();
                 this.playSound('lose');
             }
 
@@ -3914,6 +4050,7 @@
                 // Show result
                 this.showChickenResult(true, winnings);
                 this.updateChickenUI();
+                this.renderChickenRoadLanes();
                 
                 // Play win sound and confetti for big wins
                 if (profit >= 100) {
@@ -3966,6 +4103,7 @@
                 this.chickenState.currentMultiplier = 1.00;
                 this.updateChickenUI();
                 this.renderChickenRoadLanes();
+                this.updateChickenCamera();
                 this.playSound('click');
             }
 
