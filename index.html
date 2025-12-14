@@ -1991,7 +1991,7 @@
                 }, 3000);
             }
 
-            updateBalance() {
+            async updateBalance() {
                 // SECURITY CHECK: Verify current user session
                 if (!this.validateCurrentUser()) {
                     this.showToast('Security error: Unauthorized action', 'error');
@@ -2014,16 +2014,14 @@
                     }, 500);
                 }
                 
-                // Save to database with session verification
+                // Save to database immediately with proper error handling
                 if (this.userId && this.username) {
-                    // Use transaction to prevent race conditions
-                    database.ref('users/' + this.userId).transaction((currentUser) => {
-                        if (currentUser && currentUser.userId === this.userId) {
-                            currentUser.balance = this.balance;
-                            return currentUser;
-                        }
-                        return; // Abort transaction if user doesn't match
-                    });
+                    try {
+                        await database.ref('users/' + this.userId + '/balance').set(this.balance);
+                    } catch (error) {
+                        console.error('Error saving balance:', error);
+                        this.showToast('Error saving balance', 'error');
+                    }
                 }
                 
                 // Update free coins button
