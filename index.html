@@ -988,45 +988,13 @@
             }
         }
         
-        /* Chicken Road Styles */
-        .chicken-road-container {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            border-radius: 16px;
-            border: 1px solid #334155;
-            overflow: hidden;
-        }
-        
-        .chicken-sidebar {
-            background: linear-gradient(135deg, #1a2538, #0f172a);
-            border-right: 1px solid #334155;
-        }
-        
-        .chicken-lane {
-            background: linear-gradient(135deg, #2d3436, #1a1e21);
-            position: relative;
-        }
-        
-        .chicken-lane.passed {
-            background: linear-gradient(135deg, #064e3b, #022c22);
-        }
-        
-        .chicken-lane.current {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(6, 78, 59, 0.7));
-            animation: pulse-glow 2s infinite;
-        }
-        
-        .chicken-lane.crashed {
-            background: linear-gradient(135deg, #7f1d1d, #450a0a);
-            animation: shake 0.5s;
-        }
-
-        /* Chicken Road New Styles */
+        /* Chicken Road Styles - UPDATED TO MATCH MAIN UI */
         .chicken-road-main {
             display: flex;
             flex-direction: column;
             height: calc(100vh - 64px);
-            background: #0f212e;
-            font-family: 'Fredoka', sans-serif;
+            background: #0b0e14;
+            font-family: 'Space Grotesk', sans-serif;
         }
         
         /* Main Game Area */
@@ -1040,8 +1008,8 @@
         /* Controls Sidebar */
         .chicken-controls-sidebar {
             width: 320px;
-            background: #1a2c38;
-            border-right: 1px solid #2f4553;
+            background: #161b26;
+            border-right: 1px solid #2a3042;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
@@ -1064,6 +1032,7 @@
             color: white;
             font-size: 1.5rem;
             font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
         }
         
         .chicken-control-group {
@@ -1075,16 +1044,16 @@
         .chicken-control-label {
             font-size: 0.875rem;
             font-weight: 700;
-            color: #b1bad3;
+            color: #8b5cf6;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         
         .chicken-input-group {
             display: flex;
-            background: #2f4553;
-            border-radius: 8px;
-            border: 1px solid #2f4553;
+            background: linear-gradient(135deg, #0b0e14, #1e293b);
+            border-radius: 12px;
+            border: 1px solid #2a3042;
             overflow: hidden;
             transition: border-color 0.2s;
         }
@@ -1101,7 +1070,7 @@
             color: white;
             font-size: 1rem;
             font-weight: 700;
-            font-family: 'Fredoka', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             outline: none;
         }
         
@@ -1109,7 +1078,7 @@
             padding: 0 1rem;
             display: flex;
             align-items: center;
-            background: rgba(15, 33, 46, 0.3);
+            background: rgba(11, 14, 20, 0.3);
             color: #f59e0b;
         }
         
@@ -1121,33 +1090,34 @@
         }
         
         .chicken-quick-button {
-            background: #2f4553;
-            border: none;
-            border-radius: 6px;
+            background: #2a3042;
+            border: 1px solid #2a3042;
+            border-radius: 8px;
             padding: 0.5rem;
             color: #b1bad3;
             font-size: 0.875rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
-            font-family: 'Fredoka', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
         }
         
         .chicken-quick-button:hover {
-            background: #3e5666;
+            background: #3a4052;
             color: white;
+            border-color: #8b5cf6;
         }
         
         .chicken-select {
             width: 100%;
-            background: #2f4553;
-            border: 1px solid #2f4553;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #0b0e14, #1e293b);
+            border: 1px solid #2a3042;
+            border-radius: 12px;
             padding: 0.75rem 1rem;
             color: white;
             font-size: 1rem;
             font-weight: 700;
-            font-family: 'Fredoka', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             outline: none;
             cursor: pointer;
             transition: border-color 0.2s;
@@ -1158,9 +1128,9 @@
         }
         
         .chicken-stats-box {
-            background: #1a2c38;
-            border-radius: 8px;
-            border: 1px solid #2f4553;
+            background: linear-gradient(135deg, #161b26, #11141c);
+            border-radius: 12px;
+            border: 1px solid #2a3042;
             padding: 1rem;
         }
         
@@ -1168,6 +1138,20 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 0.75rem;
+        }
+        
+        .chicken-stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .chicken-stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 0.25rem;
         }
         
         .chicken-main-action {
@@ -1179,13 +1163,13 @@
             background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1rem;
             font-size: 1.125rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
-            font-family: 'Fredoka', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             box-shadow: 0 4px 0 #5b21b6;
         }
         
@@ -1200,8 +1184,8 @@
         }
         
         .chicken-action-button:disabled {
-            background: #2f4553;
-            color: #b1bad3;
+            background: #2a3042;
+            color: #6b7280;
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
@@ -1218,7 +1202,7 @@
         .chicken-road-container {
             flex: 1;
             position: relative;
-            background: #1a2c38;
+            background: #0b0e14;
             overflow: hidden;
         }
         
@@ -1234,7 +1218,7 @@
         .chicken-result-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(8px);
             z-index: 100;
             display: none;
@@ -1250,9 +1234,9 @@
         }
         
         .chicken-result-content {
-            background: linear-gradient(135deg, #1a2c38, #0f212e);
+            background: linear-gradient(135deg, #161b26, #11141c);
             border-radius: 20px;
-            border: 1px solid #2f4553;
+            border: 1px solid #2a3042;
             padding: 2rem;
             max-width: 400px;
             width: 90%;
@@ -1279,6 +1263,7 @@
         
         .chicken-result-title.loss {
             color: #ef4444;
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
         }
         
         .chicken-result-subtitle {
@@ -1310,7 +1295,7 @@
             .chicken-controls-sidebar {
                 width: 100%;
                 border-right: none;
-                border-bottom: 1px solid #2f4553;
+                border-bottom: 1px solid #2a3042;
             }
         }
         
@@ -1575,7 +1560,8 @@
             lose: new Audio('sounds/lose.wav'),
             mine: new Audio('sounds/explosion.wav'),
             gem: new Audio('sounds/win.wav'),
-            click: new Audio('sounds/click.wav')
+            click: new Audio('sounds/click.wav'),
+            hop: new Audio('sounds/click.wav')
         };
 
         // Set volume for all sounds
@@ -3332,7 +3318,7 @@
                 this.playSound('click');
             }
 
-            // CHICKEN ROAD GAME - UPDATED TO MATCH STAKE STYLE
+            // CHICKEN ROAD GAME - FIXED AND UPDATED
             renderChickenRoad() {
                 this.chickenState.isPlaying = false;
                 this.chickenState.currentStep = -1;
@@ -3413,7 +3399,7 @@
 
                                 <!-- Main Action Button -->
                                 <div class="chicken-main-action">
-                                    <button id="chickenActionBtn" onclick="app.handleChickenAction()" class="chicken-action-button" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 0 #5b21b6; color: white;">
+                                    <button id="chickenActionBtn" onclick="app.handleChickenAction()" class="chicken-action-button">
                                         <i class="fa-solid fa-play mr-1"></i> Start Game
                                     </button>
                                     <div class="chicken-game-info">
@@ -3465,7 +3451,7 @@
                                         <div class="chicken-result-title" id="chickenResultTitle">CRASHED!</div>
                                         <div class="chicken-result-subtitle" id="chickenResultSubtitle">Better luck next time</div>
                                         <div class="chicken-result-amount" id="chickenResultAmount">0 coins</div>
-                                        <button onclick="app.closeChickenResult()" class="chicken-action-button" style="background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 0 #5b21b6; color: white;">
+                                        <button onclick="app.closeChickenResult()" class="chicken-action-button">
                                             Play Again
                                         </button>
                                     </div>
@@ -3608,16 +3594,16 @@
                     if (this.chickenState.currentStep === -1) {
                         actionBtn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Game Starting...';
                         actionBtn.disabled = true;
-                        actionBtn.style.background = 'linear-gradient(135deg, #2f4553 0%, #1a2c38 100%)';
-                        actionBtn.style.color = '#b1bad3';
+                        actionBtn.style.background = 'linear-gradient(135deg, #2a3042 0%, #161b26 100%)';
+                        actionBtn.style.color = '#6b7280';
                         actionBtn.style.boxShadow = 'none';
                     } else {
                         const currentWin = (bet * this.chickenState.currentMultiplier).toFixed(0);
                         actionBtn.innerHTML = `<i class="fa-solid fa-money-bill-wave mr-1"></i> Cash Out ${currentWin}`;
                         actionBtn.disabled = false;
-                        actionBtn.style.background = 'linear-gradient(135deg, #2f4553 0%, #1a2c38 100%)';
-                        actionBtn.style.color = '#b1bad3';
-                        actionBtn.style.boxShadow = 'none';
+                        actionBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                        actionBtn.style.color = 'white';
+                        actionBtn.style.boxShadow = '0 4px 0 #065f46';
                     }
                 } else {
                     actionBtn.innerHTML = '<i class="fa-solid fa-play mr-1"></i> Start Game';
@@ -3685,6 +3671,11 @@
 
                 this.showToast('Game started! Click lanes to cross the road.', 'success');
                 this.playSound('click');
+                
+                // Force a re-render of the road lanes
+                setTimeout(() => {
+                    this.renderChickenRoadLanes();
+                }, 50);
             }
 
             renderChickenRoadLanes() {
@@ -3782,7 +3773,7 @@
                             content += `
                                 <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#8b5cf6]/10 to-transparent animate-pulse"></div>
                                 <div class="text-6xl chicken-hop drop-shadow-2xl z-30 filter contrast-125">🐔</div>
-                                <div class="mt-6 text-[#8b5cf6] font-black text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] bg-[#0f212e]/90 px-3 py-1 rounded border border-[#8b5cf6] z-30">${mult.toFixed(2)}x</div>
+                                <div class="mt-6 text-[#8b5cf6] font-black text-2xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] bg-[#0b0e14]/90 px-3 py-1 rounded border border-[#8b5cf6] z-30">${mult.toFixed(2)}x</div>
                             `;
                         } else {
                             tileClass += `bg-black/10 opacity-60 grayscale-[0.3]`;
