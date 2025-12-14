@@ -1365,71 +1365,6 @@
             opacity: 0.5;
         }
         
-        /* Result Overlay */
-        .chicken-result-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .chicken-result-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-        
-        .chicken-result-content {
-            background: linear-gradient(135deg, #161b26, #11141c);
-            border-radius: 20px;
-            border: 1px solid #2a3042;
-            padding: 2rem;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-        
-        .chicken-result-emoji {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-        
-        .chicken-result-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-        
-        .chicken-result-title.win {
-            color: #8b5cf6;
-            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
-        }
-        
-        .chicken-result-title.loss {
-            color: #ef4444;
-            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-        }
-        
-        .chicken-result-subtitle {
-            font-size: 1.25rem;
-            color: #b1bad3;
-            margin-bottom: 1.5rem;
-        }
-        
-        .chicken-result-amount {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #8b5cf6;
-            margin-bottom: 2rem;
-        }
-        
         @media (max-width: 1024px) {
             .chicken-game-area {
                 flex-direction: column;
@@ -3488,7 +3423,7 @@
                 this.playSound('click');
             }
 
-            // CHICKEN ROAD GAME - COMPLETELY FIXED
+            // CHICKEN ROAD GAME - UPDATED WITH CARS (NO CRASH SCREEN)
             renderChickenRoad() {
                 this.chickenState.isPlaying = false;
                 this.chickenState.currentStep = -1;
@@ -3596,7 +3531,7 @@
                                                 
                                                 <!-- Start Sidewalk -->
                                                 <div class="chicken-sidewalk-start" id="chickenSidewalkStart">
-                                                    <div class="text-5xl">🏁</div>
+                                                    <div class="text-5xl">🐔</div>
                                                     <div class="text-white font-black text-2xl text-center drop-shadow-md">START</div>
                                                 </div>
                                                 
@@ -3613,19 +3548,6 @@
                                             <!-- Bottom Environment -->
                                             <div class="chicken-env-bottom" id="chickenEnvBottom"></div>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <!-- Result Overlay -->
-                                <div id="chickenResultOverlay" class="chicken-result-overlay">
-                                    <div class="chicken-result-content">
-                                        <div class="chicken-result-emoji" id="chickenResultEmoji">💥</div>
-                                        <div class="chicken-result-title" id="chickenResultTitle">CRASHED!</div>
-                                        <div class="chicken-result-subtitle" id="chickenResultSubtitle">Better luck next time</div>
-                                        <div class="chicken-result-amount" id="chickenResultAmount">0 coins</div>
-                                        <button onclick="app.closeChickenResult()" class="chicken-action-button">
-                                            Play Again
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -3704,10 +3626,9 @@
                 if (!container) return;
                 
                 const props = ['💡', '🧯', '🗑️', '🚲', '🚏', '🚧'];
-                const propsContainer = container;
                 
                 // Clear existing props (keep the start/goal text)
-                const existingProps = propsContainer.querySelectorAll('div');
+                const existingProps = container.querySelectorAll('div');
                 existingProps.forEach(p => {
                     if (!p.classList.contains('text-5xl') && !p.classList.contains('text-6xl') && !p.classList.contains('text-white')) {
                         p.remove();
@@ -3719,7 +3640,7 @@
                     el.textContent = props[Math.floor(Math.random() * props.length)];
                     el.style.fontSize = '1.5rem';
                     el.style.marginBottom = '0.5rem';
-                    propsContainer.appendChild(el);
+                    container.appendChild(el);
                 }
             }
 
@@ -3867,6 +3788,7 @@
                     const isPassed = i <= this.chickenState.currentStep;
                     const isCurrent = i === this.chickenState.currentStep;
                     const isNext = i === this.chickenState.currentStep + 1;
+                    const isFuture = i > this.chickenState.currentStep + 1;
                     
                     // Add lane separator
                     const separator = document.createElement('div');
@@ -3884,6 +3806,45 @@
                     multDisplay.className = 'text-white font-bold text-xl z-20 drop-shadow-md';
                     multDisplay.textContent = `${mult.toFixed(2)}x`;
                     lane.appendChild(multDisplay);
+                    
+                    // Add cars to future and next lanes (if game is active)
+                    if ((isNext || isFuture) && this.chickenState.isPlaying) {
+                        const carCount = Math.floor(Math.random() * 2) + 1; // 1-2 cars per lane
+                        const trafficContainer = document.createElement('div');
+                        trafficContainer.className = "absolute inset-0 pointer-events-none z-0 overflow-hidden";
+                        
+                        const carColors = ['car-red', 'car-blue', 'car-yellow', 'car-white', 'car-black', 'car-green'];
+                        
+                        for (let c = 0; c < carCount; c++) {
+                            const colorClass = carColors[Math.floor(Math.random() * carColors.length)];
+                            const car = document.createElement('div');
+                            car.className = "traffic-car";
+                            car.innerHTML = `
+                                <div class="car-model ${colorClass}">
+                                    <div class="car-rear-window"></div>
+                                    <div class="car-roof"></div>
+                                    <div class="car-windshield"></div>
+                                </div>
+                            `;
+                            
+                            const minDuration = 1.2;
+                            const maxDuration = 3.5;
+                            const duration = minDuration + Math.random() * (maxDuration - minDuration);
+                            const baseDelay = (c / carCount) * duration; 
+                            const randomOffset = (Math.random() - 0.5) * 0.5;
+                            const delay = Math.max(0, baseDelay + randomOffset);
+                            
+                            car.style.animationDuration = `${duration}s`;
+                            car.style.animationDelay = `-${delay}s`;
+                            
+                            // Slight horizontal wiggle for realism
+                            const wiggle = (Math.random() * 60) - 30; 
+                            car.style.marginLeft = `${wiggle}px`;
+                            
+                            trafficContainer.appendChild(car);
+                        }
+                        lane.appendChild(trafficContainer);
+                    }
                     
                     // Set lane state
                     if (isPassed) {
@@ -3904,7 +3865,7 @@
                             multDisplay.style.color = '#8b5cf6';
                         }
                     } else if (isNext && this.chickenState.isPlaying) {
-                        // Next active lane
+                        // Next active lane (with cars)
                         lane.style.background = 'linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05))';
                         lane.style.cursor = 'pointer';
                         
@@ -3920,7 +3881,7 @@
                         
                         lane.onclick = () => this.attemptChickenHop(i);
                     } else {
-                        // Future lane (locked)
+                        // Future lane (locked with cars)
                         lane.style.background = 'rgba(0, 0, 0, 0.2)';
                         lane.style.opacity = '0.5';
                         lane.style.filter = 'saturate(0.5)';
@@ -4020,16 +3981,46 @@
                 document.body.classList.add('shake-screen');
                 setTimeout(() => document.body.classList.remove('shake-screen'), 500);
                 
+                // Show crash animation on the lane
+                const lane = document.getElementById(`chicken-lane-${failedStep}`);
+                if (lane) {
+                    // Add crash car animation
+                    const crashCar = document.createElement('div');
+                    crashCar.className = 'crash-car-anim';
+                    crashCar.innerHTML = `
+                        <div class="car-model car-red scale-150 shadow-2xl">
+                            <div class="car-rear-window"></div>
+                            <div class="car-roof"></div>
+                            <div class="car-windshield"></div>
+                        </div>
+                    `;
+                    lane.appendChild(crashCar);
+                    
+                    // Show chicken getting hit
+                    const chickenHit = document.createElement('div');
+                    chickenHit.className = 'absolute text-5xl opacity-50 blur-sm grayscale rotate-90 transform translate-y-4 z-40';
+                    chickenHit.textContent = '🐔';
+                    lane.appendChild(chickenHit);
+                    
+                    // Add crash text
+                    const crashText = document.createElement('div');
+                    crashText.className = 'absolute bottom-1/4 text-red-500 font-bold text-lg bg-black/90 px-4 py-1 rounded border border-red-500 animate-bounce z-40';
+                    crashText.textContent = 'CRASH!';
+                    lane.appendChild(crashText);
+                }
+                
                 // Record loss
                 this.recordLoss(this.chickenState.bet, 'Chicken Road');
                 
-                // Show result
-                setTimeout(() => {
-                    this.showChickenResult(false, 0);
-                }, 800);
+                // Show toast notification instead of full screen
+                this.showToast(`Chicken got hit! Lost ${this.chickenState.bet} coins`, 'error');
                 
-                this.updateChickenUI();
-                this.renderChickenRoadLanes();
+                // Update UI after a delay to show animation
+                setTimeout(() => {
+                    this.updateChickenUI();
+                    this.renderChickenRoadLanes();
+                }, 1000);
+                
                 this.playSound('lose');
             }
 
@@ -4047,8 +4038,8 @@
                     this.recordWin(profit, 'Chicken Road');
                 }
 
-                // Show result
-                this.showChickenResult(true, winnings);
+                // Show notification
+                this.showToast(`Success! Cashed out ${winnings.toFixed(0)} coins!`, 'success');
                 this.updateChickenUI();
                 this.renderChickenRoadLanes();
                 
@@ -4063,48 +4054,6 @@
                         });
                     }
                 }
-            }
-
-            showChickenResult(win, amount) {
-                const overlay = document.getElementById('chickenResultOverlay');
-                const emoji = document.getElementById('chickenResultEmoji');
-                const title = document.getElementById('chickenResultTitle');
-                const subtitle = document.getElementById('chickenResultSubtitle');
-                const amountEl = document.getElementById('chickenResultAmount');
-
-                if (win) {
-                    emoji.textContent = '💰';
-                    title.textContent = 'YOU WON!';
-                    title.className = 'chicken-result-title win';
-                    subtitle.textContent = 'Successfully crossed the road!';
-                    amountEl.textContent = `${amount.toFixed(0)} coins`;
-                    amountEl.className = 'chicken-result-amount';
-                    this.playSound('win');
-                } else {
-                    emoji.textContent = '💥';
-                    title.textContent = 'CRASHED!';
-                    title.className = 'chicken-result-title loss';
-                    subtitle.textContent = 'The chicken didn\'t make it...';
-                    amountEl.textContent = `Lost ${this.chickenState.bet} coins`;
-                    amountEl.className = 'chicken-result-amount';
-                    this.playSound('lose');
-                }
-
-                overlay.classList.add('active');
-            }
-
-            closeChickenResult() {
-                const overlay = document.getElementById('chickenResultOverlay');
-                overlay.classList.remove('active');
-                
-                // Reset game
-                this.chickenState.isPlaying = false;
-                this.chickenState.currentStep = -1;
-                this.chickenState.currentMultiplier = 1.00;
-                this.updateChickenUI();
-                this.renderChickenRoadLanes();
-                this.updateChickenCamera();
-                this.playSound('click');
             }
 
             // LEADERBOARD - Only show top 3 richest players
