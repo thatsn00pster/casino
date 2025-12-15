@@ -1830,8 +1830,6 @@
             CHICKEN_MULTIPLIERS.expert.push(val);
         }
 
-        // INCREASED HOUSE EDGE FOR LOWER WIN CHANCES
-        const CHICKEN_HOUSE_EDGE = 0.03; // Increased from 0.02 to 0.15 (15% house edge)
 
         class GameApp {
             constructor() {
@@ -4197,26 +4195,47 @@
                 camera.style.transform = `translateX(${targetX}px)`;
             }
 
-            // UPDATED: Lower win chances for Chicken Road
-            attemptChickenHop(targetStep) {
+                        attemptChickenHop(targetStep) {
                 if (!this.chickenState.isPlaying) return;
                 if (targetStep !== this.chickenState.currentStep + 1) return;
 
                 const multipliers = CHICKEN_MULTIPLIERS[this.chickenState.difficulty];
                 const targetMultiplier = multipliers[targetStep];
                 
-                // LOWER WIN CHANCES: Base probability starts at 45% (was 50%) and decreases faster
-                const baseProbability = 0.48; // Reduced from 0.5
-                const probabilityReduction = 0.04; // Increased from 0.08 (faster reduction)
+                // DIFFICULTY-BASED PROBABILITIES
+                let baseProbability, probabilityReduction;
                 
-                // Calculate win probability: decreases faster as multiplier increases
+                switch(this.chickenState.difficulty) {
+                    case 'easy':
+                        baseProbability = 0.75;      // 65% starting chance
+                        probabilityReduction = 0.04; // 4% reduction per step
+                        break;
+                    case 'medium':
+                        baseProbability = 0.55;      // 55% starting chance  
+                        probabilityReduction = 0.06; // 6% reduction per step
+                        break;
+                    case 'hard':
+                        baseProbability = 0.35;      // 45% starting chance
+                        probabilityReduction = 0.08; // 8% reduction per step
+                        break;
+                    case 'expert':
+                        baseProbability = 0.30;      // 35% starting chance
+                        probabilityReduction = 0.10; // 10% reduction per step
+                        break;
+                    default:
+                        baseProbability = 0.55;
+                        probabilityReduction = 0.06;
+                }
+                
+                // Calculate win probability based on current step
                 let winProbability = baseProbability;
                 for (let i = 0; i < targetStep; i++) {
                     winProbability *= (1 - probabilityReduction);
                 }
                 
-                // Apply house edge
-                winProbability = Math.max(0.05, winProbability * (1 - CHICKEN_HOUSE_EDGE));
+                // Apply house edge (same for all difficulties, but could also vary)
+                const HOUSE_EDGE = 0.02; // 2% house edge
+                winProbability = Math.max(0.05, winProbability * (1 - HOUSE_EDGE));
                 
                 const roll = Math.random();
 
