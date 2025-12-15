@@ -1831,7 +1831,7 @@
         }
 
         // INCREASED HOUSE EDGE FOR LOWER WIN CHANCES
-        const CHICKEN_HOUSE_EDGE = 0.05; // Increased from 0.02 to 0.15 (15% house edge)
+        const CHICKEN_HOUSE_EDGE = 0.03; // Increased from 0.02 to 0.15 (15% house edge)
 
         class GameApp {
             constructor() {
@@ -4206,8 +4206,8 @@
                 const targetMultiplier = multipliers[targetStep];
                 
                 // LOWER WIN CHANCES: Base probability starts at 45% (was 50%) and decreases faster
-                const baseProbability = 0.45; // Reduced from 0.5
-                const probabilityReduction = 0.09; // Increased from 0.08 (faster reduction)
+                const baseProbability = 0.48; // Reduced from 0.5
+                const probabilityReduction = 0.04; // Increased from 0.08 (faster reduction)
                 
                 // Calculate win probability: decreases faster as multiplier increases
                 let winProbability = baseProbability;
