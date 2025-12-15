@@ -1831,7 +1831,7 @@
         }
 
         // INCREASED HOUSE EDGE FOR LOWER WIN CHANCES
-        const CHICKEN_HOUSE_EDGE = 0.15; // Increased from 0.02 to 0.15 (15% house edge)
+        const CHICKEN_HOUSE_EDGE = 0.05; // Increased from 0.02 to 0.15 (15% house edge)
 
         class GameApp {
             constructor() {
@@ -1878,7 +1878,7 @@
                     history: [],
                     coinRotation: 0,
                     // LOWER HOUSE EDGE FOR COINFLIP
-                    HOUSE_EDGE: 1.85 // Lowered from 1.95 to 1.85
+                    HOUSE_EDGE: 1.90 // Lowered from 1.95 to 1.85
                 };
                 
                 // Initialize app
@@ -4207,7 +4207,7 @@
                 
                 // LOWER WIN CHANCES: Base probability starts at 45% (was 50%) and decreases faster
                 const baseProbability = 0.45; // Reduced from 0.5
-                const probabilityReduction = 0.12; // Increased from 0.08 (faster reduction)
+                const probabilityReduction = 0.09; // Increased from 0.08 (faster reduction)
                 
                 // Calculate win probability: decreases faster as multiplier increases
                 let winProbability = baseProbability;
@@ -4610,14 +4610,12 @@
                     gameControls.style.opacity = '0.5';
                 }
 
-                // DETERMINE RESULT WITH LOWER WIN CHANCES: 45% win rate instead of 50%
+                // FIXED: Determine actual coin result (heads or tails)
                 const random = Math.random();
-                // Player has 45% chance to win (reduced from 50%)
-                const winThreshold = 0.45;
-                const isWin = random < winThreshold;
-
-                // For display purposes, we still show heads/tails result
-                const result = random < 0.5 ? 'heads' : 'tails';
+                const result = random < 0.5 ? 'heads' : 'tails'; // 50/50 for heads/tails
+                
+                // FIXED: Check if player's choice matches the result
+                const isWin = (choice === result);
 
                 // Animate Coin
                 const coinElement = document.getElementById('coinflip-coin');
