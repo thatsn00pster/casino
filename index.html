@@ -4195,37 +4195,57 @@
                 camera.style.transform = `translateX(${targetX}px)`;
             }
 
-                        attemptChickenHop(targetStep) {
-                if (!this.chickenState.isPlaying) return;
-                if (targetStep !== this.chickenState.currentStep + 1) return;
+attemptChickenHop(targetStep) {
+    if (!this.chickenState.isPlaying) return;
+    if (targetStep !== this.chickenState.currentStep + 1) return;
 
-                const multipliers = CHICKEN_MULTIPLIERS[this.chickenState.difficulty];
-                const targetMultiplier = multipliers[targetStep];
-                
-                // DIFFICULTY-BASED PROBABILITIES
-                let baseProbability, probabilityReduction;
-                
-                switch(this.chickenState.difficulty) {
-                    case 'easy':
-                        baseProbability = 0.75;      // 65% starting chance
-                        probabilityReduction = 0.04; // 4% reduction per step
-                        break;
-                    case 'medium':
-                        baseProbability = 0.55;      // 55% starting chance  
-                        probabilityReduction = 0.06; // 6% reduction per step
-                        break;
-                    case 'hard':
-                        baseProbability = 0.35;      // 45% starting chance
-                        probabilityReduction = 0.08; // 8% reduction per step
-                        break;
-                    case 'expert':
-                        baseProbability = 0.30;      // 35% starting chance
-                        probabilityReduction = 0.10; // 10% reduction per step
-                        break;
-                    default:
-                        baseProbability = 0.75;
-                        probabilityReduction = 0.04;
-                }
+    const multipliers = CHICKEN_MULTIPLIERS[this.chickenState.difficulty];
+    const targetMultiplier = multipliers[targetStep];
+    
+    // DIFFICULTY-BASED PROBABILITIES - MUCH EASIER
+    let baseProbability, probabilityReduction;
+    
+    switch(this.chickenState.difficulty) {
+        case 'easy':
+            baseProbability = 0.85;      // 85% starting chance - VERY EASY
+            probabilityReduction = 0.02; // Only 2% reduction per step
+            break;
+        case 'medium':
+            baseProbability = 0.70;      // 70% starting chance  
+            probabilityReduction = 0.04; // 4% reduction per step
+            break;
+        case 'hard':
+            baseProbability = 0.55;      // 55% starting chance
+            probabilityReduction = 0.06; // 6% reduction per step
+            break;
+        case 'expert':
+            baseProbability = 0.40;      // 40% starting chance
+            probabilityReduction = 0.08; // 8% reduction per step
+            break;
+        default:
+            baseProbability = 0.85;
+            probabilityReduction = 0.02;
+    }
+    
+    // Calculate win probability based on current step
+    let winProbability = baseProbability;
+    for (let i = 0; i < targetStep; i++) {
+        winProbability *= (1 - probabilityReduction);
+    }
+    
+    // NO HOUSE EDGE - or very small
+    // Just ensure minimum 5% chance
+    winProbability = Math.max(0.05, winProbability);
+    
+    const roll = Math.random();
+    console.log(`Step ${targetStep+1}, Chance: ${(winProbability*100).toFixed(1)}%, Roll: ${roll.toFixed(3)}`);
+
+    if (roll <= winProbability) {
+        this.successChickenHop(targetStep, targetMultiplier);
+    } else {
+        this.crashChickenGame(targetStep);
+    }
+}
                 
                 // Calculate win probability based on current step
                 let winProbability = baseProbability;
