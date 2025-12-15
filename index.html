@@ -4197,11 +4197,45 @@
                 camera.style.transform = `translateX(${targetX}px)`;
             }
 
-            // UPDATED: Lower win chances for Chicken Road
-            case 'easy':
-    baseProbability = 0.85;      // 85% starting chance
-    probabilityReduction = 0.02; // Only 2% reduction per step
-    break;
+            // FIXED: attemptChickenHop method - Complete implementation
+            attemptChickenHop(step) {
+                if (!this.chickenState.isPlaying || step !== this.chickenState.currentStep + 1) return;
+
+                const difficulty = this.chickenState.difficulty;
+                const multipliers = CHICKEN_MULTIPLIERS[difficulty];
+                const targetMultiplier = multipliers[step];
+                
+                // Calculate win probability based on difficulty
+                let winProbability;
+                switch(difficulty) {
+                    case 'easy':
+                        winProbability = 0.85 - (step * 0.02); // Starts at 85%, decreases 2% each step
+                        break;
+                    case 'medium':
+                        winProbability = 0.75 - (step * 0.03); // Starts at 75%, decreases 3% each step
+                        break;
+                    case 'hard':
+                        winProbability = 0.65 - (step * 0.04); // Starts at 65%, decreases 4% each step
+                        break;
+                    case 'expert':
+                        winProbability = 0.45 - (step * 0.05); // Starts at 45%, decreases 5% each step
+                        break;
+                    default:
+                        winProbability = 0.85 - (step * 0.02);
+                }
+                
+                // Ensure probability doesn't go below minimum
+                winProbability = Math.max(0.05, winProbability);
+                
+                // Determine if hop is successful
+                const isSuccessful = Math.random() < winProbability;
+                
+                if (isSuccessful) {
+                    this.successChickenHop(step, targetMultiplier);
+                } else {
+                    this.crashChickenGame(step);
+                }
+            }
 
             successChickenHop(step, multiplier) {
                 this.chickenState.currentStep = step;
@@ -4574,8 +4608,7 @@
                 this.playSound('click');
             }
 
-            // UPDATED: Lower win chances for Coinflip (45% chance instead of 50%)
-                        coinflipFlip(choice) {
+            coinflipFlip(choice) {
                 if (!this.coinflipState.isGameActive || this.coinflipState.isFlipping) return;
 
                 this.coinflipState.isFlipping = true;
@@ -4586,11 +4619,11 @@
                     gameControls.style.opacity = '0.5';
                 }
 
-                // FIXED: Determine actual coin result (heads or tails)
+                // Determine actual coin result (heads or tails)
                 const random = Math.random();
                 const result = random < 0.5 ? 'heads' : 'tails'; // 50/50 for heads/tails
                 
-                // FIXED: Check if player's choice matches the result
+                // Check if player's choice matches the result
                 const isWin = (choice === result);
 
                 // Animate Coin
