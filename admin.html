@@ -16,433 +16,82 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        /* [Keep all your existing CSS styles - they're good!] */
+        /* Add any new styles here if needed */
         
-        :root {
-            --primary: #8b5cf6;
-            --secondary: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --bg-dark: #0b0e14;
-            --bg-panel: #161b26;
-            --border: #2a3042;
+        .checkbox-cell {
+            width: 40px;
+            text-align: center;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background: linear-gradient(135deg, #0f0b1f 0%, #1a1035 100%);
-            color: #fff;
-            min-height: 100vh;
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(11, 14, 20, 0.5);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #8b5cf6, #10b981);
-            border-radius: 4px;
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        /* Stats Cards */
-        .stats-card {
+        .bulk-actions {
             background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
             border: 1px solid #334155;
             border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stats-card:hover {
-            transform: translateY(-2px);
-            border-color: #8b5cf6;
-            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
-        }
-        
-        .stats-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #8b5cf6, #10b981);
-        }
-        
-        /* Data Table */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .data-table th {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            padding: 12px 16px;
-            text-align: left;
-            font-weight: 600;
-            color: #8b5cf6;
-            border-bottom: 2px solid #334155;
-        }
-        
-        .data-table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #334155;
-            color: #cbd5e1;
-        }
-        
-        .data-table tr:hover {
-            background: rgba(139, 92, 246, 0.1);
-        }
-        
-        /* Modal */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            margin-bottom: 20px;
             display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
         }
         
-        .modal.active {
-            display: flex;
+        .bulk-actions.show {
+            display: block;
             animation: fadeIn 0.3s ease-out;
         }
         
-        .modal-content {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border-radius: 16px;
+        .email-filter {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .email-tag {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid #8b5cf6;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .email-tag .remove {
+            cursor: pointer;
+            color: #ef4444;
+        }
+        
+        .chat-clear-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .option-card {
+            background: rgba(30, 41, 59, 0.8);
             border: 1px solid #334155;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        /* Tabs */
-        .tab-nav {
-            display: flex;
-            gap: 4px;
-            background: rgba(30, 41, 59, 0.5);
             border-radius: 8px;
-            padding: 4px;
-            margin-bottom: 20px;
-        }
-        
-        .tab-btn {
-            flex: 1;
-            padding: 12px 16px;
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            font-weight: 600;
-            border-radius: 6px;
+            padding: 15px;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
         }
         
-        .tab-btn:hover {
-            background: rgba(139, 92, 246, 0.1);
-            color: #cbd5e1;
+        .option-card:hover {
+            border-color: #8b5cf6;
+            transform: translateY(-2px);
         }
         
-        .tab-btn.active {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        .option-card.selected {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #8b5cf6;
         }
         
-        /* Input Styles */
-        .input-group {
-            margin-bottom: 16px;
-        }
-        
-        .input-group label {
+        .option-card i {
+            font-size: 24px;
+            margin-bottom: 10px;
             display: block;
-            margin-bottom: 6px;
-            color: #94a3b8;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .input-group input,
-        .input-group select,
-        .input-group textarea {
-            width: 100%;
-            padding: 10px 14px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid #334155;
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        
-        .input-group input:focus,
-        .input-group select:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-        }
-        
-        /* Button Styles */
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-        
-        .btn-warning:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
-        }
-        
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 16px 20px;
-            background: #1e293b;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            color: white;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            z-index: 1001;
-            transform: translateX(100px) scale(0.8);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 400px;
-        }
-        
-        .toast.show {
-            transform: translateX(0) scale(1);
-            opacity: 1;
-        }
-        
-        .toast.success {
-            border-color: #10b981;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), #1e293b);
-        }
-        
-        .toast.error {
-            border-color: #ef4444;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), #1e293b);
-        }
-        
-        .toast.warning {
-            border-color: #f59e0b;
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), #1e293b);
-        }
-        
-        /* Status Badges */
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-        }
-        
-        .status-active {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-        
-        .status-banned {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-        
-        .status-pending {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-        
-        /* Loading */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(139, 92, 246, 0.3);
-            border-radius: 50%;
-            border-top-color: #8b5cf6;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Chart Container */
-        .chart-container {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #334155;
-        }
-        
-        /* Search Box */
-        .search-box {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid #334155;
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-        }
-        
-        .search-box i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
-        
-        /* Pagination */
-        .pagination {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        .pagination button {
-            padding: 8px 16px;
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid #334155;
-            border-radius: 6px;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .pagination button:hover {
-            background: rgba(139, 92, 246, 0.1);
-            color: white;
-        }
-        
-        .pagination button.active {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-            border-color: #8b5cf6;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .tab-nav {
-                flex-direction: column;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(1, 1fr) !important;
-            }
-            
-            .modal-content {
-                width: 95%;
-                padding: 16px;
-            }
-            
-            .data-table {
-                font-size: 14px;
-            }
-            
-            .data-table th,
-            .data-table td {
-                padding: 8px 12px;
-            }
         }
     </style>
 </head>
@@ -519,6 +168,10 @@
                         <i class="fa-solid fa-users w-5"></i>
                         Users Management
                     </button>
+                    <button onclick="adminApp.showTab('bulk')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition-all duration-300 flex items-center gap-3">
+                        <i class="fa-solid fa-layer-group w-5"></i>
+                        Bulk Operations
+                    </button>
                     <button onclick="adminApp.showTab('transactions')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition-all duration-300 flex items-center gap-3">
                         <i class="fa-solid fa-money-bill-transfer w-5"></i>
                         Transactions
@@ -527,6 +180,10 @@
                         <i class="fa-solid fa-gamepad w-5"></i>
                         Games Control
                     </button>
+                    <button onclick="adminApp.showTab('chat')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition-all duration-300 flex items-center gap-3">
+                        <i class="fa-solid fa-comments w-5"></i>
+                        Chat Management
+                    </button>
                     <button onclick="adminApp.showTab('announcements')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition-all duration-300 flex items-center gap-3">
                         <i class="fa-solid fa-bullhorn w-5"></i>
                         Announcements
@@ -534,10 +191,6 @@
                     <button onclick="adminApp.showTab('system')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition-all duration-300 flex items-center gap-3">
                         <i class="fa-solid fa-gear w-5"></i>
                         System Settings
-                    </button>
-                    <button onclick="adminApp.showTab('reports')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-800 text-gray-300 hover:text-white transition-all duration-300 flex items-center gap-3">
-                        <i class="fa-solid fa-chart-bar w-5"></i>
-                        Reports & Analytics
                     </button>
                 </div>
                 
@@ -548,13 +201,13 @@
                             <i class="fa-solid fa-coins text-xs"></i>
                             Add Coins to User
                         </button>
-                        <button onclick="adminApp.quickAction('banUser')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-red-900/30 text-red-300 hover:text-red-200 transition-all duration-300 flex items-center gap-2 text-sm">
-                            <i class="fa-solid fa-ban text-xs"></i>
-                            Ban User
+                        <button onclick="adminApp.quickAction('bulkDelete')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-red-900/30 text-red-300 hover:text-red-200 transition-all duration-300 flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-users-slash text-xs"></i>
+                            Bulk Delete Users
                         </button>
-                        <button onclick="adminApp.quickAction('sendAnnouncement')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-blue-900/30 text-blue-300 hover:text-blue-200 transition-all duration-300 flex items-center gap-2 text-sm">
-                            <i class="fa-solid fa-bullhorn text-xs"></i>
-                            Send Announcement
+                        <button onclick="adminApp.quickAction('clearChat')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-blue-900/30 text-blue-300 hover:text-blue-200 transition-all duration-300 flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                            Clear Chat
                         </button>
                         <button onclick="adminApp.quickAction('resetGame')" class="w-full text-left px-4 py-2 rounded-lg hover:bg-yellow-900/30 text-yellow-300 hover:text-yellow-200 transition-all duration-300 flex items-center gap-2 text-sm">
                             <i class="fa-solid fa-rotate text-xs"></i>
@@ -568,133 +221,7 @@
             <main class="flex-1 p-6 overflow-auto max-h-[calc(100vh-73px)]">
                 <!-- Dashboard Tab -->
                 <div id="tab-dashboard" class="tab-content fade-in">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-white mb-2">Dashboard Overview</h2>
-                        <p class="text-gray-400">Real-time statistics and system monitoring</p>
-                    </div>
-                    
-                    <!-- Stats Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 stats-grid">
-                        <div class="stats-card">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="text-gray-400 text-sm mb-1">Total Users</div>
-                                    <div class="text-2xl font-bold text-white" id="statTotalUsers">0</div>
-                                </div>
-                                <i class="fa-solid fa-users text-purple-500 text-2xl"></i>
-                            </div>
-                            <div class="mt-4 text-sm text-gray-400">
-                                <span class="text-green-500"><i class="fa-solid fa-arrow-up mr-1"></i> 24 online</span>
-                            </div>
-                        </div>
-                        
-                        <div class="stats-card">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="text-gray-400 text-sm mb-1">Total Coins</div>
-                                    <div class="text-2xl font-bold text-white" id="statTotalCoins">0</div>
-                                </div>
-                                <i class="fa-solid fa-coins text-yellow-500 text-2xl"></i>
-                            </div>
-                            <div class="mt-4 text-sm text-gray-400">
-                                <span>Circulating in system</span>
-                            </div>
-                        </div>
-                        
-                        <div class="stats-card">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="text-gray-400 text-sm mb-1">Today's Wagers</div>
-                                    <div class="text-2xl font-bold text-white" id="statTodayWagers">0</div>
-                                </div>
-                                <i class="fa-solid fa-money-bill-wave text-green-500 text-2xl"></i>
-                            </div>
-                            <div class="mt-4 text-sm text-gray-400">
-                                <span class="text-green-500"><i class="fa-solid fa-arrow-up mr-1"></i> 12% from yesterday</span>
-                            </div>
-                        </div>
-                        
-                        <div class="stats-card">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="text-gray-400 text-sm mb-1">Active Games</div>
-                                    <div class="text-2xl font-bold text-white" id="statActiveGames">0</div>
-                                </div>
-                                <i class="fa-solid fa-gamepad text-blue-500 text-2xl"></i>
-                            </div>
-                            <div class="mt-4 text-sm text-gray-400">
-                                <span>Currently running</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Recent Activity -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-fire text-orange-500"></i>
-                                Recent Activity
-                            </h3>
-                            <div class="space-y-4" id="recentActivity">
-                                <!-- Activity items will be loaded here -->
-                                <div class="text-center py-8 text-gray-500">
-                                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                                    <p>Loading activity...</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-chart-line text-green-500"></i>
-                                System Health
-                            </h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <div class="flex justify-between text-sm text-gray-400 mb-1">
-                                        <span>Database Connection</span>
-                                        <span class="text-green-500 font-bold">Healthy</span>
-                                    </div>
-                                    <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
-                                        <div class="h-full bg-green-500 w-full"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-sm text-gray-400 mb-1">
-                                        <span>Server Load</span>
-                                        <span class="text-green-500 font-bold">24%</span>
-                                    </div>
-                                    <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
-                                        <div class="h-full bg-green-500 w-[24%]"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-sm text-gray-400 mb-1">
-                                        <span>Memory Usage</span>
-                                        <span class="text-yellow-500 font-bold">68%</span>
-                                    </div>
-                                    <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
-                                        <div class="h-full bg-yellow-500 w-[68%]"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-sm text-gray-400 mb-1">
-                                        <span>Active Connections</span>
-                                        <span class="text-blue-500 font-bold" id="activeConnections">0</span>
-                                    </div>
-                                    <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
-                                        <div class="h-full bg-blue-500 w-[30%]"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-6 pt-4 border-t border-gray-800">
-                                <button onclick="adminApp.refreshStats()" class="btn btn-primary w-full">
-                                    <i class="fa-solid fa-rotate"></i>
-                                    Refresh Statistics
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- ... Keep existing dashboard content ... -->
                 </div>
                 
                 <!-- Users Management Tab -->
@@ -702,6 +229,30 @@
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-white mb-2">Users Management</h2>
                         <p class="text-gray-400">Manage all registered users and their accounts</p>
+                    </div>
+                    
+                    <!-- Bulk Actions Bar -->
+                    <div id="bulkActionsBar" class="bulk-actions">
+                        <div class="flex justify-between items-center">
+                            <div class="text-white">
+                                <i class="fa-solid fa-users mr-2"></i>
+                                <span id="selectedCount">0</span> users selected
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="adminApp.selectAllUsers()" class="btn btn-primary">
+                                    <i class="fa-solid fa-check-double"></i>
+                                    Select All
+                                </button>
+                                <button onclick="adminApp.deselectAllUsers()" class="btn btn-warning">
+                                    <i class="fa-solid fa-times"></i>
+                                    Deselect All
+                                </button>
+                                <button onclick="adminApp.deleteSelectedUsers()" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                    Delete Selected
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Search and Filters -->
@@ -725,6 +276,10 @@
                                     <i class="fa-solid fa-user-plus"></i>
                                     Add User
                                 </button>
+                                <button onclick="adminApp.toggleBulkMode()" class="btn btn-warning">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                    Bulk Mode
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -735,6 +290,9 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
+                                        <th class="checkbox-cell">
+                                            <input type="checkbox" id="selectAllCheckbox" onchange="adminApp.toggleSelectAll()">
+                                        </th>
                                         <th>User ID</th>
                                         <th>Username</th>
                                         <th>Email</th>
@@ -746,575 +304,297 @@
                                 </thead>
                                 <tbody id="usersTableBody">
                                     <!-- Users will be loaded here -->
-                                    <tr>
-                                        <td colspan="7" class="text-center py-8 text-gray-500">
-                                            <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                                            <p>Loading users...</p>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="p-4 border-t border-gray-800">
-                            <div class="pagination" id="usersPagination">
-                                <!-- Pagination will be generated here -->
-                            </div>
+                            <div class="pagination" id="usersPagination"></div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Transactions Tab -->
-                <div id="tab-transactions" class="tab-content hidden fade-in">
+                <!-- Bulk Operations Tab -->
+                <div id="tab-bulk" class="tab-content hidden fade-in">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-white mb-2">Transactions History</h2>
-                        <p class="text-gray-400">Monitor all financial transactions and game wagers</p>
-                    </div>
-                    
-                    <!-- Filters -->
-                    <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-4 mb-6">
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div>
-                                <label class="text-sm text-gray-400 mb-1 block">Type</label>
-                                <select id="txTypeFilter" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white" onchange="adminApp.filterTransactions()">
-                                    <option value="all">All Types</option>
-                                    <option value="win">Wins</option>
-                                    <option value="loss">Losses</option>
-                                    <option value="transfer">Transfers</option>
-                                    <option value="deposit">Deposits</option>
-                                    <option value="withdrawal">Withdrawals</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="text-sm text-gray-400 mb-1 block">Game</label>
-                                <select id="txGameFilter" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white" onchange="adminApp.filterTransactions()">
-                                    <option value="all">All Games</option>
-                                    <option value="blackjack">Blackjack</option>
-                                    <option value="mines">Mines</option>
-                                    <option value="system">System</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="text-sm text-gray-400 mb-1 block">Date From</label>
-                                <input type="date" id="txDateFrom" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white" onchange="adminApp.filterTransactions()">
-                            </div>
-                            <div>
-                                <label class="text-sm text-gray-400 mb-1 block">Date To</label>
-                                <input type="date" id="txDateTo" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white" onchange="adminApp.filterTransactions()">
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <button onclick="adminApp.exportTransactions()" class="btn btn-success">
-                                <i class="fa-solid fa-file-export"></i>
-                                Export CSV
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Transactions Table -->
-                    <div class="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>User</th>
-                                        <th>Type</th>
-                                        <th>Amount</th>
-                                        <th>Game</th>
-                                        <th>Timestamp</th>
-                                        <th>Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="transactionsTableBody">
-                                    <!-- Transactions will be loaded here -->
-                                    <tr>
-                                        <td colspan="7" class="text-center py-8 text-gray-500">
-                                            <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                                            <p>Loading transactions...</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="p-4 border-t border-gray-800">
-                            <div class="pagination" id="transactionsPagination">
-                                <!-- Pagination will be generated here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Games Control Tab -->
-                <div id="tab-games" class="tab-content hidden fade-in">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-white mb-2">Games Control</h2>
-                        <p class="text-gray-400">Configure and monitor casino games</p>
+                        <h2 class="text-2xl font-bold text-white mb-2">Bulk Operations</h2>
+                        <p class="text-gray-400">Perform mass operations on users and data</p>
                     </div>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Blackjack Settings -->
+                        <!-- Email Filter Deletion -->
                         <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
                             <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-diamond text-green-500"></i>
-                                Blackjack Settings
+                                <i class="fa-solid fa-envelope text-red-500"></i>
+                                Delete by Email Domain
                             </h3>
                             <div class="space-y-4">
                                 <div class="input-group">
-                                    <label>Minimum Bet</label>
-                                    <input type="number" id="bjMinBet" value="10" class="w-full">
+                                    <label>Email Domains to KEEP (comma separated)</label>
+                                    <div class="text-sm text-gray-400 mb-2">
+                                        Enter domains like: gmail.com, yahoo.com, outlook.com
+                                    </div>
+                                    <input type="text" id="keepDomains" placeholder="gmail.com, yahoo.com, outlook.com" class="w-full">
                                 </div>
+                                
+                                <div id="domainTags" class="email-filter">
+                                    <!-- Domain tags will appear here -->
+                                </div>
+                                
                                 <div class="input-group">
-                                    <label>Maximum Bet</label>
-                                    <input type="number" id="bjMaxBet" value="10000" class="w-full">
+                                    <label>Test Mode</label>
+                                    <div class="flex items-center gap-2">
+                                        <input type="checkbox" id="testMode" checked>
+                                        <span class="text-sm text-gray-400">Show preview only (no deletion)</span>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <label>Dealer Stand On</label>
-                                    <select id="bjDealerStand" class="w-full">
-                                        <option value="17">17 or higher</option>
-                                        <option value="16">16 or higher</option>
-                                        <option value="15">15 or higher</option>
-                                    </select>
+                                
+                                <div class="stats-card mt-4">
+                                    <div class="text-center">
+                                        <div class="text-gray-400 text-sm mb-1">Users to be deleted</div>
+                                        <div class="text-2xl font-bold text-white" id="deleteCount">0</div>
+                                        <div class="text-xs text-gray-500 mt-2" id="deletePreview"></div>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <label>Blackjack Payout</label>
-                                    <select id="bjPayout" class="w-full">
-                                        <option value="1.5">3:2 (1.5x)</option>
-                                        <option value="1.2">6:5 (1.2x)</option>
-                                        <option value="1">1:1 (1x)</option>
-                                    </select>
-                                </div>
-                                <button onclick="adminApp.saveBlackjackSettings()" class="btn btn-success w-full">
-                                    <i class="fa-solid fa-save"></i>
-                                    Save Blackjack Settings
+                                
+                                <button onclick="adminApp.previewEmailDeletion()" class="btn btn-warning w-full">
+                                    <i class="fa-solid fa-eye"></i>
+                                    Preview Deletion
+                                </button>
+                                <button onclick="adminApp.executeEmailDeletion()" class="btn btn-danger w-full">
+                                    <i class="fa-solid fa-trash"></i>
+                                    Delete Users
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Mines Settings -->
+                        <!-- Mass User Operations -->
                         <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
                             <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-bomb text-yellow-500"></i>
-                                Mines Settings
+                                <i class="fa-solid fa-users-slash text-yellow-500"></i>
+                                Mass User Operations
                             </h3>
                             <div class="space-y-4">
                                 <div class="input-group">
-                                    <label>Minimum Bet</label>
-                                    <input type="number" id="minesMinBet" value="1" class="w-full">
+                                    <label>Operation Type</label>
+                                    <select id="massOperation" class="w-full">
+                                        <option value="delete_inactive">Delete Inactive Users</option>
+                                        <option value="delete_low_balance">Delete Low Balance (< 100 coins)</option>
+                                        <option value="delete_no_deposit">Delete No Deposit Users</option>
+                                        <option value="reset_balances">Reset All Balances to 500</option>
+                                        <option value="ban_all">Ban All Users (Except Admin)</option>
+                                    </select>
                                 </div>
+                                
                                 <div class="input-group">
-                                    <label>Maximum Bet</label>
-                                    <input type="number" id="minesMaxBet" value="5000" class="w-full">
+                                    <label>Criteria</label>
+                                    <div class="text-sm text-gray-400">
+                                        <div class="mt-2">
+                                            <input type="checkbox" id="criteriaTestMode" checked class="mr-2">
+                                            <label for="criteriaTestMode">Test Mode (Preview only)</label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <label>Maximum Mines</label>
-                                    <input type="number" id="minesMaxMines" value="24" min="1" max="24" class="w-full">
+                                
+                                <div class="stats-card">
+                                    <div class="text-center">
+                                        <div class="text-gray-400 text-sm mb-1">Affected Users</div>
+                                        <div class="text-2xl font-bold text-white" id="affectedCount">0</div>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <label>House Edge (%)</label>
-                                    <input type="number" id="minesHouseEdge" value="1" step="0.1" class="w-full">
-                                </div>
-                                <button onclick="adminApp.saveMinesSettings()" class="btn btn-success w-full">
-                                    <i class="fa-solid fa-save"></i>
-                                    Save Mines Settings
+                                
+                                <button onclick="adminApp.previewMassOperation()" class="btn btn-warning w-full">
+                                    <i class="fa-solid fa-search"></i>
+                                    Preview Operation
+                                </button>
+                                <button onclick="adminApp.executeMassOperation()" class="btn btn-danger w-full">
+                                    <i class="fa-solid fa-bolt"></i>
+                                    Execute Operation
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Game Statistics -->
+                        <!-- Quick Filters -->
                         <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 lg:col-span-2">
-                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-chart-pie text-blue-500"></i>
-                                Game Statistics
-                            </h3>
+                            <h3 class="text-lg font-bold text-white mb-4">Quick Filter Actions</h3>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="stats-card">
-                                    <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-1">Total Games Played</div>
-                                        <div class="text-2xl font-bold text-white" id="totalGamesPlayed">0</div>
-                                    </div>
-                                </div>
-                                <div class="stats-card">
-                                    <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-1">Total Wagered</div>
-                                        <div class="text-2xl font-bold text-white" id="totalWagered">0</div>
-                                    </div>
-                                </div>
-                                <div class="stats-card">
-                                    <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-1">House Profit</div>
-                                        <div class="text-2xl font-bold text-white" id="houseProfit">0</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <button onclick="adminApp.resetGameStats()" class="btn btn-danger">
+                                <button onclick="adminApp.quickFilter('delete_fake_emails')" class="btn btn-danger">
                                     <i class="fa-solid fa-trash"></i>
-                                    Reset Game Statistics
+                                    Delete Fake Emails
                                 </button>
-                                <button onclick="adminApp.recalculateStats()" class="btn btn-warning ml-2">
-                                    <i class="fa-solid fa-calculator"></i>
-                                    Recalculate Stats
+                                <button onclick="adminApp.quickFilter('delete_test_accounts')" class="btn btn-danger">
+                                    <i class="fa-solid fa-vial"></i>
+                                    Delete Test Accounts
                                 </button>
+                                <button onclick="adminApp.quickFilter('clear_banned')" class="btn btn-warning">
+                                    <i class="fa-solid fa-ban"></i>
+                                    Clear Banned Users
+                                </button>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-400">
+                                <p><i class="fa-solid fa-info-circle mr-2"></i>Fake emails include: test@, temp@, fake@, example@, user@test.com, etc.</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Announcements Tab -->
-                <div id="tab-announcements" class="tab-content hidden fade-in">
+                <!-- Chat Management Tab -->
+                <div id="tab-chat" class="tab-content hidden fade-in">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-white mb-2">Announcements</h2>
-                        <p class="text-gray-400">Send messages and notifications to all users</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- Create Announcement -->
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 lg:col-span-2">
-                            <h3 class="text-lg font-bold text-white mb-4">Create New Announcement</h3>
-                            <div class="space-y-4">
-                                <div class="input-group">
-                                    <label>Title</label>
-                                    <input type="text" id="announcementTitle" placeholder="Enter announcement title" class="w-full">
-                                </div>
-                                <div class="input-group">
-                                    <label>Message</label>
-                                    <textarea id="announcementMessage" rows="5" placeholder="Enter your message..." class="w-full"></textarea>
-                                </div>
-                                <div class="input-group">
-                                    <label>Type</label>
-                                    <select id="announcementType" class="w-full">
-                                        <option value="info">Information</option>
-                                        <option value="success">Success</option>
-                                        <option value="warning">Warning</option>
-                                        <option value="error">Error</option>
-                                        <option value="maintenance">Maintenance</option>
-                                    </select>
-                                </div>
-                                <div class="input-group">
-                                    <label>
-                                        <input type="checkbox" id="announcementImportant" class="mr-2">
-                                        Mark as Important
-                                    </label>
-                                </div>
-                                <div class="input-group">
-                                    <label>
-                                        <input type="checkbox" id="announcementPopup" class="mr-2" checked>
-                                        Show as Popup
-                                    </label>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button onclick="adminApp.sendAnnouncement()" class="btn btn-success">
-                                        <i class="fa-solid fa-paper-plane"></i>
-                                        Send Now
-                                    </button>
-                                    <button onclick="adminApp.scheduleAnnouncement()" class="btn btn-primary">
-                                        <i class="fa-solid fa-clock"></i>
-                                        Schedule
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Recent Announcements -->
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4">Recent Announcements</h3>
-                            <div class="space-y-4" id="recentAnnouncements">
-                                <!-- Announcements will be loaded here -->
-                                <div class="text-center py-8 text-gray-500">
-                                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                                    <p>Loading announcements...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- System Settings Tab -->
-                <div id="tab-system" class="tab-content hidden fade-in">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-white mb-2">System Settings</h2>
-                        <p class="text-gray-400">Configure system-wide settings and parameters</p>
+                        <h2 class="text-2xl font-bold text-white mb-2">Chat Management</h2>
+                        <p class="text-gray-400">Manage chat messages and moderation</p>
                     </div>
                     
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- General Settings -->
+                        <!-- Clear Chat Options -->
                         <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4">General Settings</h3>
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-broom text-blue-500"></i>
+                                Clear Chat Messages
+                            </h3>
                             <div class="space-y-4">
                                 <div class="input-group">
-                                    <label>Site Name</label>
-                                    <input type="text" id="siteName" value="Moon Casino" class="w-full">
+                                    <label>Clear Options</label>
+                                    <div id="chatClearOptions" class="chat-clear-options">
+                                        <div class="option-card" onclick="adminApp.selectClearOption('all')" data-option="all">
+                                            <i class="fa-solid fa-trash text-red-500"></i>
+                                            <div class="font-bold">Clear All</div>
+                                            <div class="text-xs text-gray-400">Delete all chat messages</div>
+                                        </div>
+                                        <div class="option-card" onclick="adminApp.selectClearOption('old')" data-option="old">
+                                            <i class="fa-solid fa-clock text-yellow-500"></i>
+                                            <div class="font-bold">Clear Old Messages</div>
+                                            <div class="text-xs text-gray-400">Older than 7 days</div>
+                                        </div>
+                                        <div class="option-card" onclick="adminApp.selectClearOption('system')" data-option="system">
+                                            <i class="fa-solid fa-robot text-blue-500"></i>
+                                            <div class="font-bold">Clear System Messages</div>
+                                            <div class="text-xs text-gray-400">Bot/System messages only</div>
+                                        </div>
+                                    </div>
                                 </div>
+                                
+                                <div id="customTimeOptions" class="hidden">
+                                    <div class="input-group">
+                                        <label>Delete messages older than (days)</label>
+                                        <input type="number" id="daysOld" value="7" min="1" max="365" class="w-full">
+                                    </div>
+                                </div>
+                                
                                 <div class="input-group">
-                                    <label>Starting Balance</label>
-                                    <input type="number" id="startingBalance" value="500" class="w-full">
+                                    <label>Exclude Messages Containing</label>
+                                    <input type="text" id="excludeKeywords" placeholder="important, announcement, admin (comma separated)" class="w-full">
                                 </div>
-                                <div class="input-group">
-                                    <label>Free Coins Amount</label>
-                                    <input type="number" id="freeCoinsAmount" value="500" class="w-full">
+                                
+                                <div class="stats-card">
+                                    <div class="text-center">
+                                        <div class="text-gray-400 text-sm mb-1">Messages to be deleted</div>
+                                        <div class="text-2xl font-bold text-white" id="chatDeleteCount">0</div>
+                                        <div class="text-xs text-gray-500">Total messages in chat: <span id="totalChatCount">0</span></div>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <label>Free Coins Cooldown (hours)</label>
-                                    <input type="number" id="freeCoinsCooldown" value="1" class="w-full">
-                                </div>
-                                <div class="input-group">
-                                    <label>Max Transfer Amount</label>
-                                    <input type="number" id="maxTransferAmount" value="10000" class="w-full">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Security Settings -->
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4">Security Settings</h3>
-                            <div class="space-y-4">
-                                <div class="input-group">
-                                    <label>Admin Key</label>
-                                    <input type="password" id="adminKeyChange" placeholder="Enter new admin key" class="w-full">
-                                </div>
-                                <div class="input-group">
-                                    <label>Max Login Attempts</label>
-                                    <input type="number" id="maxLoginAttempts" value="5" class="w-full">
-                                </div>
-                                <div class="input-group">
-                                    <label>Session Timeout (minutes)</label>
-                                    <input type="number" id="sessionTimeout" value="30" class="w-full">
-                                </div>
-                                <div class="input-group">
-                                    <label>IP Whitelist</label>
-                                    <textarea id="ipWhitelist" rows="3" placeholder="Enter allowed IP addresses (one per line)" class="w-full"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Maintenance -->
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 lg:col-span-2">
-                            <h3 class="text-lg font-bold text-white mb-4">Maintenance & Tools</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <button onclick="adminApp.toggleMaintenance()" class="btn btn-warning">
-                                    <i class="fa-solid fa-screwdriver-wrench"></i>
-                                    Toggle Maintenance
+                                
+                                <button onclick="adminApp.previewChatClear()" class="btn btn-warning w-full">
+                                    <i class="fa-solid fa-eye"></i>
+                                    Preview Clear
                                 </button>
-                                <button onclick="adminApp.clearChat()" class="btn btn-danger">
+                                <button onclick="adminApp.clearChatMessages()" class="btn btn-danger w-full">
                                     <i class="fa-solid fa-trash"></i>
-                                    Clear Chat
-                                </button>
-                                <button onclick="adminApp.backupDatabase()" class="btn btn-primary">
-                                    <i class="fa-solid fa-database"></i>
-                                    Backup Database
-                                </button>
-                                <button onclick="adminApp.clearCache()" class="btn btn-warning">
-                                    <i class="fa-solid fa-broom"></i>
-                                    Clear Cache
-                                </button>
-                            </div>
-                            <div class="mt-6 pt-4 border-t border-gray-800">
-                                <button onclick="adminApp.saveSystemSettings()" class="btn btn-success">
-                                    <i class="fa-solid fa-save"></i>
-                                    Save All Settings
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Reports & Analytics Tab -->
-                <div id="tab-reports" class="tab-content hidden fade-in">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-white mb-2">Reports & Analytics</h2>
-                        <p class="text-gray-400">Generate reports and view analytics</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Report Generator -->
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4">Generate Report</h3>
-                            <div class="space-y-4">
-                                <div class="input-group">
-                                    <label>Report Type</label>
-                                    <select id="reportType" class="w-full">
-                                        <option value="daily">Daily Summary</option>
-                                        <option value="weekly">Weekly Summary</option>
-                                        <option value="monthly">Monthly Summary</option>
-                                        <option value="users">User Activity</option>
-                                        <option value="financial">Financial Report</option>
-                                        <option value="games">Games Performance</option>
-                                    </select>
-                                </div>
-                                <div class="input-group">
-                                    <label>Date Range</label>
-                                    <div class="flex gap-2">
-                                        <input type="date" id="reportDateFrom" class="flex-1">
-                                        <input type="date" id="reportDateTo" class="flex-1">
-                                    </div>
-                                </div>
-                                <div class="input-group">
-                                    <label>Format</label>
-                                    <select id="reportFormat" class="w-full">
-                                        <option value="html">HTML</option>
-                                        <option value="csv">CSV</option>
-                                        <option value="json">JSON</option>
-                                        <option value="pdf">PDF</option>
-                                    </select>
-                                </div>
-                                <button onclick="adminApp.generateReport()" class="btn btn-success w-full">
-                                    <i class="fa-solid fa-file-export"></i>
-                                    Generate Report
+                                    Clear Chat Messages
                                 </button>
                             </div>
                         </div>
                         
-                        <!-- Analytics Overview -->
+                        <!-- Chat Statistics -->
                         <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
-                            <h3 class="text-lg font-bold text-white mb-4">Analytics Overview</h3>
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-chart-bar text-green-500"></i>
+                                Chat Statistics
+                            </h3>
                             <div class="space-y-4">
                                 <div class="stats-card">
                                     <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-1">Active Users (24h)</div>
-                                        <div class="text-2xl font-bold text-white" id="activeUsers24h">0</div>
+                                        <div class="text-gray-400 text-sm mb-1">Total Messages</div>
+                                        <div class="text-2xl font-bold text-white" id="totalMessages">0</div>
                                     </div>
                                 </div>
+                                
                                 <div class="stats-card">
                                     <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-1">New Users (Today)</div>
-                                        <div class="text-2xl font-bold text-white" id="newUsersToday">0</div>
+                                        <div class="text-gray-400 text-sm mb-1">Today's Messages</div>
+                                        <div class="text-2xl font-bold text-white" id="todayMessages">0</div>
                                     </div>
                                 </div>
+                                
                                 <div class="stats-card">
                                     <div class="text-center">
-                                        <div class="text-gray-400 text-sm mb-1">Total Wagered (Today)</div>
-                                        <div class="text-2xl font-bold text-white" id="totalWageredToday">0</div>
+                                        <div class="text-gray-400 text-sm mb-1">Active Users in Chat</div>
+                                        <div class="text-2xl font-bold text-white" id="activeChatUsers">0</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="mt-4">
-                                <button onclick="adminApp.refreshAnalytics()" class="btn btn-primary w-full">
+                                
+                                <button onclick="adminApp.loadChatStats()" class="btn btn-primary w-full">
                                     <i class="fa-solid fa-rotate"></i>
-                                    Refresh Analytics
+                                    Refresh Statistics
                                 </button>
                             </div>
-                        </div>
-                        
-                        <!-- Recent Reports -->
-                        <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 lg:col-span-2">
-                            <h3 class="text-lg font-bold text-white mb-4">Recent Reports</h3>
-                            <div class="overflow-x-auto">
-                                <table class="data-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Report ID</th>
-                                            <th>Type</th>
-                                            <th>Date Range</th>
-                                            <th>Generated By</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="reportsTableBody">
-                                        <tr>
-                                            <td colspan="5" class="text-center py-8 text-gray-500">
-                                                No reports generated yet
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            
+                            <div class="mt-6 pt-4 border-t border-gray-800">
+                                <h4 class="text-sm font-bold text-white mb-2">Recent Messages Preview</h4>
+                                <div class="space-y-2 max-h-60 overflow-y-auto" id="recentChatMessages">
+                                    <!-- Chat messages will load here -->
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                <!-- [Keep other tabs: transactions, games, announcements, system - unchanged] -->
+                
             </main>
         </div>
     </div>
     
     <!-- Modals -->
+    <!-- [Keep existing modals] -->
     
-    <!-- Add/Edit User Modal -->
-    <div id="userModal" class="modal">
+    <!-- New Modals for Bulk Operations -->
+    <div id="bulkDeleteModal" class="modal">
         <div class="modal-content p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-white" id="userModalTitle">Add New User</h3>
-                <button onclick="adminApp.closeModal('userModal')" class="text-gray-400 hover:text-white">
+                <h3 class="text-xl font-bold text-white">Confirm Bulk Deletion</h3>
+                <button onclick="adminApp.closeModal('bulkDeleteModal')" class="text-gray-400 hover:text-white">
                     <i class="fa-solid fa-times text-xl"></i>
                 </button>
             </div>
             
             <div class="space-y-4">
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" id="modalUsername" class="w-full">
+                <div class="text-center py-4">
+                    <i class="fa-solid fa-triangle-exclamation text-red-500 text-4xl mb-4"></i>
+                    <h4 class="text-lg font-bold text-white mb-2">Warning!</h4>
+                    <p class="text-gray-400">You are about to delete <span id="bulkDeleteCount" class="text-red-500 font-bold">0</span> users.</p>
+                    <p class="text-gray-400 text-sm mt-2">This action cannot be undone!</p>
                 </div>
+                
                 <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="modalEmail" class="w-full">
+                    <label>Type "DELETE" to confirm</label>
+                    <input type="text" id="bulkDeleteConfirm" placeholder="Type DELETE here" class="w-full">
                 </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="modalPassword" class="w-full">
-                </div>
-                <div class="input-group">
-                    <label>Initial Balance</label>
-                    <input type="number" id="modalBalance" value="500" class="w-full">
-                </div>
-                <div class="input-group">
-                    <label>Status</label>
-                    <select id="modalStatus" class="w-full">
-                        <option value="active">Active</option>
-                        <option value="banned">Banned</option>
-                        <option value="suspended">Suspended</option>
-                    </select>
-                </div>
+                
                 <div class="flex gap-2">
-                    <button onclick="adminApp.saveUser()" class="btn btn-success flex-1">
-                        <i class="fa-solid fa-save"></i>
-                        Save User
+                    <button onclick="adminApp.executeBulkDelete()" class="btn btn-danger flex-1">
+                        <i class="fa-solid fa-trash"></i>
+                        Confirm Delete
                     </button>
-                    <button onclick="adminApp.closeModal('userModal')" class="btn btn-danger">
+                    <button onclick="adminApp.closeModal('bulkDeleteModal')" class="btn btn-primary">
                         Cancel
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Quick Action Modal -->
-    <div id="quickActionModal" class="modal">
-        <div class="modal-content p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-white" id="quickActionTitle">Quick Action</h3>
-                <button onclick="adminApp.closeModal('quickActionModal')" class="text-gray-400 hover:text-white">
-                    <i class="fa-solid fa-times text-xl"></i>
-                </button>
-            </div>
-            
-            <div id="quickActionContent">
-                <!-- Content will be loaded dynamically -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- Confirmation Modal -->
-    <div id="confirmModal" class="modal">
-        <div class="modal-content p-6">
-            <div class="text-center mb-6">
-                <i class="fa-solid fa-triangle-exclamation text-yellow-500 text-4xl mb-4"></i>
-                <h3 class="text-xl font-bold text-white mb-2" id="confirmTitle">Confirm Action</h3>
-                <p class="text-gray-400" id="confirmMessage">Are you sure you want to perform this action?</p>
-            </div>
-            
-            <div class="flex gap-2 justify-center">
-                <button onclick="adminApp.confirmAction(true)" class="btn btn-danger">
-                    <i class="fa-solid fa-check"></i>
-                    Confirm
-                </button>
-                <button onclick="adminApp.confirmAction(false)" class="btn btn-primary">
-                    <i class="fa-solid fa-times"></i>
-                    Cancel
-                </button>
-            </div>
-        </div>
-    </div>
 
     <script>
-        // Firebase Configuration (Same as main app)
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBLmhwz-ocTNaZwWchcpWl3N0hJMlsskts",
             authDomain: "nebula-48dbd.firebaseapp.com",
@@ -1332,17 +612,19 @@
 
         class AdminApp {
             constructor() {
-                this.adminKey = 'mooncasino2024'; // Default admin key
+                this.adminKey = 'mooncasino2024';
                 this.currentUser = null;
                 this.currentTab = 'dashboard';
                 this.users = [];
-                this.transactions = [];
-                this.confirmCallback = null;
+                this.selectedUsers = new Set();
+                this.bulkMode = false;
                 this.currentPage = {
                     users: 1,
                     transactions: 1
                 };
                 this.itemsPerPage = 10;
+                this.clearChatOption = 'all';
+                this.emailDomains = ['gmail.com', 'yahoo.com', 'outlook.com'];
                 
                 this.init();
             }
@@ -1350,139 +632,632 @@
             init() {
                 this.checkAuth();
                 this.loadStats();
-                setInterval(() => this.loadStats(), 30000); // Refresh every 30 seconds
+                this.loadEmailDomains();
+                setInterval(() => this.loadStats(), 30000);
             }
 
-            showToast(message, type = 'success') {
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                toast.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-exclamation-triangle'} text-lg"></i>
-                        <span class="font-medium">${message}</span>
-                    </div>
-                `;
-                
-                document.getElementById('toastContainer').appendChild(toast);
-                
-                setTimeout(() => toast.classList.add('show'), 10);
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            }
+            // [Keep all existing methods: showToast, login, logout, etc.]
 
-            login() {
-                const key = document.getElementById('adminKey').value;
+            // NEW: Bulk User Management Methods
+            toggleBulkMode() {
+                this.bulkMode = !this.bulkMode;
+                const bulkBar = document.getElementById('bulkActionsBar');
+                const toggleBtn = document.querySelector('button[onclick="adminApp.toggleBulkMode()"]');
                 
-                if (key === this.adminKey) {
-                    document.getElementById('loginModal').classList.remove('active');
-                    document.getElementById('adminPanel').classList.remove('hidden');
-                    this.showToast('Welcome to Admin Panel!', 'success');
-                    
-                    // Load initial data
-                    this.loadUsers();
-                    this.loadTransactions();
-                    this.loadRecentActivity();
-                    this.loadAnnouncements();
+                if (this.bulkMode) {
+                    bulkBar.classList.add('show');
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-times mr-2"></i>Exit Bulk Mode';
+                    toggleBtn.classList.remove('btn-warning');
+                    toggleBtn.classList.add('btn-danger');
                 } else {
-                    this.showToast('Invalid admin key!', 'error');
+                    bulkBar.classList.remove('show');
+                    this.deselectAllUsers();
+                    toggleBtn.innerHTML = '<i class="fa-solid fa-layer-group mr-2"></i>Bulk Mode';
+                    toggleBtn.classList.remove('btn-danger');
+                    toggleBtn.classList.add('btn-warning');
                 }
+                
+                // Refresh table to show/hide checkboxes
+                this.displayUsers();
             }
 
-            logout() {
-                document.getElementById('loginModal').classList.add('active');
-                document.getElementById('adminPanel').classList.add('hidden');
-                this.showToast('Logged out successfully', 'warning');
-            }
-
-            checkAuth() {
-                // Check if already logged in (for session persistence)
-                const savedKey = localStorage.getItem('adminKey');
-                if (savedKey === this.adminKey) {
-                    this.login();
+            toggleUserSelection(userId) {
+                if (this.selectedUsers.has(userId)) {
+                    this.selectedUsers.delete(userId);
+                } else {
+                    this.selectedUsers.add(userId);
                 }
+                this.updateSelectedCount();
             }
 
-            showTab(tabName) {
-                // Hide all tabs
-                document.querySelectorAll('.tab-content').forEach(tab => {
-                    tab.classList.add('hidden');
+            selectAllUsers() {
+                const currentPageUsers = this.users.slice(
+                    (this.currentPage.users - 1) * this.itemsPerPage,
+                    this.currentPage.users * this.itemsPerPage
+                );
+                
+                currentPageUsers.forEach(user => {
+                    this.selectedUsers.add(user.id);
                 });
                 
-                // Show selected tab
-                document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-                this.currentTab = tabName;
-                
-                // Load tab-specific data
-                switch(tabName) {
-                    case 'users':
-                        this.loadUsers();
-                        break;
-                    case 'transactions':
-                        this.loadTransactions();
-                        break;
-                    case 'games':
-                        this.loadGameStats();
-                        break;
-                    case 'announcements':
-                        this.loadAnnouncements();
-                        break;
-                    case 'reports':
-                        this.loadReports();
-                        break;
+                document.getElementById('selectAllCheckbox').checked = true;
+                this.updateSelectedCount();
+                this.displayUsers(); // Refresh to show all checked
+            }
+
+            deselectAllUsers() {
+                this.selectedUsers.clear();
+                document.getElementById('selectAllCheckbox').checked = false;
+                this.updateSelectedCount();
+                this.displayUsers(); // Refresh to show all unchecked
+            }
+
+            toggleSelectAll() {
+                const checkbox = document.getElementById('selectAllCheckbox');
+                if (checkbox.checked) {
+                    this.selectAllUsers();
+                } else {
+                    this.deselectAllUsers();
                 }
             }
 
-            async loadStats() {
+            updateSelectedCount() {
+                document.getElementById('selectedCount').textContent = this.selectedUsers.size;
+            }
+
+            deleteSelectedUsers() {
+                if (this.selectedUsers.size === 0) {
+                    this.showToast('No users selected', 'warning');
+                    return;
+                }
+                
+                document.getElementById('bulkDeleteCount').textContent = this.selectedUsers.size;
+                document.getElementById('bulkDeleteConfirm').value = '';
+                this.openModal('bulkDeleteModal');
+            }
+
+            async executeBulkDelete() {
+                const confirmText = document.getElementById('bulkDeleteConfirm').value;
+                if (confirmText !== 'DELETE') {
+                    this.showToast('Please type DELETE to confirm', 'error');
+                    return;
+                }
+                
                 try {
-                    // Load total users
-                    const usersSnapshot = await database.ref('users').once('value');
-                    const totalUsers = usersSnapshot.numChildren();
-                    document.getElementById('statTotalUsers').textContent = totalUsers.toLocaleString();
-                    
-                    // Calculate total coins
-                    let totalCoins = 0;
-                    usersSnapshot.forEach(child => {
-                        const user = child.val();
-                        totalCoins += user.balance || 0;
+                    const deletePromises = [];
+                    this.selectedUsers.forEach(userId => {
+                        deletePromises.push(database.ref('users/' + userId).remove());
+                        // Also delete user's transactions
+                        deletePromises.push(
+                            database.ref('transactions')
+                                .orderByChild('userId')
+                                .equalTo(userId)
+                                .once('value')
+                                .then(snapshot => {
+                                    const updates = {};
+                                    snapshot.forEach(child => {
+                                        updates[child.key] = null;
+                                    });
+                                    return database.ref('transactions').update(updates);
+                                })
+                        );
                     });
-                    document.getElementById('statTotalCoins').textContent = totalCoins.toLocaleString();
                     
-                    // Load online users
-                    const onlineSnapshot = await database.ref('online').once('value');
-                    const onlineCount = onlineSnapshot.numChildren();
-                    document.getElementById('activeConnections').textContent = onlineCount;
+                    await Promise.all(deletePromises);
                     
-                    // Update active games (simulated)
-                    document.getElementById('statActiveGames').textContent = Math.floor(Math.random() * 50 + 10);
-                    
-                    // Update today's wagers (simulated)
-                    document.getElementById('statTodayWagers').textContent = Math.floor(Math.random() * 10000 + 5000).toLocaleString();
+                    this.showToast(`Deleted ${this.selectedUsers.size} users successfully`, 'success');
+                    this.selectedUsers.clear();
+                    this.closeModal('bulkDeleteModal');
+                    this.loadUsers();
                     
                 } catch (error) {
-                    console.error('Error loading stats:', error);
+                    console.error('Error deleting users:', error);
+                    this.showToast('Error deleting users', 'error');
                 }
             }
 
-            async loadUsers() {
+            // NEW: Email Domain Filter Deletion
+            loadEmailDomains() {
+                const savedDomains = localStorage.getItem('emailDomains');
+                if (savedDomains) {
+                    this.emailDomains = JSON.parse(savedDomains);
+                }
+                this.updateDomainTags();
+            }
+
+            updateDomainTags() {
+                const container = document.getElementById('domainTags');
+                container.innerHTML = this.emailDomains.map(domain => `
+                    <div class="email-tag">
+                        ${domain}
+                        <span class="remove" onclick="adminApp.removeDomain('${domain}')">
+                            <i class="fa-solid fa-times"></i>
+                        </span>
+                    </div>
+                `).join('');
+                
+                document.getElementById('keepDomains').value = this.emailDomains.join(', ');
+            }
+
+            removeDomain(domain) {
+                this.emailDomains = this.emailDomains.filter(d => d !== domain);
+                localStorage.setItem('emailDomains', JSON.stringify(this.emailDomains));
+                this.updateDomainTags();
+            }
+
+            async previewEmailDeletion() {
+                const domainsInput = document.getElementById('keepDomains').value;
+                const domains = domainsInput.split(',')
+                    .map(d => d.trim().toLowerCase())
+                    .filter(d => d.length > 0);
+                
+                // Update saved domains
+                this.emailDomains = domains;
+                localStorage.setItem('emailDomains', JSON.stringify(this.emailDomains));
+                this.updateDomainTags();
+                
+                if (domains.length === 0) {
+                    this.showToast('Please enter at least one domain to keep', 'error');
+                    return;
+                }
+                
                 try {
                     const snapshot = await database.ref('users').once('value');
-                    this.users = [];
+                    let deleteCount = 0;
+                    const deletePreview = [];
                     
                     snapshot.forEach(child => {
                         const user = child.val();
-                        user.id = child.key;
-                        this.users.push(user);
+                        const email = user.email || '';
+                        const emailDomain = email.split('@')[1];
+                        
+                        if (emailDomain) {
+                            const shouldDelete = !domains.some(domain => 
+                                emailDomain.includes(domain)
+                            );
+                            
+                            if (shouldDelete) {
+                                deleteCount++;
+                                if (deletePreview.length < 5) {
+                                    deletePreview.push(user.username);
+                                }
+                            }
+                        }
                     });
                     
-                    this.displayUsers();
+                    document.getElementById('deleteCount').textContent = deleteCount;
+                    
+                    let previewText = '';
+                    if (deletePreview.length > 0) {
+                        previewText = `Examples: ${deletePreview.join(', ')}${deleteCount > 5 ? ` and ${deleteCount - 5} more...` : ''}`;
+                    }
+                    document.getElementById('deletePreview').textContent = previewText;
+                    
+                    this.showToast(`Found ${deleteCount} users to delete`, 'info');
+                    
                 } catch (error) {
-                    console.error('Error loading users:', error);
-                    this.showToast('Error loading users', 'error');
+                    console.error('Error previewing deletion:', error);
+                    this.showToast('Error previewing deletion', 'error');
                 }
             }
 
+            async executeEmailDeletion() {
+                const testMode = document.getElementById('testMode').checked;
+                const domains = this.emailDomains;
+                
+                if (domains.length === 0) {
+                    this.showToast('Please enter domains to keep', 'error');
+                    return;
+                }
+                
+                try {
+                    const snapshot = await database.ref('users').once('value');
+                    const deletePromises = [];
+                    let deleteCount = 0;
+                    
+                    snapshot.forEach(child => {
+                        const user = child.val();
+                        const email = user.email || '';
+                        const emailDomain = email.split('@')[1];
+                        
+                        if (emailDomain) {
+                            const shouldDelete = !domains.some(domain => 
+                                emailDomain.includes(domain)
+                            );
+                            
+                            if (shouldDelete) {
+                                deleteCount++;
+                                if (!testMode) {
+                                    deletePromises.push(database.ref('users/' + child.key).remove());
+                                }
+                            }
+                        }
+                    });
+                    
+                    if (testMode) {
+                        this.showToast(`Test mode: Would delete ${deleteCount} users`, 'info');
+                    } else {
+                        await Promise.all(deletePromises);
+                        this.showToast(`Deleted ${deleteCount} users successfully`, 'success');
+                        this.loadUsers();
+                    }
+                    
+                } catch (error) {
+                    console.error('Error deleting users:', error);
+                    this.showToast('Error deleting users', 'error');
+                }
+            }
+
+            // NEW: Mass Operations
+            async previewMassOperation() {
+                const operation = document.getElementById('massOperation').value;
+                const testMode = document.getElementById('criteriaTestMode').checked;
+                
+                try {
+                    const snapshot = await database.ref('users').once('value');
+                    let affectedCount = 0;
+                    
+                    snapshot.forEach(child => {
+                        const user = child.val();
+                        let shouldAffect = false;
+                        
+                        switch(operation) {
+                            case 'delete_inactive':
+                                const lastActive = user.lastActive || user.createdAt;
+                                const daysInactive = (Date.now() - lastActive) / (1000 * 60 * 60 * 24);
+                                shouldAffect = daysInactive > 30;
+                                break;
+                                
+                            case 'delete_low_balance':
+                                shouldAffect = (user.balance || 0) < 100;
+                                break;
+                                
+                            case 'delete_no_deposit':
+                                // You would need to track deposits
+                                shouldAffect = !user.hasDeposited;
+                                break;
+                                
+                            case 'reset_balances':
+                                shouldAffect = (user.balance || 0) !== 500;
+                                break;
+                                
+                            case 'ban_all':
+                                shouldAffect = user.status !== 'admin';
+                                break;
+                        }
+                        
+                        if (shouldAffect) affectedCount++;
+                    });
+                    
+                    document.getElementById('affectedCount').textContent = affectedCount;
+                    this.showToast(`Found ${affectedCount} users for this operation`, 'info');
+                    
+                } catch (error) {
+                    console.error('Error previewing operation:', error);
+                    this.showToast('Error previewing operation', 'error');
+                }
+            }
+
+            async executeMassOperation() {
+                const operation = document.getElementById('massOperation').value;
+                const testMode = document.getElementById('criteriaTestMode').checked;
+                
+                try {
+                    const snapshot = await database.ref('users').once('value');
+                    const updates = {};
+                    let affectedCount = 0;
+                    
+                    snapshot.forEach(child => {
+                        const user = child.val();
+                        let shouldAffect = false;
+                        
+                        switch(operation) {
+                            case 'delete_inactive':
+                                const lastActive = user.lastActive || user.createdAt;
+                                const daysInactive = (Date.now() - lastActive) / (1000 * 60 * 60 * 24);
+                                shouldAffect = daysInactive > 30;
+                                if (shouldAffect && !testMode) {
+                                    updates[child.key] = null;
+                                }
+                                break;
+                                
+                            case 'delete_low_balance':
+                                shouldAffect = (user.balance || 0) < 100;
+                                if (shouldAffect && !testMode) {
+                                    updates[child.key] = null;
+                                }
+                                break;
+                                
+                            case 'reset_balances':
+                                shouldAffect = (user.balance || 0) !== 500;
+                                if (shouldAffect && !testMode) {
+                                    updates[child.key + '/balance'] = 500;
+                                }
+                                break;
+                                
+                            case 'ban_all':
+                                shouldAffect = user.status !== 'admin';
+                                if (shouldAffect && !testMode) {
+                                    updates[child.key + '/status'] = 'banned';
+                                    updates[child.key + '/bannedAt'] = Date.now();
+                                }
+                                break;
+                        }
+                        
+                        if (shouldAffect) affectedCount++;
+                    });
+                    
+                    if (!testMode && Object.keys(updates).length > 0) {
+                        await database.ref('users').update(updates);
+                        this.showToast(`Operation completed. ${affectedCount} users affected`, 'success');
+                        this.loadUsers();
+                    } else if (testMode) {
+                        this.showToast(`Test mode: Would affect ${affectedCount} users`, 'info');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error executing operation:', error);
+                    this.showToast('Error executing operation', 'error');
+                }
+            }
+
+            // NEW: Quick Filter Actions
+            async quickFilter(filterType) {
+                const confirm = await this.showConfirmDialog(
+                    'Quick Filter Action',
+                    'Are you sure you want to perform this action?'
+                );
+                
+                if (!confirm) return;
+                
+                try {
+                    const snapshot = await database.ref('users').once('value');
+                    const fakeEmailPatterns = [
+                        'test@', 'temp@', 'fake@', 'example@',
+                        'user@test', 'admin@test', 'demo@'
+                    ];
+                    
+                    const updates = {};
+                    let count = 0;
+                    
+                    snapshot.forEach(child => {
+                        const user = child.val();
+                        const email = (user.email || '').toLowerCase();
+                        const username = (user.username || '').toLowerCase();
+                        let shouldDelete = false;
+                        
+                        switch(filterType) {
+                            case 'delete_fake_emails':
+                                shouldDelete = fakeEmailPatterns.some(pattern => 
+                                    email.includes(pattern) || 
+                                    username.includes('test') ||
+                                    username.includes('fake') ||
+                                    username.includes('temp')
+                                );
+                                break;
+                                
+                            case 'delete_test_accounts':
+                                shouldDelete = username.includes('test') || 
+                                             username.includes('demo') ||
+                                             email.includes('@test') ||
+                                             (user.balance || 0) > 10000; // Test accounts often have high balances
+                                break;
+                                
+                            case 'clear_banned':
+                                shouldDelete = user.status === 'banned';
+                                break;
+                        }
+                        
+                        if (shouldDelete) {
+                            updates[child.key] = null;
+                            count++;
+                        }
+                    });
+                    
+                    if (count > 0) {
+                        await database.ref('users').update(updates);
+                        this.showToast(`Deleted ${count} users`, 'success');
+                        this.loadUsers();
+                    } else {
+                        this.showToast('No users matched the criteria', 'info');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error in quick filter:', error);
+                    this.showToast('Error performing action', 'error');
+                }
+            }
+
+            // NEW: Chat Management Methods
+            selectClearOption(option) {
+                this.clearChatOption = option;
+                
+                // Update UI
+                document.querySelectorAll('.option-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                document.querySelector(`[data-option="${option}"]`).classList.add('selected');
+                
+                // Show/hide custom options
+                const customOptions = document.getElementById('customTimeOptions');
+                if (option === 'old') {
+                    customOptions.classList.remove('hidden');
+                } else {
+                    customOptions.classList.add('hidden');
+                }
+            }
+
+            async loadChatStats() {
+                try {
+                    const snapshot = await database.ref('chat').once('value');
+                    const totalMessages = snapshot.numChildren();
+                    document.getElementById('totalMessages').textContent = totalMessages;
+                    document.getElementById('totalChatCount').textContent = totalMessages;
+                    
+                    // Count today's messages
+                    const today = new Date().setHours(0, 0, 0, 0);
+                    let todayCount = 0;
+                    snapshot.forEach(child => {
+                        const message = child.val();
+                        if (message.timestamp >= today) {
+                            todayCount++;
+                        }
+                    });
+                    document.getElementById('todayMessages').textContent = todayCount;
+                    
+                    // Load recent messages preview
+                    this.loadRecentChatMessages();
+                    
+                } catch (error) {
+                    console.error('Error loading chat stats:', error);
+                }
+            }
+
+            async loadRecentChatMessages() {
+                try {
+                    const snapshot = await database.ref('chat')
+                        .orderByChild('timestamp')
+                        .limitToLast(10)
+                        .once('value');
+                    
+                    const container = document.getElementById('recentChatMessages');
+                    const messages = [];
+                    
+                    snapshot.forEach(child => {
+                        const msg = child.val();
+                        messages.push(msg);
+                    });
+                    
+                    messages.sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    container.innerHTML = messages.map(msg => `
+                        <div class="text-sm p-2 bg-gray-800/50 rounded">
+                            <div class="flex justify-between">
+                                <span class="font-bold ${msg.type === 'system' ? 'text-blue-400' : 'text-white'}">
+                                    ${msg.username}:
+                                </span>
+                                <span class="text-gray-500 text-xs">
+                                    ${new Date(msg.timestamp).toLocaleTimeString()}
+                                </span>
+                            </div>
+                            <div class="mt-1 text-gray-300 truncate">${msg.message}</div>
+                        </div>
+                    `).join('');
+                    
+                } catch (error) {
+                    console.error('Error loading recent messages:', error);
+                }
+            }
+
+            async previewChatClear() {
+                try {
+                    const snapshot = await database.ref('chat').once('value');
+                    let deleteCount = 0;
+                    const excludeKeywords = document.getElementById('excludeKeywords').value
+                        .split(',')
+                        .map(k => k.trim().toLowerCase())
+                        .filter(k => k.length > 0);
+                    
+                    snapshot.forEach(child => {
+                        const message = child.val();
+                        let shouldDelete = false;
+                        
+                        switch(this.clearChatOption) {
+                            case 'all':
+                                shouldDelete = true;
+                                break;
+                                
+                            case 'old':
+                                const days = parseInt(document.getElementById('daysOld').value) || 7;
+                                const cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
+                                shouldDelete = message.timestamp < cutoff;
+                                break;
+                                
+                            case 'system':
+                                shouldDelete = message.type === 'system' || 
+                                              message.username === 'System' ||
+                                              message.userId === 'system';
+                                break;
+                        }
+                        
+                        // Check exclude keywords
+                        if (shouldDelete && excludeKeywords.length > 0) {
+                            const msgLower = (message.message || '').toLowerCase();
+                            if (excludeKeywords.some(keyword => msgLower.includes(keyword))) {
+                                shouldDelete = false;
+                            }
+                        }
+                        
+                        if (shouldDelete) deleteCount++;
+                    });
+                    
+                    document.getElementById('chatDeleteCount').textContent = deleteCount;
+                    this.showToast(`Found ${deleteCount} messages to delete`, 'info');
+                    
+                } catch (error) {
+                    console.error('Error previewing chat clear:', error);
+                    this.showToast('Error previewing chat clear', 'error');
+                }
+            }
+
+            async clearChatMessages() {
+                try {
+                    const snapshot = await database.ref('chat').once('value');
+                    const excludeKeywords = document.getElementById('excludeKeywords').value
+                        .split(',')
+                        .map(k => k.trim().toLowerCase())
+                        .filter(k => k.length > 0);
+                    
+                    const updates = {};
+                    let deleteCount = 0;
+                    
+                    snapshot.forEach(child => {
+                        const message = child.val();
+                        let shouldDelete = false;
+                        
+                        switch(this.clearChatOption) {
+                            case 'all':
+                                shouldDelete = true;
+                                break;
+                                
+                            case 'old':
+                                const days = parseInt(document.getElementById('daysOld').value) || 7;
+                                const cutoff = Date.now() - (days * 24 * 60 * 60 * 1000);
+                                shouldDelete = message.timestamp < cutoff;
+                                break;
+                                
+                            case 'system':
+                                shouldDelete = message.type === 'system' || 
+                                              message.username === 'System' ||
+                                              message.userId === 'system';
+                                break;
+                        }
+                        
+                        // Check exclude keywords
+                        if (shouldDelete && excludeKeywords.length > 0) {
+                            const msgLower = (message.message || '').toLowerCase();
+                            if (excludeKeywords.some(keyword => msgLower.includes(keyword))) {
+                                shouldDelete = false;
+                            }
+                        }
+                        
+                        if (shouldDelete) {
+                            updates[child.key] = null;
+                            deleteCount++;
+                        }
+                    });
+                    
+                    await database.ref('chat').update(updates);
+                    this.showToast(`Cleared ${deleteCount} chat messages`, 'success');
+                    this.loadChatStats();
+                    
+                } catch (error) {
+                    console.error('Error clearing chat:', error);
+                    this.showToast('Error clearing chat', 'error');
+                }
+            }
+
+            // Update displayUsers to include checkboxes
             displayUsers(page = 1) {
                 const tbody = document.getElementById('usersTableBody');
                 const pagination = document.getElementById('usersPagination');
@@ -1490,7 +1265,7 @@
                 if (this.users.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="7" class="text-center py-8 text-gray-500">
+                            <td colspan="8" class="text-center py-8 text-gray-500">
                                 No users found
                             </td>
                         </tr>
@@ -1505,9 +1280,16 @@
                 const endIndex = startIndex + this.itemsPerPage;
                 const pageUsers = this.users.slice(startIndex, endIndex);
                 
-                // Display users
+                // Display users with checkboxes
                 tbody.innerHTML = pageUsers.map(user => `
                     <tr>
+                        <td class="checkbox-cell">
+                            ${this.bulkMode ? `
+                                <input type="checkbox" 
+                                       onchange="adminApp.toggleUserSelection('${user.id}')"
+                                       ${this.selectedUsers.has(user.id) ? 'checked' : ''}>
+                            ` : ''}
+                        </td>
                         <td class="font-mono text-sm">${user.id.substring(0, 8)}...</td>
                         <td>
                             <div class="font-bold">${user.username}</div>
@@ -1519,7 +1301,9 @@
                             <div class="text-xs text-gray-500">coins</div>
                         </td>
                         <td>
-                            <span class="status-badge status-active">Active</span>
+                            <span class="status-badge ${user.status === 'active' ? 'status-active' : user.status === 'banned' ? 'status-banned' : 'status-pending'}">
+                                ${user.status || 'active'}
+                            </span>
                         </td>
                         <td>
                             <div class="text-sm">${new Date(user.createdAt).toLocaleDateString()}</div>
@@ -1560,1080 +1344,59 @@
                 pagination.innerHTML = paginationHTML;
             }
 
-            searchUsers() {
-                const searchTerm = document.getElementById('userSearch').value.toLowerCase();
-                if (!searchTerm) {
-                    this.displayUsers();
-                    return;
-                }
+            // Update showTab to include new tabs
+            showTab(tabName) {
+                // Hide all tabs
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.add('hidden');
+                });
                 
-                const filteredUsers = this.users.filter(user => 
-                    user.username.toLowerCase().includes(searchTerm) ||
-                    user.email.toLowerCase().includes(searchTerm) ||
-                    user.id.toLowerCase().includes(searchTerm)
-                );
+                // Show selected tab
+                document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+                this.currentTab = tabName;
                 
-                const tbody = document.getElementById('usersTableBody');
-                tbody.innerHTML = filteredUsers.map(user => `
-                    <tr>
-                        <td class="font-mono text-sm">${user.id.substring(0, 8)}...</td>
-                        <td>${user.username}</td>
-                        <td>${user.email}</td>
-                        <td class="text-green-500 font-bold">${(user.balance || 0).toLocaleString()}</td>
-                        <td><span class="status-badge status-active">Active</span></td>
-                        <td>${new Date(user.createdAt).toLocaleDateString()}</td>
-                        <td>
-                            <div class="flex gap-2">
-                                <button onclick="adminApp.editUser('${user.id}')" class="text-blue-500">
-                                    <i class="fa-solid fa-edit"></i>
-                                </button>
-                                <button onclick="adminApp.manageUserBalance('${user.id}', '${user.username}')" class="text-green-500">
-                                    <i class="fa-solid fa-coins"></i>
-                                </button>
-                                <button onclick="adminApp.banUser('${user.id}', '${user.username}')" class="text-red-500">
-                                    <i class="fa-solid fa-ban"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            filterUsers() {
-                const filter = document.getElementById('userFilter').value;
-                let filteredUsers = this.users;
-                
-                switch(filter) {
-                    case 'online':
-                        // This would require checking online status
+                // Load tab-specific data
+                switch(tabName) {
+                    case 'users':
+                        this.loadUsers();
                         break;
-                    case 'banned':
-                        filteredUsers = this.users.filter(u => u.status === 'banned');
+                    case 'bulk':
+                        this.previewEmailDeletion();
+                        this.previewMassOperation();
                         break;
-                    case 'high-balance':
-                        filteredUsers = this.users.filter(u => (u.balance || 0) > 10000);
+                    case 'chat':
+                        this.loadChatStats();
+                        this.selectClearOption('all');
                         break;
-                    case 'new':
-                        const today = new Date().setHours(0, 0, 0, 0);
-                        filteredUsers = this.users.filter(u => new Date(u.createdAt) >= today);
+                    case 'transactions':
+                        this.loadTransactions();
+                        break;
+                    case 'games':
+                        this.loadGameStats();
+                        break;
+                    case 'announcements':
+                        this.loadAnnouncements();
                         break;
                 }
-                
-                this.displayFilteredUsers(filteredUsers);
             }
 
-            displayFilteredUsers(users) {
-                const tbody = document.getElementById('usersTableBody');
-                tbody.innerHTML = users.map(user => `
-                    <tr>
-                        <td class="font-mono text-sm">${user.id.substring(0, 8)}...</td>
-                        <td>${user.username}</td>
-                        <td>${user.email}</td>
-                        <td class="text-green-500 font-bold">${(user.balance || 0).toLocaleString()}</td>
-                        <td><span class="status-badge status-active">Active</span></td>
-                        <td>${new Date(user.createdAt).toLocaleDateString()}</td>
-                        <td>
-                            <div class="flex gap-2">
-                                <button onclick="adminApp.editUser('${user.id}')" class="text-blue-500">
-                                    <i class="fa-solid fa-edit"></i>
-                                </button>
-                                <button onclick="adminApp.manageUserBalance('${user.id}', '${user.username}')" class="text-green-500">
-                                    <i class="fa-solid fa-coins"></i>
-                                </button>
-                                <button onclick="adminApp.banUser('${user.id}', '${user.username}')" class="text-red-500">
-                                    <i class="fa-solid fa-ban"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            showAddUserModal() {
-                document.getElementById('userModalTitle').textContent = 'Add New User';
-                document.getElementById('modalUsername').value = '';
-                document.getElementById('modalEmail').value = '';
-                document.getElementById('modalPassword').value = '';
-                document.getElementById('modalBalance').value = 500;
-                document.getElementById('modalStatus').value = 'active';
-                
-                this.openModal('userModal');
-            }
-
-            editUser(userId) {
-                const user = this.users.find(u => u.id === userId);
-                if (!user) return;
-                
-                document.getElementById('userModalTitle').textContent = 'Edit User';
-                document.getElementById('modalUsername').value = user.username;
-                document.getElementById('modalEmail').value = user.email;
-                document.getElementById('modalPassword').value = '';
-                document.getElementById('modalBalance').value = user.balance || 0;
-                document.getElementById('modalStatus').value = user.status || 'active';
-                
-                // Store user ID for saving
-                document.getElementById('userModal').dataset.userId = userId;
-                
-                this.openModal('userModal');
-            }
-
-            async saveUser() {
-                const username = document.getElementById('modalUsername').value.trim();
-                const email = document.getElementById('modalEmail').value.trim();
-                const password = document.getElementById('modalPassword').value;
-                const balance = parseInt(document.getElementById('modalBalance').value) || 0;
-                const status = document.getElementById('modalStatus').value;
-                const userId = document.getElementById('userModal').dataset.userId;
-                
-                if (!username || !email) {
-                    this.showToast('Please fill all required fields', 'error');
-                    return;
-                }
-                
-                try {
-                    if (userId) {
-                        // Update existing user
-                        const updates = {
-                            username,
-                            email,
-                            balance,
-                            status
-                        };
-                        
-                        if (password) {
-                            updates.password = btoa(password);
-                        }
-                        
-                        await database.ref('users/' + userId).update(updates);
-                        this.showToast('User updated successfully', 'success');
-                    } else {
-                        // Create new user
-                        const newUserId = 'admin_' + Date.now();
-                        const userData = {
-                            userId: newUserId,
-                            username,
-                            email,
-                            password: btoa(password),
-                            balance,
-                            status,
-                            createdAt: Date.now(),
-                            createdBy: 'admin'
-                        };
-                        
-                        await database.ref('users/' + newUserId).set(userData);
-                        this.showToast('User created successfully', 'success');
-                    }
+            // Helper method for confirmation dialogs
+            async showConfirmDialog(title, message) {
+                return new Promise(resolve => {
+                    document.getElementById('confirmTitle').textContent = title;
+                    document.getElementById('confirmMessage').textContent = message;
                     
-                    this.closeModal('userModal');
-                    this.loadUsers();
-                    
-                } catch (error) {
-                    console.error('Error saving user:', error);
-                    this.showToast('Error saving user', 'error');
-                }
-            }
-
-            manageUserBalance(userId, username) {
-                document.getElementById('quickActionTitle').textContent = 'Manage Balance';
-                document.getElementById('quickActionContent').innerHTML = `
-                    <div class="space-y-4">
-                        <div class="input-group">
-                            <label>User: ${username}</label>
-                            <div class="text-sm text-gray-400">User ID: ${userId}</div>
-                        </div>
-                        <div class="input-group">
-                            <label>Action</label>
-                            <select id="balanceAction" class="w-full">
-                                <option value="add">Add Coins</option>
-                                <option value="remove">Remove Coins</option>
-                                <option value="set">Set Balance</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Amount</label>
-                            <input type="number" id="balanceAmount" value="1000" class="w-full">
-                        </div>
-                        <div class="input-group">
-                            <label>Reason</label>
-                            <input type="text" id="balanceReason" placeholder="Reason for adjustment" class="w-full">
-                        </div>
-                        <button onclick="adminApp.performBalanceAdjustment('${userId}', '${username}')" class="btn btn-success w-full">
-                            <i class="fa-solid fa-check"></i>
-                            Apply Adjustment
-                        </button>
-                    </div>
-                `;
-                
-                this.openModal('quickActionModal');
-            }
-
-            async performBalanceAdjustment(userId, username) {
-                const action = document.getElementById('balanceAction').value;
-                const amount = parseInt(document.getElementById('balanceAmount').value) || 0;
-                const reason = document.getElementById('balanceReason').value.trim();
-                
-                if (!amount || amount <= 0) {
-                    this.showToast('Please enter a valid amount', 'error');
-                    return;
-                }
-                
-                try {
-                    const userRef = database.ref('users/' + userId);
-                    const snapshot = await userRef.once('value');
-                    const user = snapshot.val();
-                    
-                    if (!user) {
-                        this.showToast('User not found', 'error');
-                        return;
-                    }
-                    
-                    let newBalance = user.balance || 0;
-                    
-                    switch(action) {
-                        case 'add':
-                            newBalance += amount;
-                            break;
-                        case 'remove':
-                            newBalance = Math.max(0, newBalance - amount);
-                            break;
-                        case 'set':
-                            newBalance = amount;
-                            break;
-                    }
-                    
-                    await userRef.update({ balance: newBalance });
-                    
-                    // Log the transaction
-                    const transaction = {
-                        type: 'admin_adjustment',
-                        userId,
-                        username,
-                        action,
-                        amount,
-                        reason,
-                        previousBalance: user.balance || 0,
-                        newBalance,
-                        timestamp: Date.now(),
-                        admin: 'System'
+                    const confirmCallback = (result) => {
+                        this.closeModal('confirmModal');
+                        resolve(result);
                     };
                     
-                    await database.ref('admin_logs').push(transaction);
-                    await database.ref('transactions').push({
-                        userId,
-                        username,
-                        amount,
-                        type: 'admin_adjustment',
-                        game: 'system',
-                        timestamp: Date.now(),
-                        details: reason
-                    });
-                    
-                    this.showToast(`Balance adjusted successfully. New balance: ${newBalance.toLocaleString()}`, 'success');
-                    this.closeModal('quickActionModal');
-                    this.loadUsers();
-                    
-                } catch (error) {
-                    console.error('Error adjusting balance:', error);
-                    this.showToast('Error adjusting balance', 'error');
-                }
+                    this.confirmCallback = confirmCallback;
+                    this.openModal('confirmModal');
+                });
             }
 
-            banUser(userId, username) {
-                this.showConfirm(
-                    'Ban User',
-                    `Are you sure you want to ban ${username}?`,
-                    async () => {
-                        try {
-                            await database.ref('users/' + userId).update({ 
-                                status: 'banned',
-                                bannedAt: Date.now(),
-                                bannedBy: 'admin'
-                            });
-                            
-                            this.showToast(`User ${username} has been banned`, 'success');
-                            this.loadUsers();
-                        } catch (error) {
-                            console.error('Error banning user:', error);
-                            this.showToast('Error banning user', 'error');
-                        }
-                    }
-                );
-            }
-
-            deleteUser(userId, username) {
-                this.showConfirm(
-                    'Delete User',
-                    `Are you sure you want to permanently delete ${username}? This action cannot be undone!`,
-                    async () => {
-                        try {
-                            await database.ref('users/' + userId).remove();
-                            this.showToast(`User ${username} has been deleted`, 'success');
-                            this.loadUsers();
-                        } catch (error) {
-                            console.error('Error deleting user:', error);
-                            this.showToast('Error deleting user', 'error');
-                        }
-                    }
-                );
-            }
-
-            async loadTransactions() {
-                try {
-                    const snapshot = await database.ref('transactions').orderByChild('timestamp').limitToLast(1000).once('value');
-                    this.transactions = [];
-                    
-                    snapshot.forEach(child => {
-                        const tx = child.val();
-                        tx.id = child.key;
-                        this.transactions.push(tx);
-                    });
-                    
-                    // Sort by timestamp (newest first)
-                    this.transactions.sort((a, b) => b.timestamp - a.timestamp);
-                    
-                    this.displayTransactions();
-                } catch (error) {
-                    console.error('Error loading transactions:', error);
-                    this.showToast('Error loading transactions', 'error');
-                }
-            }
-
-            displayTransactions(page = 1) {
-                const tbody = document.getElementById('transactionsTableBody');
-                const pagination = document.getElementById('transactionsPagination');
-                
-                if (this.transactions.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="7" class="text-center py-8 text-gray-500">
-                                No transactions found
-                            </td>
-                        </tr>
-                    `;
-                    pagination.innerHTML = '';
-                    return;
-                }
-                
-                // Pagination
-                const totalPages = Math.ceil(this.transactions.length / this.itemsPerPage);
-                const startIndex = (page - 1) * this.itemsPerPage;
-                const endIndex = startIndex + this.itemsPerPage;
-                const pageTransactions = this.transactions.slice(startIndex, endIndex);
-                
-                // Display transactions
-                tbody.innerHTML = pageTransactions.map(tx => `
-                    <tr>
-                        <td class="font-mono text-sm">${tx.id.substring(0, 8)}...</td>
-                        <td>
-                            <div class="font-bold">${tx.username || 'System'}</div>
-                            <div class="text-xs text-gray-500">${tx.userId ? tx.userId.substring(0, 8) + '...' : 'N/A'}</div>
-                        </td>
-                        <td>
-                            <span class="status-badge ${tx.type === 'win' ? 'status-active' : tx.type === 'loss' ? 'status-banned' : 'status-pending'}">
-                                ${tx.type}
-                            </span>
-                        </td>
-                        <td class="${tx.type === 'win' ? 'text-green-500' : tx.type === 'loss' ? 'text-red-500' : 'text-yellow-500'} font-bold">
-                            ${tx.type === 'win' ? '+' : tx.type === 'loss' ? '-' : ''}${(tx.amount || 0).toLocaleString()}
-                        </td>
-                        <td>${tx.game || 'system'}</td>
-                        <td>
-                            <div class="text-sm">${new Date(tx.timestamp).toLocaleDateString()}</div>
-                            <div class="text-xs text-gray-500">${new Date(tx.timestamp).toLocaleTimeString()}</div>
-                        </td>
-                        <td>
-                            <button onclick="adminApp.viewTransactionDetails('${tx.id}')" class="text-blue-500 hover:text-blue-400">
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-                
-                // Generate pagination
-                let paginationHTML = '';
-                for (let i = 1; i <= totalPages; i++) {
-                    if (i === 1 || i === totalPages || (i >= page - 2 && i <= page + 2)) {
-                        paginationHTML += `
-                            <button onclick="adminApp.changePage('transactions', ${i})" class="${i === page ? 'active' : ''}">
-                                ${i}
-                            </button>
-                        `;
-                    } else if (i === page - 3 || i === page + 3) {
-                        paginationHTML += '<span class="px-2">...</span>';
-                    }
-                }
-                pagination.innerHTML = paginationHTML;
-            }
-
-            filterTransactions() {
-                const typeFilter = document.getElementById('txTypeFilter').value;
-                const gameFilter = document.getElementById('txGameFilter').value;
-                const dateFrom = document.getElementById('txDateFrom').value;
-                const dateTo = document.getElementById('txDateTo').value;
-                
-                let filtered = this.transactions;
-                
-                if (typeFilter !== 'all') {
-                    filtered = filtered.filter(tx => tx.type === typeFilter);
-                }
-                
-                if (gameFilter !== 'all') {
-                    filtered = filtered.filter(tx => tx.game === gameFilter);
-                }
-                
-                if (dateFrom) {
-                    const fromDate = new Date(dateFrom).getTime();
-                    filtered = filtered.filter(tx => tx.timestamp >= fromDate);
-                }
-                
-                if (dateTo) {
-                    const toDate = new Date(dateTo + 'T23:59:59').getTime();
-                    filtered = filtered.filter(tx => tx.timestamp <= toDate);
-                }
-                
-                this.displayFilteredTransactions(filtered);
-            }
-
-            displayFilteredTransactions(transactions) {
-                const tbody = document.getElementById('transactionsTableBody');
-                tbody.innerHTML = transactions.slice(0, 50).map(tx => `
-                    <tr>
-                        <td class="font-mono text-sm">${tx.id.substring(0, 8)}...</td>
-                        <td>${tx.username || 'System'}</td>
-                        <td>
-                            <span class="status-badge ${tx.type === 'win' ? 'status-active' : tx.type === 'loss' ? 'status-banned' : 'status-pending'}">
-                                ${tx.type}
-                            </span>
-                        </td>
-                        <td class="${tx.type === 'win' ? 'text-green-500' : tx.type === 'loss' ? 'text-red-500' : 'text-yellow-500'} font-bold">
-                            ${tx.type === 'win' ? '+' : tx.type === 'loss' ? '-' : ''}${(tx.amount || 0).toLocaleString()}
-                        </td>
-                        <td>${tx.game || 'system'}</td>
-                        <td>${new Date(tx.timestamp).toLocaleString()}</td>
-                        <td>
-                            <button onclick="adminApp.viewTransactionDetails('${tx.id}')" class="text-blue-500">
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            exportTransactions() {
-                const csv = this.transactions.map(tx => 
-                    `${tx.id},${tx.username || ''},${tx.type},${tx.amount || 0},${tx.game || ''},${new Date(tx.timestamp).toISOString()}`
-                ).join('\n');
-                
-                const blob = new Blob(['Transaction ID,Username,Type,Amount,Game,Timestamp\n' + csv], { type: 'text/csv' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                
-                this.showToast('Transactions exported successfully', 'success');
-            }
-
-            viewTransactionDetails(txId) {
-                const tx = this.transactions.find(t => t.id === txId);
-                if (!tx) return;
-                
-                document.getElementById('quickActionTitle').textContent = 'Transaction Details';
-                document.getElementById('quickActionContent').innerHTML = `
-                    <div class="space-y-4">
-                        <div class="input-group">
-                            <label>Transaction ID</label>
-                            <div class="text-sm font-mono bg-gray-800 p-2 rounded">${tx.id}</div>
-                        </div>
-                        <div class="input-group">
-                            <label>User</label>
-                            <div class="text-sm">${tx.username || 'System'} (${tx.userId || 'N/A'})</div>
-                        </div>
-                        <div class="input-group">
-                            <label>Type</label>
-                            <div class="text-sm"><span class="status-badge ${tx.type === 'win' ? 'status-active' : tx.type === 'loss' ? 'status-banned' : 'status-pending'}">${tx.type}</span></div>
-                        </div>
-                        <div class="input-group">
-                            <label>Amount</label>
-                            <div class="text-lg font-bold ${tx.type === 'win' ? 'text-green-500' : tx.type === 'loss' ? 'text-red-500' : 'text-yellow-500'}">
-                                ${tx.type === 'win' ? '+' : tx.type === 'loss' ? '-' : ''}${(tx.amount || 0).toLocaleString()} coins
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <label>Game</label>
-                            <div class="text-sm">${tx.game || 'system'}</div>
-                        </div>
-                        <div class="input-group">
-                            <label>Timestamp</label>
-                            <div class="text-sm">${new Date(tx.timestamp).toLocaleString()}</div>
-                        </div>
-                        ${tx.details ? `
-                            <div class="input-group">
-                                <label>Details</label>
-                                <div class="text-sm bg-gray-800 p-2 rounded">${tx.details}</div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-                
-                this.openModal('quickActionModal');
-            }
-
-            async loadRecentActivity() {
-                try {
-                    const snapshot = await database.ref('transactions').orderByChild('timestamp').limitToLast(10).once('value');
-                    const activities = [];
-                    
-                    snapshot.forEach(child => {
-                        const tx = child.val();
-                        activities.push(tx);
-                    });
-                    
-                    activities.sort((a, b) => b.timestamp - a.timestamp);
-                    
-                    const container = document.getElementById('recentActivity');
-                    container.innerHTML = activities.map(tx => `
-                        <div class="flex items-center gap-3 p-3 bg-gray-800/50 rounded-lg">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-teal-400 flex items-center justify-center">
-                                <i class="fa-solid fa-user text-white text-sm"></i>
-                            </div>
-                            <div class="flex-1">
-                                <div class="text-sm">
-                                    <span class="font-bold text-white">${tx.username}</span>
-                                    <span class="text-gray-400">${tx.type === 'win' ? 'won' : tx.type === 'loss' ? 'lost' : 'transferred'}</span>
-                                    <span class="font-bold ${tx.type === 'win' ? 'text-green-500' : tx.type === 'loss' ? 'text-red-500' : 'text-yellow-500'}">
-                                        ${(tx.amount || 0).toLocaleString()} coins
-                                    </span>
-                                    <span class="text-gray-400">in ${tx.game || 'system'}</span>
-                                </div>
-                                <div class="text-xs text-gray-500">${new Date(tx.timestamp).toLocaleTimeString()}</div>
-                            </div>
-                        </div>
-                    `).join('');
-                    
-                } catch (error) {
-                    console.error('Error loading recent activity:', error);
-                }
-            }
-
-            async loadAnnouncements() {
-                try {
-                    const snapshot = await database.ref('announcements').orderByChild('timestamp').limitToLast(10).once('value');
-                    const announcements = [];
-                    
-                    snapshot.forEach(child => {
-                        const ann = child.val();
-                        ann.id = child.key;
-                        announcements.push(ann);
-                    });
-                    
-                    announcements.sort((a, b) => b.timestamp - a.timestamp);
-                    
-                    const container = document.getElementById('recentAnnouncements');
-                    container.innerHTML = announcements.map(ann => `
-                        <div class="p-3 bg-gray-800/50 rounded-lg border-l-4 ${ann.type === 'info' ? 'border-blue-500' : ann.type === 'success' ? 'border-green-500' : ann.type === 'warning' ? 'border-yellow-500' : 'border-red-500'}">
-                            <div class="font-bold text-white mb-1">${ann.title}</div>
-                            <div class="text-sm text-gray-300 mb-2">${ann.message}</div>
-                            <div class="flex justify-between text-xs text-gray-500">
-                                <span>${new Date(ann.timestamp).toLocaleString()}</span>
-                                <button onclick="adminApp.deleteAnnouncement('${ann.id}')" class="text-red-500 hover:text-red-400">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `).join('');
-                    
-                } catch (error) {
-                    console.error('Error loading announcements:', error);
-                }
-            }
-
-            async sendAnnouncement() {
-                const title = document.getElementById('announcementTitle').value.trim();
-                const message = document.getElementById('announcementMessage').value.trim();
-                const type = document.getElementById('announcementType').value;
-                const important = document.getElementById('announcementImportant').checked;
-                const popup = document.getElementById('announcementPopup').checked;
-                
-                if (!title || !message) {
-                    this.showToast('Please fill all fields', 'error');
-                    return;
-                }
-                
-                try {
-                    const announcement = {
-                        title,
-                        message,
-                        type,
-                        important,
-                        popup,
-                        timestamp: Date.now(),
-                        sentBy: 'admin'
-                    };
-                    
-                    await database.ref('announcements').push(announcement);
-                    
-                    // Also add to chat as system message
-                    await database.ref('chat').push({
-                        username: 'System',
-                        message: `📢 ${title}: ${message}`,
-                        userId: 'system',
-                        timestamp: Date.now(),
-                        type: 'announcement'
-                    });
-                    
-                    document.getElementById('announcementTitle').value = '';
-                    document.getElementById('announcementMessage').value = '';
-                    
-                    this.showToast('Announcement sent successfully', 'success');
-                    this.loadAnnouncements();
-                    
-                } catch (error) {
-                    console.error('Error sending announcement:', error);
-                    this.showToast('Error sending announcement', 'error');
-                }
-            }
-
-            scheduleAnnouncement() {
-                this.showToast('Scheduling feature coming soon!', 'info');
-            }
-
-            deleteAnnouncement(announcementId) {
-                this.showConfirm(
-                    'Delete Announcement',
-                    'Are you sure you want to delete this announcement?',
-                    async () => {
-                        try {
-                            await database.ref('announcements/' + announcementId).remove();
-                            this.showToast('Announcement deleted', 'success');
-                            this.loadAnnouncements();
-                        } catch (error) {
-                            console.error('Error deleting announcement:', error);
-                            this.showToast('Error deleting announcement', 'error');
-                        }
-                    }
-                );
-            }
-
-            async loadGameStats() {
-                try {
-                    // Calculate total games played
-                    const txSnapshot = await database.ref('transactions').once('value');
-                    let totalGames = 0;
-                    let totalWagered = 0;
-                    let houseProfit = 0;
-                    
-                    txSnapshot.forEach(child => {
-                        const tx = child.val();
-                        if (tx.game && tx.game !== 'system') {
-                            totalGames++;
-                        }
-                        if (tx.amount) {
-                            if (tx.type === 'loss') {
-                                houseProfit += tx.amount;
-                            } else if (tx.type === 'win') {
-                                houseProfit -= tx.amount;
-                            }
-                        }
-                        if (tx.amount && tx.type !== 'transfer') {
-                            totalWagered += tx.amount;
-                        }
-                    });
-                    
-                    document.getElementById('totalGamesPlayed').textContent = totalGames.toLocaleString();
-                    document.getElementById('totalWagered').textContent = totalWagered.toLocaleString();
-                    document.getElementById('houseProfit').textContent = houseProfit.toLocaleString();
-                    
-                } catch (error) {
-                    console.error('Error loading game stats:', error);
-                }
-            }
-
-            saveBlackjackSettings() {
-                const minBet = document.getElementById('bjMinBet').value;
-                const maxBet = document.getElementById('bjMaxBet').value;
-                const dealerStand = document.getElementById('bjDealerStand').value;
-                const payout = document.getElementById('bjPayout').value;
-                
-                // Save to database or localStorage
-                localStorage.setItem('bj_settings', JSON.stringify({
-                    minBet, maxBet, dealerStand, payout
-                }));
-                
-                this.showToast('Blackjack settings saved', 'success');
-            }
-
-            saveMinesSettings() {
-                const minBet = document.getElementById('minesMinBet').value;
-                const maxBet = document.getElementById('minesMaxBet').value;
-                const maxMines = document.getElementById('minesMaxMines').value;
-                const houseEdge = document.getElementById('minesHouseEdge').value;
-                
-                localStorage.setItem('mines_settings', JSON.stringify({
-                    minBet, maxBet, maxMines, houseEdge
-                }));
-                
-                this.showToast('Mines settings saved', 'success');
-            }
-
-            resetGameStats() {
-                this.showConfirm(
-                    'Reset Game Statistics',
-                    'Are you sure you want to reset all game statistics? This cannot be undone!',
-                    async () => {
-                        try {
-                            // Reset specific game stats
-                            const usersSnapshot = await database.ref('users').once('value');
-                            const updates = {};
-                            
-                            usersSnapshot.forEach(child => {
-                                updates[child.key + '/totalWins'] = 0;
-                                updates[child.key + '/totalLosses'] = 0;
-                                updates[child.key + '/biggestWin'] = 0;
-                                updates[child.key + '/wageredToday'] = 0;
-                                updates[child.key + '/wageredWeek'] = 0;
-                                updates[child.key + '/wonToday'] = 0;
-                            });
-                            
-                            await database.ref('users').update(updates);
-                            
-                            this.showToast('Game statistics reset successfully', 'success');
-                            this.loadGameStats();
-                            
-                        } catch (error) {
-                            console.error('Error resetting game stats:', error);
-                            this.showToast('Error resetting game stats', 'error');
-                        }
-                    }
-                );
-            }
-
-            recalculateStats() {
-                this.loadGameStats();
-                this.showToast('Statistics recalculated', 'success');
-            }
-
-            saveSystemSettings() {
-                const siteName = document.getElementById('siteName').value;
-                const startingBalance = document.getElementById('startingBalance').value;
-                const freeCoinsAmount = document.getElementById('freeCoinsAmount').value;
-                const freeCoinsCooldown = document.getElementById('freeCoinsCooldown').value;
-                const maxTransferAmount = document.getElementById('maxTransferAmount').value;
-                const adminKey = document.getElementById('adminKeyChange').value;
-                const maxLoginAttempts = document.getElementById('maxLoginAttempts').value;
-                const sessionTimeout = document.getElementById('sessionTimeout').value;
-                const ipWhitelist = document.getElementById('ipWhitelist').value;
-                
-                const settings = {
-                    siteName,
-                    startingBalance,
-                    freeCoinsAmount,
-                    freeCoinsCooldown,
-                    maxTransferAmount,
-                    maxLoginAttempts,
-                    sessionTimeout,
-                    ipWhitelist
-                };
-                
-                if (adminKey) {
-                    this.adminKey = adminKey;
-                    localStorage.setItem('adminKey', adminKey);
-                }
-                
-                localStorage.setItem('system_settings', JSON.stringify(settings));
-                this.showToast('System settings saved', 'success');
-            }
-
-            toggleMaintenance() {
-                this.showConfirm(
-                    'Toggle Maintenance Mode',
-                    'This will enable/disable maintenance mode for all users. Continue?',
-                    async () => {
-                        try {
-                            const maintenanceRef = database.ref('system/maintenance');
-                            const snapshot = await maintenanceRef.once('value');
-                            const current = snapshot.val();
-                            
-                            await maintenanceRef.set(!current);
-                            
-                            this.showToast(`Maintenance mode ${!current ? 'enabled' : 'disabled'}`, 'success');
-                            
-                        } catch (error) {
-                            console.error('Error toggling maintenance:', error);
-                            this.showToast('Error toggling maintenance', 'error');
-                        }
-                    }
-                );
-            }
-
-            clearChat() {
-                this.showConfirm(
-                    'Clear Chat',
-                    'Are you sure you want to clear all chat messages? This cannot be undone!',
-                    async () => {
-                        try {
-                            await database.ref('chat').remove();
-                            this.showToast('Chat cleared successfully', 'success');
-                        } catch (error) {
-                            console.error('Error clearing chat:', error);
-                            this.showToast('Error clearing chat', 'error');
-                        }
-                    }
-                );
-            }
-
-            backupDatabase() {
-                this.showToast('Backup feature coming soon!', 'info');
-            }
-
-            clearCache() {
-                localStorage.removeItem('system_settings');
-                localStorage.removeItem('bj_settings');
-                localStorage.removeItem('mines_settings');
-                this.showToast('Cache cleared', 'success');
-            }
-
-            generateReport() {
-                const type = document.getElementById('reportType').value;
-                const format = document.getElementById('reportFormat').value;
-                const dateFrom = document.getElementById('reportDateFrom').value;
-                const dateTo = document.getElementById('reportDateTo').value;
-                
-                // Simulate report generation
-                this.showToast(`Generating ${type} report in ${format} format...`, 'info');
-                
-                setTimeout(() => {
-                    this.showToast('Report generated successfully!', 'success');
-                }, 2000);
-            }
-
-            refreshAnalytics() {
-                this.loadStats();
-                this.loadGameStats();
-                this.showToast('Analytics refreshed', 'success');
-            }
-
-            loadReports() {
-                // Load saved reports from localStorage
-                const reports = JSON.parse(localStorage.getItem('reports') || '[]');
-                const tbody = document.getElementById('reportsTableBody');
-                
-                tbody.innerHTML = reports.map(report => `
-                    <tr>
-                        <td class="font-mono text-sm">${report.id}</td>
-                        <td>${report.type}</td>
-                        <td>${report.dateFrom} to ${report.dateTo}</td>
-                        <td>${report.generatedBy}</td>
-                        <td>
-                            <button onclick="adminApp.downloadReport('${report.id}')" class="text-blue-500 hover:text-blue-400">
-                                <i class="fa-solid fa-download"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            downloadReport(reportId) {
-                this.showToast('Downloading report...', 'info');
-            }
-
-            quickAction(action) {
-                switch(action) {
-                    case 'addCoins':
-                        this.showAddCoinsQuickAction();
-                        break;
-                    case 'banUser':
-                        this.showBanUserQuickAction();
-                        break;
-                    case 'sendAnnouncement':
-                        this.showTab('announcements');
-                        break;
-                    case 'resetGame':
-                        this.resetGameStats();
-                        break;
-                }
-            }
-
-            showAddCoinsQuickAction() {
-                document.getElementById('quickActionTitle').textContent = 'Add Coins to User';
-                document.getElementById('quickActionContent').innerHTML = `
-                    <div class="space-y-4">
-                        <div class="input-group">
-                            <label>Username or User ID</label>
-                            <input type="text" id="quickUsername" placeholder="Enter username or user ID" class="w-full">
-                        </div>
-                        <div class="input-group">
-                            <label>Amount</label>
-                            <input type="number" id="quickAmount" value="1000" class="w-full">
-                        </div>
-                        <button onclick="adminApp.performQuickAddCoins()" class="btn btn-success w-full">
-                            <i class="fa-solid fa-check"></i>
-                            Add Coins
-                        </button>
-                    </div>
-                `;
-                
-                this.openModal('quickActionModal');
-            }
-
-            async performQuickAddCoins() {
-                const username = document.getElementById('quickUsername').value.trim();
-                const amount = parseInt(document.getElementById('quickAmount').value) || 0;
-                
-                if (!username || !amount) {
-                    this.showToast('Please fill all fields', 'error');
-                    return;
-                }
-                
-                try {
-                    // Find user by username or ID
-                    const snapshot = await database.ref('users').orderByChild('username').equalTo(username).once('value');
-                    
-                    if (!snapshot.exists()) {
-                        // Try by ID
-                        const idSnapshot = await database.ref('users/' + username).once('value');
-                        if (!idSnapshot.exists()) {
-                            this.showToast('User not found', 'error');
-                            return;
-                        }
-                        
-                        const user = idSnapshot.val();
-                        const newBalance = (user.balance || 0) + amount;
-                        await database.ref('users/' + username).update({ balance: newBalance });
-                        this.showToast(`Added ${amount} coins to ${user.username}`, 'success');
-                        
-                    } else {
-                        snapshot.forEach(async child => {
-                            const user = child.val();
-                            const newBalance = (user.balance || 0) + amount;
-                            await database.ref('users/' + child.key).update({ balance: newBalance });
-                            this.showToast(`Added ${amount} coins to ${user.username}`, 'success');
-                        });
-                    }
-                    
-                    this.closeModal('quickActionModal');
-                    this.loadUsers();
-                    
-                } catch (error) {
-                    console.error('Error adding coins:', error);
-                    this.showToast('Error adding coins', 'error');
-                }
-            }
-
-            showBanUserQuickAction() {
-                document.getElementById('quickActionTitle').textContent = 'Ban User';
-                document.getElementById('quickActionContent').innerHTML = `
-                    <div class="space-y-4">
-                        <div class="input-group">
-                            <label>Username or User ID</label>
-                            <input type="text" id="banUsername" placeholder="Enter username or user ID" class="w-full">
-                        </div>
-                        <div class="input-group">
-                            <label>Reason</label>
-                            <input type="text" id="banReason" placeholder="Reason for ban" class="w-full">
-                        </div>
-                        <div class="input-group">
-                            <label>Duration</label>
-                            <select id="banDuration" class="w-full">
-                                <option value="1">1 Day</option>
-                                <option value="7">1 Week</option>
-                                <option value="30">1 Month</option>
-                                <option value="0">Permanent</option>
-                            </select>
-                        </div>
-                        <button onclick="adminApp.performQuickBan()" class="btn btn-danger w-full">
-                            <i class="fa-solid fa-ban"></i>
-                            Ban User
-                        </button>
-                    </div>
-                `;
-                
-                this.openModal('quickActionModal');
-            }
-
-            async performQuickBan() {
-                const username = document.getElementById('banUsername').value.trim();
-                const reason = document.getElementById('banReason').value.trim();
-                const duration = parseInt(document.getElementById('banDuration').value);
-                
-                if (!username) {
-                    this.showToast('Please enter username', 'error');
-                    return;
-                }
-                
-                try {
-                    const snapshot = await database.ref('users').orderByChild('username').equalTo(username).once('value');
-                    
-                    if (!snapshot.exists()) {
-                        this.showToast('User not found', 'error');
-                        return;
-                    }
-                    
-                    snapshot.forEach(async child => {
-                        const banData = {
-                            status: 'banned',
-                            bannedAt: Date.now(),
-                            bannedBy: 'admin',
-                            banReason: reason,
-                            banDuration: duration
-                        };
-                        
-                        if (duration > 0) {
-                            banData.unbanAt = Date.now() + (duration * 24 * 60 * 60 * 1000);
-                        }
-                        
-                        await database.ref('users/' + child.key).update(banData);
-                        this.showToast(`User ${username} has been banned`, 'success');
-                    });
-                    
-                    this.closeModal('quickActionModal');
-                    this.loadUsers();
-                    
-                } catch (error) {
-                    console.error('Error banning user:', error);
-                    this.showToast('Error banning user', 'error');
-                }
-            }
-
-            openModal(modalId) {
-                document.getElementById(modalId).classList.add('active');
-            }
-
-            closeModal(modalId) {
-                document.getElementById(modalId).classList.remove('active');
-            }
-
-            showConfirm(title, message, callback) {
-                document.getElementById('confirmTitle').textContent = title;
-                document.getElementById('confirmMessage').textContent = message;
-                this.confirmCallback = callback;
-                this.openModal('confirmModal');
-            }
-
-            confirmAction(confirmed) {
-                this.closeModal('confirmModal');
-                if (confirmed && this.confirmCallback) {
-                    this.confirmCallback();
-                }
-                this.confirmCallback = null;
-            }
-
-            changePage(type, page) {
-                this.currentPage[type] = page;
-                if (type === 'users') {
-                    this.displayUsers(page);
-                } else if (type === 'transactions') {
-                    this.displayTransactions(page);
-                }
-            }
-
-            refreshStats() {
-                this.loadStats();
-                this.loadRecentActivity();
-                this.showToast('Statistics refreshed', 'success');
-            }
+            // [Keep all other existing methods...]
         }
 
         // Initialize the admin app
