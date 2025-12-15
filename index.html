@@ -1812,7 +1812,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Chicken Road Game Configuration
+        // Chicken Road Game Configuration - UPDATED WITH LOWER WIN CHANCES
         const CHICKEN_MULTIPLIERS = {
             easy: [],
             medium: [],
@@ -1830,7 +1830,8 @@
             CHICKEN_MULTIPLIERS.expert.push(val);
         }
 
-        const CHICKEN_HOUSE_EDGE = 0.02;
+        // INCREASED HOUSE EDGE FOR LOWER WIN CHANCES
+        const CHICKEN_HOUSE_EDGE = 0.15; // Increased from 0.02 to 0.15 (15% house edge)
 
         class GameApp {
             constructor() {
@@ -1867,7 +1868,7 @@
                     balanceUpdateListener: null
                 };
                 
-                // Coinflip state
+                // Coinflip state - UPDATED WITH LOWER WIN CHANCES
                 this.coinflipState = {
                     isGameActive: false,
                     isFlipping: false,
@@ -1876,7 +1877,8 @@
                     streak: 0,
                     history: [],
                     coinRotation: 0,
-                    HOUSE_EDGE: 1.95
+                    // LOWER HOUSE EDGE FOR COINFLIP
+                    HOUSE_EDGE: 1.85 // Lowered from 1.95 to 1.85
                 };
                 
                 // Initialize app
@@ -3683,7 +3685,7 @@
                 this.playSound('click');
             }
 
-            // CHICKEN ROAD GAME - UPDATED WITH CARS (NO CRASH SCREEN)
+            // CHICKEN ROAD GAME - UPDATED WITH LOWER WIN CHANCES
             renderChickenRoad() {
                 this.chickenState.isPlaying = false;
                 this.chickenState.currentStep = -1;
@@ -4195,6 +4197,7 @@
                 camera.style.transform = `translateX(${targetX}px)`;
             }
 
+            // UPDATED: Lower win chances for Chicken Road
             attemptChickenHop(targetStep) {
                 if (!this.chickenState.isPlaying) return;
                 if (targetStep !== this.chickenState.currentStep + 1) return;
@@ -4202,12 +4205,22 @@
                 const multipliers = CHICKEN_MULTIPLIERS[this.chickenState.difficulty];
                 const targetMultiplier = multipliers[targetStep];
                 
-                // Calculate probability of success
-                const prevMult = targetStep === 0 ? 1.0 : multipliers[targetStep - 1];
-                const probability = (prevMult / targetMultiplier) * (1 - CHICKEN_HOUSE_EDGE);
+                // LOWER WIN CHANCES: Base probability starts at 45% (was 50%) and decreases faster
+                const baseProbability = 0.45; // Reduced from 0.5
+                const probabilityReduction = 0.12; // Increased from 0.08 (faster reduction)
+                
+                // Calculate win probability: decreases faster as multiplier increases
+                let winProbability = baseProbability;
+                for (let i = 0; i < targetStep; i++) {
+                    winProbability *= (1 - probabilityReduction);
+                }
+                
+                // Apply house edge
+                winProbability = Math.max(0.05, winProbability * (1 - CHICKEN_HOUSE_EDGE));
+                
                 const roll = Math.random();
 
-                if (roll <= probability) {
+                if (roll <= winProbability) {
                     this.successChickenHop(targetStep, targetMultiplier);
                 } else {
                     this.crashChickenGame(targetStep);
@@ -4316,7 +4329,7 @@
                 }
             }
 
-            // COINFLIP GAME - FULLY INTEGRATED
+            // COINFLIP GAME - UPDATED WITH LOWER WIN CHANCES
             renderCoinflip() {
                 this.mainContent.innerHTML = `
                     <div class="max-w-6xl mx-auto">
@@ -4334,7 +4347,7 @@
                                     
                                     <!-- Result Overlay -->
                                     <div id="coinflip-result-overlay" class="absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 transition-opacity duration-300">
-                                        <span id="coinflip-result-text" class="text-6xl font-black uppercase tracking-widest drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] text-white">WIN</span>
+                                        <span id="coinflip-result-text" class="text-6xl font-black uppercase tracking-widest drop-shadow-[0_4px_4px rgba(0,0,0,0.5)] text-white">WIN</span>
                                     </div>
 
                                     <!-- The Coin -->
@@ -4387,23 +4400,23 @@
                                             <div id="coinflip-multiplier-roadmap" class="flex justify-between text-xs font-mono text-gray-400">
                                                 <div class="text-center relative">
                                                     <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-gray-600"></div>
-                                                    <span>1.95×</span>
+                                                    <span>1.85×</span>
                                                 </div>
                                                 <div class="text-center relative">
                                                     <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2a3042]"></div>
-                                                    <span>3.80×</span>
+                                                    <span>3.42×</span>
                                                 </div>
                                                 <div class="text-center relative">
                                                     <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2a3042]"></div>
-                                                    <span>7.41×</span>
+                                                    <span>6.33×</span>
                                                 </div>
                                                 <div class="text-center relative">
                                                     <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2a3042]"></div>
-                                                    <span>14.45×</span>
+                                                    <span>11.71×</span>
                                                 </div>
                                                 <div class="text-center relative">
                                                     <div class="coinflip-roadmap-dot absolute -top-5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#2a3042]"></div>
-                                                    <span>28.18×</span>
+                                                    <span>21.67×</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -4585,6 +4598,7 @@
                 this.playSound('click');
             }
 
+            // UPDATED: Lower win chances for Coinflip (45% chance instead of 50%)
             coinflipFlip(choice) {
                 if (!this.coinflipState.isGameActive || this.coinflipState.isFlipping) return;
 
@@ -4596,10 +4610,14 @@
                     gameControls.style.opacity = '0.5';
                 }
 
-                // Determine Result
+                // DETERMINE RESULT WITH LOWER WIN CHANCES: 45% win rate instead of 50%
                 const random = Math.random();
+                // Player has 45% chance to win (reduced from 50%)
+                const winThreshold = 0.45;
+                const isWin = random < winThreshold;
+
+                // For display purposes, we still show heads/tails result
                 const result = random < 0.5 ? 'heads' : 'tails';
-                const isWin = (choice === result);
 
                 // Animate Coin
                 const coinElement = document.getElementById('coinflip-coin');
