@@ -722,6 +722,87 @@
             to { opacity: 1; backdrop-filter: blur(10px); }
         }
         
+        /* Maintenance Modal */
+        .maintenance-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .maintenance-modal.active {
+            display: flex;
+        }
+        
+        .maintenance-content {
+            background: linear-gradient(135deg, #161b26, #11141c);
+            border-radius: 20px;
+            border: 2px solid #8b5cf6;
+            box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.4), 
+                        0 0 100px rgba(139, 92, 246, 0.2);
+            max-width: 500px;
+            width: 90%;
+            padding: 40px;
+            text-align: center;
+            animation: scale-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: center;
+        }
+        
+        .maintenance-icon {
+            font-size: 4rem;
+            color: #8b5cf6;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        .maintenance-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #8b5cf6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .maintenance-message {
+            color: #b1bad3;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .maintenance-timer {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .maintenance-timer-label {
+            color: #8b5cf6;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .maintenance-timer-value {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: monospace;
+        }
+        
         /* Toast */
         .toast {
             position: fixed;
@@ -878,6 +959,24 @@
             .btn-primary, button {
                 font-size: 14px !important;
                 padding: 12px 16px !important;
+            }
+            
+            /* Maintenance modal responsive */
+            .maintenance-content {
+                padding: 30px 20px;
+                width: 95%;
+            }
+            
+            .maintenance-icon {
+                font-size: 3rem;
+            }
+            
+            .maintenance-title {
+                font-size: 1.5rem;
+            }
+            
+            .maintenance-message {
+                font-size: 1rem;
             }
             
             /* Coinflip responsive */
@@ -1594,6 +1693,28 @@
 <body class="min-h-screen flex flex-col">
     <!-- Global Alert Bar (for 200k+ wins) -->
     <div id="globalAlertBar" class="global-alert-bar hidden"></div>
+    
+    <!-- Maintenance Modal -->
+    <div id="maintenanceModal" class="maintenance-modal">
+        <div class="maintenance-content">
+            <div class="maintenance-icon">
+                <i class="fa-solid fa-tools"></i>
+            </div>
+            <h1 class="maintenance-title">Under Maintenance</h1>
+            <div class="maintenance-message">
+                Moon Casino is currently undergoing scheduled maintenance to bring you an even better gaming experience.
+                We'll be back online shortly!
+            </div>
+            <div class="maintenance-timer">
+                <div class="maintenance-timer-label">Estimated Time Remaining</div>
+                <div id="maintenanceTimer" class="maintenance-timer-value">00:30:00</div>
+            </div>
+            <div class="text-gray-500 text-sm">
+                <i class="fa-solid fa-info-circle mr-1"></i>
+                All games, deposits, and withdrawals are temporarily disabled.
+            </div>
+        </div>
+    </div>
 
     <!-- Sound Toggle -->
     <div class="sound-toggle" id="soundToggle" onclick="app.toggleSound()">
@@ -1916,6 +2037,11 @@
                 this.minesDragStartTile = null;
                 this.minesSelectedTiles = new Set();
                 
+                // Maintenance state
+                this.maintenanceMode = false;
+                this.maintenanceEndTime = null;
+                this.maintenanceTimerInterval = null;
+                
                 // Chicken Road state
                 this.chickenState = {
                     isPlaying: false,
@@ -1952,6 +2078,7 @@
 
             init() {
                 this.checkAuth();
+                this.checkMaintenanceStatus();
                 this.initChat();
                 this.updateFreeCoinsButton();
                 this.listenForBigWins();
@@ -2009,7 +2136,7 @@
                 
                 // Ping every 5 seconds to show user is active
                 this.activityPingInterval = setInterval(() => {
-                    if (this.userId && this.username) {
+                    if (this.userId && this.username && !this.maintenanceMode) {
                         // Check if user has been active in last 10 seconds
                         const isActive = (Date.now() - this.lastActivityTime) < 10000;
                         
@@ -2028,7 +2155,248 @@
                 }, 5000);
             }
 
+            // MAINTENANCE FUNCTIONS
+            async checkMaintenanceStatus() {
+                try {
+                    const maintenanceRef = database.ref('maintenance');
+                    const snapshot = await maintenanceRef.once('value');
+                    
+                    if (snapshot.exists()) {
+                        const maintenanceData = snapshot.val();
+                        this.maintenanceMode = maintenanceData.enabled || false;
+                        this.maintenanceEndTime = maintenanceData.endTime || null;
+                        
+                        if (this.maintenanceMode) {
+                            this.showMaintenanceModal();
+                            this.startMaintenanceTimer();
+                        } else {
+                            this.hideMaintenanceModal();
+                        }
+                    }
+                    
+                    // Listen for maintenance status changes
+                    maintenanceRef.on('value', (snap) => {
+                        if (snap.exists()) {
+                            const maintenanceData = snap.val();
+                            const newMaintenanceMode = maintenanceData.enabled || false;
+                            
+                            if (newMaintenanceMode !== this.maintenanceMode) {
+                                this.maintenanceMode = newMaintenanceMode;
+                                this.maintenanceEndTime = maintenanceData.endTime || null;
+                                
+                                if (this.maintenanceMode) {
+                                    this.showMaintenanceModal();
+                                    this.startMaintenanceTimer();
+                                } else {
+                                    this.hideMaintenanceModal();
+                                }
+                            }
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.error('Error checking maintenance status:', error);
+                }
+            }
+
+            showMaintenanceModal() {
+                const maintenanceModal = document.getElementById('maintenanceModal');
+                if (maintenanceModal) {
+                    maintenanceModal.classList.add('active');
+                }
+                
+                // Disable all game-related buttons
+                this.disableAllGames();
+            }
+
+            hideMaintenanceModal() {
+                const maintenanceModal = document.getElementById('maintenanceModal');
+                if (maintenanceModal) {
+                    maintenanceModal.classList.remove('active');
+                }
+                
+                // Re-enable games
+                this.enableAllGames();
+            }
+
+            disableAllGames() {
+                // Disable game buttons
+                const gameButtons = document.querySelectorAll('button[id^="nav-"], .game-card, .btn-primary');
+                gameButtons.forEach(button => {
+                    button.disabled = true;
+                    button.style.opacity = '0.5';
+                    button.style.cursor = 'not-allowed';
+                });
+                
+                // Disable bet inputs
+                const betInputs = document.querySelectorAll('input[type="number"]');
+                betInputs.forEach(input => {
+                    input.disabled = true;
+                });
+                
+                // Disable chat
+                const chatInput = document.getElementById('chatInput');
+                if (chatInput) {
+                    chatInput.disabled = true;
+                    chatInput.placeholder = 'Chat disabled during maintenance';
+                }
+                
+                // Stop any active games
+                if (this.minesActive) {
+                    this.endMines(false, -1);
+                }
+                if (this.bjInProgress) {
+                    this.resetBlackjackUI();
+                }
+                if (this.chickenState.isPlaying) {
+                    this.chickenState.isPlaying = false;
+                    this.updateChickenUI();
+                }
+                if (this.coinflipState.isGameActive) {
+                    this.coinflipEndGame();
+                }
+            }
+
+            enableAllGames() {
+                // Re-enable game buttons
+                const gameButtons = document.querySelectorAll('button[id^="nav-"], .game-card, .btn-primary');
+                gameButtons.forEach(button => {
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                    button.style.cursor = 'pointer';
+                });
+                
+                // Re-enable bet inputs
+                const betInputs = document.querySelectorAll('input[type="number"]');
+                betInputs.forEach(input => {
+                    input.disabled = false;
+                });
+                
+                // Re-enable chat
+                const chatInput = document.getElementById('chatInput');
+                if (chatInput) {
+                    chatInput.disabled = false;
+                    chatInput.placeholder = 'Type a message...';
+                }
+            }
+
+            startMaintenanceTimer() {
+                if (!this.maintenanceEndTime) {
+                    document.getElementById('maintenanceTimer').textContent = '00:30:00';
+                    return;
+                }
+                
+                // Clear any existing timer
+                if (this.maintenanceTimerInterval) {
+                    clearInterval(this.maintenanceTimerInterval);
+                }
+                
+                const updateTimer = () => {
+                    const now = Date.now();
+                    const endTime = this.maintenanceEndTime;
+                    
+                    if (now >= endTime) {
+                        // Maintenance should be over
+                        document.getElementById('maintenanceTimer').textContent = '00:00:00';
+                        clearInterval(this.maintenanceTimerInterval);
+                        return;
+                    }
+                    
+                    const remaining = endTime - now;
+                    const hours = Math.floor(remaining / (1000 * 60 * 60));
+                    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+                    
+                    const timerElement = document.getElementById('maintenanceTimer');
+                    if (timerElement) {
+                        timerElement.textContent = 
+                            `${hours.toString().padStart(2, '0')}:` +
+                            `${minutes.toString().padStart(2, '0')}:` +
+                            `${seconds.toString().padStart(2, '0')}`;
+                    }
+                };
+                
+                // Update immediately and every second
+                updateTimer();
+                this.maintenanceTimerInterval = setInterval(updateTimer, 1000);
+            }
+
+            // ADMIN FUNCTIONS - To be called from browser console or admin panel
+            async enableMaintenance(minutes = 30) {
+                if (!this.userId) {
+                    this.showToast('You must be logged in to enable maintenance', 'error');
+                    return;
+                }
+                
+                // Only allow admin users (you can add admin check here)
+                const endTime = Date.now() + (minutes * 60 * 1000);
+                
+                const maintenanceData = {
+                    enabled: true,
+                    endTime: endTime,
+                    startedBy: this.username,
+                    startedAt: Date.now(),
+                    message: `Maintenance mode enabled for ${minutes} minutes`
+                };
+                
+                try {
+                    await database.ref('maintenance').set(maintenanceData);
+                    this.showToast(`Maintenance mode enabled for ${minutes} minutes`, 'warning');
+                    this.maintenanceMode = true;
+                    this.maintenanceEndTime = endTime;
+                    this.showMaintenanceModal();
+                    this.startMaintenanceTimer();
+                    
+                    // Add maintenance message to chat
+                    const maintenanceMessage = `🚧 MAINTENANCE ALERT: The casino is undergoing maintenance for approximately ${minutes} minutes. All games are temporarily disabled.`;
+                    this.addChatMessage('System', maintenanceMessage, 'text-yellow-400', true);
+                    
+                } catch (error) {
+                    console.error('Error enabling maintenance:', error);
+                    this.showToast('Failed to enable maintenance mode', 'error');
+                }
+            }
+
+            async disableMaintenance() {
+                if (!this.userId) {
+                    this.showToast('You must be logged in to disable maintenance', 'error');
+                    return;
+                }
+                
+                try {
+                    await database.ref('maintenance').remove();
+                    this.showToast('Maintenance mode disabled', 'success');
+                    this.maintenanceMode = false;
+                    this.maintenanceEndTime = null;
+                    this.hideMaintenanceModal();
+                    
+                    // Clear maintenance timer
+                    if (this.maintenanceTimerInterval) {
+                        clearInterval(this.maintenanceTimerInterval);
+                    }
+                    
+                    // Add maintenance complete message to chat
+                    const completionMessage = '✅ MAINTENANCE COMPLETE: All games are now available!';
+                    this.addChatMessage('System', completionMessage, 'text-green-400', true);
+                    
+                } catch (error) {
+                    console.error('Error disabling maintenance:', error);
+                    this.showToast('Failed to disable maintenance mode', 'error');
+                }
+            }
+
+            // Check maintenance before allowing game actions
+            checkMaintenance() {
+                if (this.maintenanceMode) {
+                    this.showToast('Casino is under maintenance. Please try again later.', 'error');
+                    return false;
+                }
+                return true;
+            }
+
             toggleSound() {
+                if (!this.checkMaintenance()) return;
+                
                 this.soundEnabled = !this.soundEnabled;
                 const toggleBtn = document.getElementById('soundToggle');
                 const icon = toggleBtn.querySelector('i');
@@ -2045,7 +2413,7 @@
             }
 
             playSound(soundName) {
-                if (!this.soundEnabled || !sounds[soundName]) return;
+                if (!this.soundEnabled || !sounds[soundName] || this.maintenanceMode) return;
                 
                 try {
                     const soundClone = sounds[soundName].cloneNode();
@@ -2057,6 +2425,7 @@
             }
 
             toggleSidebar() {
+                if (this.maintenanceMode) return;
                 this.sidebarOpen = !this.sidebarOpen;
                 if (window.innerWidth < 768) {
                     if (this.sidebarOpen) {
@@ -2070,6 +2439,10 @@
             }
 
             toggleChat() {
+                if (this.maintenanceMode) {
+                    this.showToast('Chat disabled during maintenance', 'warning');
+                    return;
+                }
                 this.chatSidebar.classList.toggle('hidden');
                 this.playSound('click');
             }
@@ -2097,6 +2470,8 @@
             }
 
             async updateBalance() {
+                if (this.maintenanceMode) return;
+                
                 // SECURITY CHECK: Verify current user session
                 if (!this.validateCurrentUser()) {
                     this.showToast('Security error: Unauthorized action', 'error');
@@ -2252,18 +2627,25 @@
             }
 
             showSignup() {
+                if (this.maintenanceMode) return;
                 document.getElementById('loginForm').classList.add('hidden');
                 document.getElementById('signupForm').classList.remove('hidden');
                 this.playSound('click');
             }
 
             showLogin() {
+                if (this.maintenanceMode) return;
                 document.getElementById('signupForm').classList.add('hidden');
                 document.getElementById('loginForm').classList.remove('hidden');
                 this.playSound('click');
             }
 
             async signup() {
+                if (this.maintenanceMode) {
+                    this.showToast('Signup disabled during maintenance', 'error');
+                    return;
+                }
+
                 const username = document.getElementById('signupUsername').value.trim();
                 const email = document.getElementById('signupEmail').value.trim();
                 const password = document.getElementById('signupPassword').value;
@@ -2345,6 +2727,11 @@
             }
 
             async login() {
+                if (this.maintenanceMode) {
+                    this.showToast('Login disabled during maintenance', 'error');
+                    return;
+                }
+
                 const email = document.getElementById('loginEmail').value.trim();
                 const password = document.getElementById('loginPassword').value;
 
@@ -2437,7 +2824,7 @@
             }
 
             async updateOnlineStatus() {
-                if (!this.userId) return;
+                if (!this.userId || this.maintenanceMode) return;
 
                 // Set user as online with active status
                 await database.ref('online/' + this.userId).set({
@@ -2471,6 +2858,8 @@
 
             // Wallet Functions
             openDepositModal() {
+                if (!this.checkMaintenance()) return;
+                
                 if (!this.userId) {
                     this.showToast('Please login first', 'error');
                     return;
@@ -2495,21 +2884,23 @@
                 if (claimButton && timerElement) {
                     const canClaim = this.balance < 100;
                     
-                    if (canClaim) {
+                    if (canClaim && !this.maintenanceMode) {
                         timerElement.textContent = 'Ready to Claim';
                         claimButton.disabled = false;
                         claimButton.textContent = 'Claim 500 Coins';
                         claimButton.className = 'w-full btn-primary py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-[1.02] touch-button';
                     } else {
-                        timerElement.textContent = 'Balance too high';
+                        timerElement.textContent = this.maintenanceMode ? 'Disabled (Maintenance)' : 'Balance too high';
                         claimButton.disabled = true;
-                        claimButton.textContent = 'Balance must be under 100';
+                        claimButton.textContent = this.maintenanceMode ? 'Maintenance Mode' : 'Balance must be under 100';
                         claimButton.className = 'w-full bg-gray-700 text-gray-400 py-3 rounded-xl font-bold text-sm cursor-not-allowed touch-button';
                     }
                 }
             }
 
             async claimFreeCoins() {
+                if (!this.checkMaintenance()) return;
+                
                 if (!this.userId) return;
 
                 // SECURITY CHECK
@@ -2552,6 +2943,8 @@
 
             // FIXED: Secure money transfer with database transaction
             async sendMoney() {
+                if (!this.checkMaintenance()) return;
+                
                 if (!this.userId) return;
                 
                 // SECURITY VALIDATION
@@ -2679,6 +3072,8 @@
 
             // Show global alert bar for 200k+ wins
             showGlobalAlert(message, type = 'purple') {
+                if (this.maintenanceMode) return;
+                
                 const alertBar = document.getElementById('globalAlertBar');
                 if (!alertBar) return;
                 
@@ -2718,6 +3113,11 @@
             }
 
             addChatMessage(user, msg, color = 'text-white', saveToDB = true) {
+                if (this.maintenanceMode && saveToDB) {
+                    // Don't save new chat messages during maintenance
+                    saveToDB = false;
+                }
+                
                 const messages = document.getElementById('chatMessages');
                 const div = document.createElement('div');
                 div.className = `flex gap-2 ${color} text-sm`;
@@ -2739,6 +3139,8 @@
             }
 
             addBigWinNotification(username, amount, game) {
+                if (this.maintenanceMode) return;
+                
                 const messages = document.getElementById('chatMessages');
                 const div = document.createElement('div');
                 
@@ -2769,6 +3171,12 @@
 
             sendChatMessage(e) {
                 e.preventDefault();
+                
+                if (this.maintenanceMode) {
+                    this.showToast('Chat disabled during maintenance', 'warning');
+                    return;
+                }
+                
                 if (!this.userId) {
                     this.showToast('Please login to chat', 'error');
                     return;
@@ -2785,7 +3193,7 @@
 
             // Record Wager for Leaderboard
             async recordWager(amount) {
-                if (!this.userId || amount <= 0) return;
+                if (!this.userId || amount <= 0 || this.maintenanceMode) return;
 
                 const now = Date.now();
                 const today = new Date();
@@ -2816,7 +3224,7 @@
 
             // Record Win/Loss - UPDATED for special effects
             async recordWin(amount, game) {
-                if (!this.userId || amount <= 0) return;
+                if (!this.userId || amount <= 0 || this.maintenanceMode) return;
 
                 // SECURITY CHECK
                 if (!this.validateCurrentUser()) return;
@@ -2892,7 +3300,7 @@
             }
 
             async recordLoss(amount, game) {
-                if (!this.userId || amount <= 0) return;
+                if (!this.userId || amount <= 0 || this.maintenanceMode) return;
 
                 // SECURITY CHECK
                 if (!this.validateCurrentUser()) return;
@@ -2946,6 +3354,8 @@
 
             // Game Loading
             loadGame(gameName) {
+                if (!this.checkMaintenance()) return;
+                
                 if (window.innerWidth < 768 && this.sidebarOpen) {
                     this.toggleSidebar();
                 }
@@ -3295,6 +3705,8 @@
             }
 
             playMines() {
+                if (!this.checkMaintenance()) return;
+                
                 if (!this.userId) {
                     this.showToast('Please login to play', 'error');
                     return;
@@ -3508,6 +3920,8 @@
             }
 
             adjustBjBet(multiplier) {
+                if (this.maintenanceMode) return;
+                
                 const betInput = document.getElementById('bjBetInput');
                 const currentBet = parseFloat(betInput.value) || 50;
                 let newBet = currentBet * multiplier;
@@ -3523,6 +3937,8 @@
             }
 
             bjDeal() {
+                if (!this.checkMaintenance()) return;
+                
                 if (!this.userId) {
                     this.showToast('Please login to play', 'error');
                     return;
@@ -4208,6 +4624,8 @@
             }
 
             handleChickenAction() {
+                if (!this.checkMaintenance()) return;
+                
                 if (this.chickenState.isPlaying) {
                     this.chickenCashOut();
                 } else {
@@ -4795,6 +5213,8 @@
             }
 
             coinflipStartGame() {
+                if (!this.checkMaintenance()) return;
+                
                 if (!this.userId) {
                     this.showToast('Please login to play', 'error');
                     return;
@@ -5234,6 +5654,11 @@
 
         // Initialize the app
         const app = new GameApp();
+        
+        // ADMIN FUNCTIONS - Can be called from browser console
+        window.enableMaintenance = (minutes = 30) => app.enableMaintenance(minutes);
+        window.disableMaintenance = () => app.disableMaintenance();
+        window.checkMaintenance = () => console.log('Maintenance mode:', app.maintenanceMode);
     </script>
 </body>
 </html>
