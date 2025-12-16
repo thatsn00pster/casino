@@ -1532,9 +1532,69 @@
                 width: 120px;
             }
         }
+
+        /* Global Alert Bar */
+        .global-alert-bar {
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            animation: slideDown 0.5s ease-out;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .global-alert-bar.purple {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            border-bottom: 3px solid #a78bfa;
+        }
+        
+        /* Money Transfer Chat Messages */
+        .chat-transfer-message {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin: 4px 0;
+            font-size: 14px;
+        }
+        
+        .chat-transfer-message.gold {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.15));
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        
+        .chat-transfer-message.purple {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.15));
+            border: 1px solid rgba(139, 92, 246, 0.4);
+        }
+
+        /* Special Win Notification Styles */
+        .big-win-notification.purple {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(124, 58, 237, 0.15));
+            border: 2px solid #8b5cf6;
+        }
+        
+        .big-win-notification.purple .amount {
+            color: #a78bfa;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.7);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
+    <!-- Global Alert Bar (for 200k+ wins) -->
+    <div id="globalAlertBar" class="global-alert-bar hidden"></div>
+
     <!-- Sound Toggle -->
     <div class="sound-toggle" id="soundToggle" onclick="app.toggleSound()">
         <i class="fa-solid fa-volume-high"></i>
@@ -1881,6 +1941,11 @@
                     HOUSE_EDGE: 1.85 // Lowered from 1.95 to 1.85
                 };
                 
+                // Online users tracking
+                this.onlineUsers = new Map();
+                this.activityPingInterval = null;
+                this.lastActivityTime = Date.now();
+                
                 // Initialize app
                 this.init();
             }
@@ -1890,6 +1955,7 @@
                 this.initChat();
                 this.updateFreeCoinsButton();
                 this.listenForBigWins();
+                this.startActivityPing();
                 
                 // Set default home page
                 this.loadGame('home');
@@ -1902,6 +1968,12 @@
                         this.toggleSidebar();
                     }
                 });
+                
+                // Track user activity
+                document.addEventListener('mousemove', () => this.updateUserActivity());
+                document.addEventListener('click', () => this.updateUserActivity());
+                document.addEventListener('keypress', () => this.updateUserActivity());
+                document.addEventListener('touchstart', () => this.updateUserActivity());
                 
                 // Prevent zoom on iOS
                 document.addEventListener('touchstart', (e) => {
@@ -1923,6 +1995,37 @@
                 } else {
                     viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
                 }
+            }
+
+            updateUserActivity() {
+                this.lastActivityTime = Date.now();
+            }
+
+            startActivityPing() {
+                // Clear any existing interval
+                if (this.activityPingInterval) {
+                    clearInterval(this.activityPingInterval);
+                }
+                
+                // Ping every 5 seconds to show user is active
+                this.activityPingInterval = setInterval(() => {
+                    if (this.userId && this.username) {
+                        // Check if user has been active in last 10 seconds
+                        const isActive = (Date.now() - this.lastActivityTime) < 10000;
+                        
+                        if (isActive) {
+                            // Update online status
+                            database.ref('online/' + this.userId).set({
+                                username: this.username,
+                                lastSeen: Date.now(),
+                                isActive: true
+                            });
+                        } else {
+                            // User is inactive, remove from online list
+                            database.ref('online/' + this.userId).remove();
+                        }
+                    }
+                }, 5000);
             }
 
             toggleSound() {
@@ -2294,11 +2397,6 @@
 
             logout() {
                 localStorage.removeItem('moonCasinoUser');
-                this.userId = '';
-                this.username = '';
-                this.balance = 500;
-                this.showAuthModal();
-                this.updateUI();
                 
                 // Remove from online users
                 if (this.userId) {
@@ -2310,11 +2408,23 @@
                     database.ref('sessions/' + this.userId).remove();
                 }
                 
+                // Clear activity ping
+                if (this.activityPingInterval) {
+                    clearInterval(this.activityPingInterval);
+                    this.activityPingInterval = null;
+                }
+                
                 // Remove balance listener
                 if (this.chickenState.balanceUpdateListener) {
                     this.chickenState.balanceUpdateListener();
                     this.chickenState.balanceUpdateListener = null;
                 }
+                
+                this.userId = '';
+                this.username = '';
+                this.balance = 500;
+                this.showAuthModal();
+                this.updateUI();
                 
                 this.showToast('Logged out successfully', 'warning');
             }
@@ -2329,21 +2439,33 @@
             async updateOnlineStatus() {
                 if (!this.userId) return;
 
-                // Set user as online
+                // Set user as online with active status
                 await database.ref('online/' + this.userId).set({
                     username: this.username,
-                    lastSeen: Date.now()
+                    lastSeen: Date.now(),
+                    isActive: true
                 });
 
-                // Remove after 2 minutes of inactivity
-                setTimeout(() => {
-                    database.ref('online/' + this.userId).remove();
-                }, 120000);
-
-                // Listen for online users
+                // Listen for online users with proper tracking
                 database.ref('online').on('value', (snapshot) => {
-                    const onlineCount = snapshot.numChildren();
-                    document.getElementById('onlineCount').textContent = onlineCount + ' Online';
+                    const now = Date.now();
+                    const activeUsers = [];
+                    
+                    snapshot.forEach(child => {
+                        const user = child.val();
+                        // Check if user was active in last 15 seconds
+                        if (now - user.lastSeen < 15000 && user.isActive) {
+                            activeUsers.push(user);
+                        }
+                    });
+                    
+                    this.onlineUsers = activeUsers;
+                    
+                    // Update display
+                    const onlineCount = document.getElementById('onlineCount');
+                    if (onlineCount) {
+                        onlineCount.textContent = activeUsers.length + ' Online';
+                    }
                 });
             }
 
@@ -2462,77 +2584,118 @@
                 }
 
                 try {
-                    // Use database transaction to prevent race conditions and duplication
-                    const result = await database.ref().transaction((currentData) => {
-                        if (!currentData) return;
-                        
-                        const users = currentData.users || {};
-                        const sender = users[this.userId];
-                        let recipient = null;
-                        let recipientId = null;
-                        
-                        // Find recipient
-                        Object.keys(users).forEach(id => {
-                            if (users[id].username === recipientUsername) {
-                                recipient = users[id];
-                                recipientId = id;
-                            }
-                        });
-                        
-                        // Validate users exist
-                        if (!recipient || !sender) {
-                            return; // Abort if users not found
-                        }
-                        
-                        // Verify sender has enough balance
-                        if (sender.balance < amount) {
-                            return; // Abort if insufficient funds
-                        }
-                        
-                        // Perform the transfer
-                        sender.balance -= amount;
-                        recipient.balance = (recipient.balance || 0) + amount;
-                        
-                        // Update both users in the transaction
-                        users[this.userId] = sender;
-                        users[recipientId] = recipient;
-                        
-                        currentData.users = users;
-                        
-                        return currentData;
+                    // First, find the recipient user
+                    const usersSnapshot = await database.ref('users').orderByChild('username').equalTo(recipientUsername).once('value');
+                    
+                    if (!usersSnapshot.exists()) {
+                        this.showToast('Recipient not found', 'error');
+                        return;
+                    }
+                    
+                    let recipientId = null;
+                    usersSnapshot.forEach(child => {
+                        recipientId = child.key;
                     });
                     
-                    if (result.committed) {
-                        // Update local balance
-                        this.balance -= amount;
-                        this.updateBalance();
-                        this.showToast(`Sent ${amount} coins to ${recipientUsername}`, 'success');
-                        this.playSound('click');
-                        
-                        // Clear form
-                        document.getElementById('sendToUsername').value = '';
-                        document.getElementById('sendAmount').value = '';
-                        
-                        // Add transaction record
-                        const transaction = {
-                            from: this.username,
-                            to: recipientUsername,
-                            amount: amount,
-                            timestamp: Date.now(),
-                            type: 'transfer'
-                        };
-
-                        await database.ref('transactions').push(transaction);
-                        
-                        // Add chat message
-                        this.addChatMessage('System', `${this.username} sent ${amount} coins to ${recipientUsername}!`, 'text-[#10b981]');
-                    } else {
-                        this.showToast('Transaction failed. Please try again.', 'error');
+                    if (!recipientId) {
+                        this.showToast('Recipient not found', 'error');
+                        return;
                     }
+
+                    // Use database transaction to prevent race conditions
+                    const updates = {};
+                    
+                    // Deduct from sender
+                    const senderNewBalance = this.balance - amount;
+                    updates['users/' + this.userId + '/balance'] = senderNewBalance;
+                    
+                    // Add to recipient
+                    const recipientSnapshot = await database.ref('users/' + recipientId + '/balance').once('value');
+                    const recipientCurrentBalance = recipientSnapshot.val() || 0;
+                    updates['users/' + recipientId + '/balance'] = recipientCurrentBalance + amount;
+                    
+                    // Perform all updates at once
+                    await database.ref().update(updates);
+                    
+                    // Update local balance
+                    this.balance = senderNewBalance;
+                    this.updateBalance();
+                    
+                    // Clear form
+                    document.getElementById('sendToUsername').value = '';
+                    document.getElementById('sendAmount').value = '';
+                    
+                    // Add transaction record
+                    const transaction = {
+                        from: this.username,
+                        fromId: this.userId,
+                        to: recipientUsername,
+                        toId: recipientId,
+                        amount: amount,
+                        timestamp: Date.now(),
+                        type: 'transfer'
+                    };
+
+                    await database.ref('transactions').push(transaction);
+                    
+                    // Show success message
+                    this.showToast(`Sent ${amount.toLocaleString()} coins to ${recipientUsername}`, 'success');
+                    this.playSound('win');
+                    
+                    // Add chat message with appropriate styling
+                    let messageClass = 'chat-transfer-message';
+                    let messageColor = '';
+                    
+                    if (amount >= 100000) {
+                        // Purple alert for 100k+ transfers
+                        messageClass += ' purple';
+                        messageColor = 'purple';
+                        this.showGlobalAlert(`${this.username} sent ${amount.toLocaleString()} coins to ${recipientUsername}!`, 'purple');
+                    } else if (amount >= 10000) {
+                        // Gold alert for 10k+ transfers
+                        messageClass += ' gold';
+                        messageColor = 'gold';
+                    }
+                    
+                    // Add chat message
+                    this.addChatMessage('💰 Money Transfer', 
+                        `${this.username} sent ${amount.toLocaleString()} coins to ${recipientUsername}!`, 
+                        'text-[#10b981]', true);
+                    
+                    // Play confetti for large transfers
+                    if (amount >= 10000) {
+                        confetti({
+                            particleCount: Math.min(amount / 100, 500),
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    }
+                    
                 } catch (error) {
                     console.error('Money transfer error:', error);
                     this.showToast('Transaction error occurred', 'error');
                 }
+            }
+
+            // Show global alert bar for 200k+ wins
+            showGlobalAlert(message, type = 'purple') {
+                const alertBar = document.getElementById('globalAlertBar');
+                if (!alertBar) return;
+                
+                alertBar.className = `global-alert-bar ${type}`;
+                alertBar.innerHTML = `
+                    <div class="flex items-center justify-center gap-3">
+                        <i class="fa-solid ${type === 'purple' ? 'fa-crown' : 'fa-trophy'}"></i>
+                        <span>${message}</span>
+                        <i class="fa-solid ${type === 'purple' ? 'fa-crown' : 'fa-trophy'}"></i>
+                    </div>
+                `;
+                alertBar.classList.remove('hidden');
+                
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    alertBar.classList.add('hidden');
+                }, 5000);
             }
 
             // Chat Functions - Fixed to only load new messages
@@ -2578,18 +2741,30 @@
             addBigWinNotification(username, amount, game) {
                 const messages = document.getElementById('chatMessages');
                 const div = document.createElement('div');
-                div.className = 'big-win-notification';
+                
+                // Determine notification style based on amount
+                let notificationClass = 'big-win-notification';
+                if (amount >= 100000) {
+                    notificationClass += ' purple';
+                }
+                
+                div.className = notificationClass;
                 div.innerHTML = `
                     <div class="flex items-center justify-center gap-2 mb-2">
-                        <i class="fa-solid fa-trophy text-yellow-400 text-sm"></i>
+                        <i class="fa-solid fa-trophy ${amount >= 100000 ? 'text-purple-400' : 'text-yellow-400'} text-sm"></i>
                         <div class="username">${username}</div>
-                        <i class="fa-solid fa-trophy text-yellow-400 text-sm"></i>
+                        <i class="fa-solid fa-trophy ${amount >= 100000 ? 'text-purple-400' : 'text-yellow-400'} text-sm"></i>
                     </div>
                     <div class="amount">${amount.toLocaleString()} coins</div>
                     <div class="text-gray-300 text-xs mt-1">won in ${game}!</div>
                 `;
                 messages.appendChild(div);
                 messages.scrollTop = messages.scrollHeight;
+                
+                // Show global alert for 200k+ wins
+                if (amount >= 200000) {
+                    this.showGlobalAlert(`${username} won ${amount.toLocaleString()} coins playing ${game}!`, 'purple');
+                }
             }
 
             sendChatMessage(e) {
@@ -2639,7 +2814,7 @@
                 await userRef.update(updates);
             }
 
-            // Record Win/Loss
+            // Record Win/Loss - UPDATED for special effects
             async recordWin(amount, game) {
                 if (!this.userId || amount <= 0) return;
 
@@ -2681,14 +2856,38 @@
 
                 await database.ref('transactions').push(transaction);
 
-                // Announce big win in chat
+                // Announce big win in chat with appropriate styling
                 if (amount >= this.bigWinThreshold) {
                     this.addBigWinNotification(this.username, amount, game);
                     
                     // Also save as system message
-                    this.addChatMessage('System', 
-                        `🎉 ${this.username} just won ${amount.toLocaleString()} coins in ${game}! 🎉`, 
-                        'text-yellow-400', true);
+                    const winMessage = `🎉 ${this.username} just won ${amount.toLocaleString()} coins in ${game}! 🎉`;
+                    const messageColor = amount >= 100000 ? 'text-purple-400' : 'text-yellow-400';
+                    this.addChatMessage('System', winMessage, messageColor, true);
+                    
+                    // Special effects for huge wins
+                    if (amount >= 100000) {
+                        // Purple confetti for 100k+ wins
+                        confetti({
+                            particleCount: 300,
+                            spread: 100,
+                            origin: { y: 0.6 },
+                            colors: ['#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6']
+                        });
+                        
+                        // Show global alert for 200k+ wins
+                        if (amount >= 200000) {
+                            this.showGlobalAlert(`${this.username} won ${amount.toLocaleString()} coins playing ${game}!`, 'purple');
+                        }
+                    } else if (amount >= 10000) {
+                        // Gold confetti for 10k+ wins
+                        confetti({
+                            particleCount: 200,
+                            spread: 90,
+                            origin: { y: 0.6 },
+                            colors: ['#f59e0b', '#d97706', '#b45309']
+                        });
+                    }
                 }
             }
 
@@ -2735,6 +2934,11 @@
                         // Add to chat with slight delay
                         setTimeout(() => {
                             this.addBigWinNotification(transaction.username, transaction.amount, transaction.game);
+                            
+                            // Show global alert for 200k+ wins from other users
+                            if (transaction.amount >= 200000) {
+                                this.showGlobalAlert(`${transaction.username} won ${transaction.amount.toLocaleString()} coins playing ${transaction.game}!`, 'purple');
+                            }
                         }, 1000);
                     }
                 });
@@ -3630,11 +3834,30 @@
                                 payoutEl.style.color = '#10b981';
                             }
                             this.playSound('win');
-                            confetti({
-                                particleCount: 150,
-                                spread: 70,
-                                origin: { y: 0.6 }
-                            });
+                            
+                            // Special effects for big wins
+                            if (this.bjBet >= 100000) {
+                                // Purple confetti for 100k+ wins
+                                confetti({
+                                    particleCount: 300,
+                                    spread: 100,
+                                    origin: { y: 0.6 },
+                                    colors: ['#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6']
+                                });
+                                
+                                // Show global alert for 200k+ wins
+                                if (this.bjBet >= 200000) {
+                                    this.showGlobalAlert(`${this.username} won ${winAmount.toLocaleString()} coins playing Blackjack!`, 'purple');
+                                }
+                            } else if (this.bjBet >= 10000) {
+                                // Gold confetti for 10k+ wins
+                                confetti({
+                                    particleCount: 200,
+                                    spread: 90,
+                                    origin: { y: 0.6 },
+                                    colors: ['#f59e0b', '#d97706', '#b45309']
+                                });
+                            }
                             break;
                             
                         case 'push':
@@ -4337,6 +4560,30 @@
                         });
                     }
                 }
+                
+                // Special effects for huge wins
+                if (profit >= 100000) {
+                    // Purple confetti for 100k+ wins
+                    confetti({
+                        particleCount: 300,
+                        spread: 100,
+                        origin: { y: 0.6 },
+                        colors: ['#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6']
+                    });
+                    
+                    // Show global alert for 200k+ wins
+                    if (profit >= 200000) {
+                        this.showGlobalAlert(`${this.username} won ${winnings.toFixed(0)} coins playing Chicken Road!`, 'purple');
+                    }
+                } else if (profit >= 10000) {
+                    // Gold confetti for 10k+ wins
+                    confetti({
+                        particleCount: 200,
+                        spread: 90,
+                        origin: { y: 0.6 },
+                        colors: ['#f59e0b', '#d97706', '#b45309']
+                    });
+                }
             }
 
             // COINFLIP GAME - UPDATED WITH LOWER WIN CHANCES
@@ -4702,6 +4949,30 @@
                 this.coinflipShowResultOverlay(`+$${winnings.toFixed(2)}`, "text-[#f59e0b]");
                 this.coinflipEndGame();
                 this.playSound('win');
+                
+                // Special effects for huge wins
+                if (profit >= 100000) {
+                    // Purple confetti for 100k+ wins
+                    confetti({
+                        particleCount: 300,
+                        spread: 100,
+                        origin: { y: 0.6 },
+                        colors: ['#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6']
+                    });
+                    
+                    // Show global alert for 200k+ wins
+                    if (profit >= 200000) {
+                        this.showGlobalAlert(`${this.username} won ${winnings.toFixed(2)} coins playing Coinflip!`, 'purple');
+                    }
+                } else if (profit >= 10000) {
+                    // Gold confetti for 10k+ wins
+                    confetti({
+                        particleCount: 200,
+                        spread: 90,
+                        origin: { y: 0.6 },
+                        colors: ['#f59e0b', '#d97706', '#b45309']
+                    });
+                }
             }
 
             coinflipEndGame() {
