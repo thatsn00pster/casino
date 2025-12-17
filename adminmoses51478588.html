@@ -1553,7 +1553,7 @@
             }
 
             checkAdminAuth() {
-                const adminData = localStorage.getItem('moonCasinoAdmin');
+                const adminData = localStorage.getItem('moonCasinoUser'); // Changed from moonCasinoAdmin to moonCasinoUser
                 if (!adminData) {
                     // Redirect to main site or show login
                     window.location.href = 'index.html';
