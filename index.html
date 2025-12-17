@@ -1928,6 +1928,10 @@
                         <button id="claimCoinsBtn" onclick="app.claimFreeCoins()" class="w-full btn-primary py-3 rounded-xl font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 touch-button">
                             Claim 500 Coins
                         </button>
+                        <div class="text-xs text-gray-500 mt-2">
+                            <i class="fa-solid fa-clock mr-1"></i>
+                            <span id="freeCoinsCooldown">No cooldown</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -1945,6 +1949,16 @@
                         <div>
                             <label class="text-xs text-[#6b7280] font-bold mb-1 block tracking-wider">Amount to Send</label>
                             <input type="number" id="sendAmount" placeholder="0" class="w-full bg-gradient-to-r from-[#0b0e14] to-[#1e293b] border border-[#2a3042] rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-[#10b981] transition-all duration-300 text-sm">
+                        </div>
+                        <div class="bg-gradient-to-r from-[#0f172a] to-[#1e293b] p-3 rounded-lg border border-[#2a3042]">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-gray-400">Recipient receives:</span>
+                                <span id="recipientReceives" class="text-[#10b981] font-bold">0 coins</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-gray-400">10% transfer fee:</span>
+                                <span id="transferFee" class="text-[#f59e0b] font-bold">0 coins</span>
+                            </div>
                         </div>
                         <button onclick="app.sendMoney()" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 rounded-xl font-bold text-sm tracking-wider transition-all duration-300 hover:scale-[1.02] touch-button">
                             <i class="fa-solid fa-paper-plane mr-1 text-xs"></i> Send Money
@@ -2030,6 +2044,7 @@
                 this.minesActive = false;
                 this.bjInProgress = false;
                 this.lastFreeCoinsClaim = 0;
+                this.freeCoinsCooldown = 0; // 5-minute cooldown after claiming free coins
                 this.bigWinThreshold = 1000;
                 this.chatLoadedAt = null;
                 this.liveWinsInterval = null;
@@ -2112,6 +2127,9 @@
                 // Handle window resize
                 window.addEventListener('resize', this.handleResize.bind(this));
                 this.handleResize();
+                
+                // Update transfer fee display
+                document.getElementById('sendAmount')?.addEventListener('input', () => this.updateTransferFeeDisplay());
             }
             
             handleResize() {
@@ -2122,6 +2140,21 @@
                 } else {
                     viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
                 }
+            }
+            
+            updateTransferFeeDisplay() {
+                const amountInput = document.getElementById('sendAmount');
+                const recipientReceives = document.getElementById('recipientReceives');
+                const transferFee = document.getElementById('transferFee');
+                
+                if (!amountInput || !recipientReceives || !transferFee) return;
+                
+                const amount = parseFloat(amountInput.value) || 0;
+                const fee = Math.floor(amount * 0.10); // 10% fee
+                const recipientGets = amount - fee;
+                
+                recipientReceives.textContent = `${recipientGets} coins`;
+                transferFee.textContent = `${fee} coins`;
             }
 
             updateUserActivity() {
@@ -2580,6 +2613,7 @@
                         this.username = userData.username;
                         this.balance = parseInt(userData.balance) || 500;
                         this.lastFreeCoinsClaim = userData.lastFreeCoins || 0;
+                        this.freeCoinsCooldown = userData.freeCoinsCooldown || 0;
                         
                         this.updateUI();
                         this.hideAuthModal();
@@ -2684,6 +2718,7 @@
                     balance: 500,
                     createdAt: Date.now(),
                     lastFreeCoins: 0,
+                    freeCoinsCooldown: 0,
                     totalWins: 0,
                     totalLosses: 0,
                     biggestWin: 0,
@@ -2710,6 +2745,7 @@
                 this.username = username;
                 this.balance = 500;
                 this.lastFreeCoinsClaim = 0;
+                this.freeCoinsCooldown = 0;
 
                 this.updateUI();
                 this.hideAuthModal();
@@ -2773,6 +2809,7 @@
                 this.username = userFound.username;
                 this.balance = userFound.balance || 500;
                 this.lastFreeCoinsClaim = userFound.lastFreeCoins || 0;
+                this.freeCoinsCooldown = userFound.freeCoinsCooldown || 0;
 
                 this.updateUI();
                 this.hideAuthModal();
@@ -2880,20 +2917,46 @@
             updateFreeCoinsButton() {
                 const claimButton = document.getElementById('claimCoinsBtn');
                 const timerElement = document.getElementById('freeCoinsTimer');
+                const cooldownElement = document.getElementById('freeCoinsCooldown');
 
-                if (claimButton && timerElement) {
+                if (claimButton && timerElement && cooldownElement) {
                     const canClaim = this.balance < 100;
+                    const now = Date.now();
+                    const cooldownRemaining = this.freeCoinsCooldown - now;
                     
-                    if (canClaim && !this.maintenanceMode) {
+                    if (canClaim && cooldownRemaining <= 0 && !this.maintenanceMode) {
                         timerElement.textContent = 'Ready to Claim';
                         claimButton.disabled = false;
                         claimButton.textContent = 'Claim 500 Coins';
                         claimButton.className = 'w-full btn-primary py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:scale-[1.02] touch-button';
+                        cooldownElement.textContent = 'No cooldown';
+                        cooldownElement.className = 'text-xs text-gray-500';
                     } else {
-                        timerElement.textContent = this.maintenanceMode ? 'Disabled (Maintenance)' : 'Balance too high';
-                        claimButton.disabled = true;
-                        claimButton.textContent = this.maintenanceMode ? 'Maintenance Mode' : 'Balance must be under 100';
-                        claimButton.className = 'w-full bg-gray-700 text-gray-400 py-3 rounded-xl font-bold text-sm cursor-not-allowed touch-button';
+                        if (cooldownRemaining > 0) {
+                            // Show cooldown timer
+                            const minutes = Math.floor(cooldownRemaining / 60000);
+                            const seconds = Math.floor((cooldownRemaining % 60000) / 1000);
+                            timerElement.textContent = 'Cooldown Active';
+                            claimButton.disabled = true;
+                            claimButton.textContent = 'Wait ' + minutes + 'm ' + seconds + 's';
+                            claimButton.className = 'w-full bg-gray-700 text-gray-400 py-3 rounded-xl font-bold text-sm cursor-not-allowed touch-button';
+                            cooldownElement.textContent = `${minutes}m ${seconds}s remaining`;
+                            cooldownElement.className = 'text-xs text-yellow-400';
+                        } else if (this.maintenanceMode) {
+                            timerElement.textContent = 'Disabled (Maintenance)';
+                            claimButton.disabled = true;
+                            claimButton.textContent = 'Maintenance Mode';
+                            claimButton.className = 'w-full bg-gray-700 text-gray-400 py-3 rounded-xl font-bold text-sm cursor-not-allowed touch-button';
+                            cooldownElement.textContent = 'Maintenance active';
+                            cooldownElement.className = 'text-xs text-red-400';
+                        } else {
+                            timerElement.textContent = 'Balance too high';
+                            claimButton.disabled = true;
+                            claimButton.textContent = 'Balance must be under 100';
+                            claimButton.className = 'w-full bg-gray-700 text-gray-400 py-3 rounded-xl font-bold text-sm cursor-not-allowed touch-button';
+                            cooldownElement.textContent = 'Balance > 100 coins';
+                            cooldownElement.className = 'text-xs text-gray-500';
+                        }
                     }
                 }
             }
@@ -2915,14 +2978,26 @@
                     return;
                 }
 
+                // Check cooldown
+                const now = Date.now();
+                if (this.freeCoinsCooldown > now) {
+                    const remaining = this.freeCoinsCooldown - now;
+                    const minutes = Math.floor(remaining / 60000);
+                    const seconds = Math.floor((remaining % 60000) / 1000);
+                    this.showToast(`Please wait ${minutes}m ${seconds}s before claiming again`, 'warning');
+                    return;
+                }
+
                 this.balance += 500;
                 this.lastFreeCoinsClaim = Date.now();
+                this.freeCoinsCooldown = Date.now() + (5 * 60 * 1000); // 5 minute cooldown
 
                 // Update in database with transaction
                 await database.ref('users/' + this.userId).transaction((currentUser) => {
                     if (currentUser && currentUser.userId === this.userId) {
                         currentUser.balance = this.balance;
                         currentUser.lastFreeCoins = this.lastFreeCoinsClaim;
+                        currentUser.freeCoinsCooldown = this.freeCoinsCooldown;
                         return currentUser;
                     }
                     return;
@@ -2930,7 +3005,7 @@
 
                 this.updateBalance();
                 this.updateFreeCoinsButton();
-                this.showToast('500 free coins claimed!', 'success');
+                this.showToast('500 free coins claimed! 5-minute cooldown started.', 'success');
                 this.playSound('win');
 
                 // Confetti effect
@@ -2941,7 +3016,7 @@
                 });
             }
 
-            // FIXED: Secure money transfer with database transaction
+            // FIXED: Secure money transfer with database transaction and 10% tax
             async sendMoney() {
                 if (!this.checkMaintenance()) return;
                 
@@ -2950,6 +3025,16 @@
                 // SECURITY VALIDATION
                 if (!this.validateCurrentUser()) {
                     this.showToast('Security alert: Invalid session', 'error');
+                    return;
+                }
+                
+                // Check if user is in cooldown after claiming free coins
+                const now = Date.now();
+                if (this.freeCoinsCooldown > now) {
+                    const remaining = this.freeCoinsCooldown - now;
+                    const minutes = Math.floor(remaining / 60000);
+                    const seconds = Math.floor((remaining % 60000) / 1000);
+                    this.showToast(`Cannot send money for ${minutes}m ${seconds}s after claiming free coins`, 'error');
                     return;
                 }
                 
@@ -2976,6 +3061,10 @@
                     return;
                 }
 
+                // Calculate 10% tax
+                const tax = Math.floor(amount * 0.10);
+                const recipientAmount = amount - tax;
+
                 try {
                     // First, find the recipient user
                     const usersSnapshot = await database.ref('users').orderByChild('username').equalTo(recipientUsername).once('value');
@@ -2998,14 +3087,14 @@
                     // Use database transaction to prevent race conditions
                     const updates = {};
                     
-                    // Deduct from sender
+                    // Deduct from sender (full amount)
                     const senderNewBalance = this.balance - amount;
                     updates['users/' + this.userId + '/balance'] = senderNewBalance;
                     
-                    // Add to recipient
+                    // Add to recipient (amount minus 10% tax)
                     const recipientSnapshot = await database.ref('users/' + recipientId + '/balance').once('value');
                     const recipientCurrentBalance = recipientSnapshot.val() || 0;
-                    updates['users/' + recipientId + '/balance'] = recipientCurrentBalance + amount;
+                    updates['users/' + recipientId + '/balance'] = recipientCurrentBalance + recipientAmount;
                     
                     // Perform all updates at once
                     await database.ref().update(updates);
@@ -3025,14 +3114,16 @@
                         to: recipientUsername,
                         toId: recipientId,
                         amount: amount,
+                        recipientAmount: recipientAmount,
+                        tax: tax,
                         timestamp: Date.now(),
                         type: 'transfer'
                     };
 
                     await database.ref('transactions').push(transaction);
                     
-                    // Show success message
-                    this.showToast(`Sent ${amount.toLocaleString()} coins to ${recipientUsername}`, 'success');
+                    // Show success message with tax info
+                    this.showToast(`Sent ${amount.toLocaleString()} coins to ${recipientUsername} (${recipientAmount.toLocaleString()} after 10% tax)`, 'success');
                     this.playSound('win');
                     
                     // Add chat message with appropriate styling
@@ -3050,9 +3141,9 @@
                         messageColor = 'gold';
                     }
                     
-                    // Add chat message
+                    // Add chat message with tax info
                     this.addChatMessage('💰 Money Transfer', 
-                        `${this.username} sent ${amount.toLocaleString()} coins to ${recipientUsername}!`, 
+                        `${this.username} sent ${amount.toLocaleString()} coins to ${recipientUsername}! (${recipientAmount.toLocaleString()} after 10% tax)`, 
                         'text-[#10b981]', true);
                     
                     // Play confetti for large transfers
