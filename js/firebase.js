@@ -1,3 +1,5 @@
+[file name]: firebase.js
+[file content begin]
 // Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDJ5tpQ5pVY2A8L55Eg5SxB_L02dIHWcWA",
@@ -48,4 +50,10 @@ for(let i=0; i<30; i++) {
 // INCREASED HOUSE EDGE FOR LOWER WIN CHANCES
 const CHICKEN_HOUSE_EDGE = 0.15; // Increased from 0.02 to 0.15 (15% house edge)
 
-export { initializeFirebase, database, CHICKEN_MULTIPLIERS, CHICKEN_HOUSE_EDGE };
+// Export for use in other modules (no export statement needed for global)
+window.firebaseConfig = firebaseConfig;
+window.database = database;
+window.initializeFirebase = initializeFirebase;
+window.CHICKEN_MULTIPLIERS = CHICKEN_MULTIPLIERS;
+window.CHICKEN_HOUSE_EDGE = CHICKEN_HOUSE_EDGE;
+[file content end]
