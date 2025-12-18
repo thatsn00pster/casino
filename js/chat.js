@@ -1,4 +1,7 @@
-import { database } from './firebase.js';
+[file name]: chat.js
+[file content begin]
+// Get database from global scope
+const database = window.database;
 
 class ChatManager {
     constructor(app) {
@@ -336,4 +339,6 @@ class ChatManager {
     }
 }
 
-export { ChatManager };
+// Make class globally available
+window.ChatManager = ChatManager;
+[file content end]
