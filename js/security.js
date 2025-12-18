@@ -1,3 +1,6 @@
+
+const database = window.database;
+
 class SecurityManager {
     constructor(app) {
         this.app = app;
@@ -464,4 +467,5 @@ class SecurityManager {
     }
 }
 
-export { SecurityManager };
+// Make class globally available
+window.SecurityManager = SecurityManager;
