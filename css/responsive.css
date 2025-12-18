@@ -1,0 +1,181 @@
+@media (max-width: 768px) {
+    .mines-grid-container {
+        gap: 8px;
+        max-width: 320px;
+    }
+    
+    .card-container {
+        width: 70px;
+        height: 102px;
+        margin: 0 4px;
+    }
+    
+    .sound-toggle {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    .modal-content {
+        width: 100%;
+        padding: 20px;
+        margin: 0 16px;
+    }
+    
+    .blackjack-table {
+        padding: 12px;
+    }
+    
+    .hand-container {
+        min-height: 120px;
+    }
+    
+    .card-container {
+        width: 60px;
+        height: 87px;
+        margin: 0 2px;
+    }
+    
+    .game-controls {
+        padding: 12px;
+    }
+    
+    .btn-primary, button {
+        font-size: 14px !important;
+        padding: 12px 16px !important;
+    }
+    
+    /* Maintenance modal responsive */
+    .maintenance-content {
+        padding: 30px 20px;
+        width: 95%;
+    }
+    
+    .maintenance-icon {
+        font-size: 3rem;
+    }
+    
+    .maintenance-title {
+        font-size: 1.5rem;
+    }
+    
+    .maintenance-message {
+        font-size: 1rem;
+    }
+    
+    /* Coinflip responsive */
+    .coin {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .coin-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .coinflip-side-btn {
+        width: 100px;
+        height: 100px;
+    }
+    
+    /* Hide sidebar on mobile when not active */
+    #sidebar:not(.mobile-open) {
+        transform: translateX(-100%);
+    }
+    
+    #sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .modal {
+        align-items: flex-start;
+        padding-top: 40px;
+    }
+    
+    .modal-content {
+        margin-top: 0;
+        max-height: 85vh;
+    }
+    
+    /* Chicken Road responsive */
+    .chicken-game-area {
+        flex-direction: column;
+    }
+    
+    .chicken-controls-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #2a3042;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .chicken-road-container {
+        min-height: 400px;
+    }
+    
+    .chicken-road-lanes {
+        min-width: 4800px;
+    }
+    
+    .chicken-lane {
+        width: 120px;
+    }
+}
+
+@media (max-width: 640px) {
+    .chicken-controls-sidebar {
+        padding: 1rem;
+    }
+    
+    .chicken-controls-header h2 {
+        font-size: 1.25rem;
+    }
+    
+    .chicken-action-button {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+    
+    .chicken-sidewalk-start,
+    .chicken-sidewalk-end {
+        width: 80px;
+    }
+    
+    .chicken-road-lanes {
+        min-width: 3600px; /* 30 lanes * 120px each */
+    }
+    
+    .chicken-lane {
+        width: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mines-grid-container {
+        gap: 6px;
+        max-width: 280px;
+    }
+    
+    .card-container {
+        width: 50px;
+        height: 73px;
+        margin: 0 1px;
+    }
+    
+    .card-face > div:first-child,
+    .card-face > div:last-child {
+        font-size: 12px;
+    }
+    
+    .card-face .card-value {
+        font-size: 36px;
+    }
+    
+    .modal-content {
+        padding: 16px;
+    }
+}
