@@ -1,6 +1,4 @@
-import { soundManager } from '../sounds.js';
-import { CHICKEN_MULTIPLIERS } from '../firebase.js';
-
+// chicken.js - Chicken Road Game
 class ChickenRoadGame {
     constructor(app) {
         this.app = app;
@@ -772,4 +770,4 @@ class ChickenRoadGame {
     }
 }
 
-export { ChickenRoadGame };
+window.ChickenRoadGame = ChickenRoadGame;
