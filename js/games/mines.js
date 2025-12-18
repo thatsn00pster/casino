@@ -1,5 +1,4 @@
-import { soundManager } from '../sounds.js';
-
+// mines.js - Mines Game
 class MinesGame {
     constructor(app) {
         this.app = app;
@@ -136,8 +135,8 @@ class MinesGame {
                 b.classList.add('border-[#8b5cf6]', 'text-white', 'shadow-[0_0_20px_rgba(139,92,246,0.3)]');
             }
         });
-        this.updateMinesNextMult();
         soundManager.play('click');
+        this.updateMinesNextMult();
     }
 
     updateMinesNextMult() {
@@ -402,4 +401,4 @@ class MinesGame {
     }
 }
 
-export { MinesGame };
+window.MinesGame = MinesGame;
