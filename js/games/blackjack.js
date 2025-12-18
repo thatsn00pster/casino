@@ -1,5 +1,4 @@
-import { soundManager } from '../sounds.js';
-
+// blackjack.js - Blackjack Game
 class BlackjackGame {
     constructor(app) {
         this.app = app;
@@ -608,4 +607,4 @@ class BlackjackGame {
     }
 }
 
-export { BlackjackGame };
+window.BlackjackGame = BlackjackGame;
