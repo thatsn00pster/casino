@@ -1,16 +1,4 @@
-import { initializeFirebase, database } from './firebase.js';
-import { soundManager } from './sounds.js';
-import { SecurityManager } from './security.js';
-import { AuthManager } from './auth.js';
-import { WalletManager } from './wallet.js';
-import { ChatManager } from './chat.js';
-import { MaintenanceManager } from './maintenance.js';
-import { MinesGame } from './games/mines.js';
-import { BlackjackGame } from './games/blackjack.js';
-import { ChickenRoadGame } from './games/chicken.js';
-import { CoinflipGame } from './games/coinflip.js';
-import { LeaderboardGame } from './games/leaderboard.js';
-
+// app.js - Main Application
 class GameApp {
     constructor() {
         this.user = null;
@@ -26,14 +14,14 @@ class GameApp {
         this.soundEnabled = true;
         this.bigWinThreshold = 1000;
         
-        // Initialize managers
+        // Initialize managers (these are loaded as regular scripts)
         this.security = new SecurityManager(this);
         this.auth = new AuthManager(this);
         this.wallet = new WalletManager(this);
         this.chat = new ChatManager(this);
         this.maintenance = new MaintenanceManager(this);
         
-        // Initialize games
+        // Initialize games (these are loaded as regular scripts)
         this.minesGame = new MinesGame(this);
         this.blackjackGame = new BlackjackGame(this);
         this.chickenGame = new ChickenRoadGame(this);
@@ -642,11 +630,7 @@ class GameApp {
     }
 }
 
-// Create and initialize the app
-const app = new GameApp();
-
-// Make app available globally for event handlers in HTML
-window.app = app;
-
-// Export for module usage
-export { app };
+// Create and initialize the app when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new GameApp();
+});
