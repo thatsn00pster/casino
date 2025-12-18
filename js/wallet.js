@@ -1,5 +1,10 @@
-import { database } from './firebase.js';
-import { soundManager } from './sounds.js';
+
+// Get database from global scope
+const database = window.database;
+const soundManager = window.soundManager || {
+    play: () => {},
+    toggle: () => {}
+};
 
 class WalletManager {
     constructor(app) {
@@ -43,7 +48,9 @@ class WalletManager {
         
         this.updateFreeCoinsButton();
         this.updateTransferFeeDisplay();
-        soundManager.play('click');
+        if (soundManager && soundManager.play) {
+            soundManager.play('click');
+        }
     }
 
     closeDepositModal() {
@@ -51,7 +58,9 @@ class WalletManager {
         if (depositModal) {
             depositModal.classList.remove('active');
         }
-        soundManager.play('click');
+        if (soundManager && soundManager.play) {
+            soundManager.play('click');
+        }
     }
 
     updateTransferFeeDisplay() {
@@ -151,14 +160,18 @@ class WalletManager {
 
         this.updateFreeCoinsButton();
         this.app.showToast('500 free coins claimed! 5-minute cooldown started.', 'success');
-        soundManager.play('win');
+        if (soundManager && soundManager.play) {
+            soundManager.play('win');
+        }
 
         // Confetti effect
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
     }
 
     async sendMoney() {
@@ -261,7 +274,9 @@ class WalletManager {
             
             // Show success message with tax info
             this.app.showToast(`Sent ${amount.toLocaleString()} coins to ${recipientUsername} (${recipientAmount.toLocaleString()} after 10% tax)`, 'success');
-            soundManager.play('win');
+            if (soundManager && soundManager.play) {
+                soundManager.play('win');
+            }
             
             // Add chat message with appropriate styling
             let messageClass = 'chat-transfer-message';
@@ -284,7 +299,7 @@ class WalletManager {
                 'text-[#10b981]', true);
             
             // Play confetti for large transfers
-            if (amount >= 10000) {
+            if (amount >= 10000 && typeof confetti === 'function') {
                 confetti({
                     particleCount: Math.min(amount / 100, 500),
                     spread: 70,
@@ -299,4 +314,5 @@ class WalletManager {
     }
 }
 
-export { WalletManager };
+// Make class globally available
+window.WalletManager = WalletManager;
