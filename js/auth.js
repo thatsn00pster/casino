@@ -1,4 +1,5 @@
-import { database } from './firebase.js';
+
+const database = window.database;
 
 class AuthManager {
     constructor(app) {
@@ -368,4 +369,5 @@ class AuthManager {
     }
 }
 
-export { AuthManager };
+// Make class globally available
+window.AuthManager = AuthManager;
