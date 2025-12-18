@@ -1,5 +1,4 @@
-import { soundManager } from '../sounds.js';
-
+// coinflip.js - Coinflip Game
 class CoinflipGame {
     constructor(app) {
         this.app = app;
@@ -619,4 +618,4 @@ class CoinflipGame {
     }
 }
 
-export { CoinflipGame };
+window.CoinflipGame = CoinflipGame;
