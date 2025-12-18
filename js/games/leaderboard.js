@@ -1,5 +1,4 @@
-import { database } from '../firebase.js';
-
+// leaderboard.js - Leaderboard Game
 class LeaderboardGame {
     constructor(app) {
         this.app = app;
@@ -152,4 +151,4 @@ class LeaderboardGame {
     }
 }
 
-export { LeaderboardGame };
+window.LeaderboardGame = LeaderboardGame;
