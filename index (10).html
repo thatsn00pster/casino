@@ -1,3 +1,4 @@
+[file content begin]
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1688,11 +1689,131 @@
             color: #a78bfa;
             text-shadow: 0 0 20px rgba(139, 92, 246, 0.7);
         }
+        
+        /* Ban Modal */
+        .ban-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.98);
+            backdrop-filter: blur(20px);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .ban-modal.active {
+            display: flex;
+        }
+        
+        .ban-content {
+            background: linear-gradient(135deg, #161b26, #11141c);
+            border-radius: 20px;
+            border: 2px solid #ef4444;
+            box-shadow: 0 25px 50px -12px rgba(239, 68, 68, 0.4), 
+                        0 0 100px rgba(239, 68, 68, 0.2);
+            max-width: 500px;
+            width: 90%;
+            padding: 40px;
+            text-align: center;
+            animation: scale-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: center;
+        }
+        
+        .ban-icon {
+            font-size: 4rem;
+            color: #ef4444;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        .ban-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .ban-reason {
+            color: #fca5a5;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .ban-duration {
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .ban-duration-label {
+            color: #ef4444;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .ban-duration-value {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: monospace;
+        }
+        
+        .ban-appeal {
+            color: #b1bad3;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
     <!-- Global Alert Bar (for 200k+ wins) -->
     <div id="globalAlertBar" class="global-alert-bar hidden"></div>
+    
+    <!-- Ban Modal -->
+    <div id="banModal" class="ban-modal">
+        <div class="ban-content">
+            <div class="ban-icon">
+                <i class="fa-solid fa-ban"></i>
+            </div>
+            <h1 class="ban-title">Account Banned</h1>
+            <div class="ban-reason" id="banReason">
+                Violation of community rules
+            </div>
+            <div class="ban-duration">
+                <div class="ban-duration-label">Ban Duration</div>
+                <div id="banDuration" class="ban-duration-value">Permanent</div>
+            </div>
+            <div class="text-gray-500 text-sm">
+                <i class="fa-solid fa-info-circle mr-1"></i>
+                This account has been suspended due to rule violations.
+            </div>
+            <div class="ban-appeal">
+                If you believe this is a mistake, please contact support.
+            </div>
+        </div>
+    </div>
     
     <!-- Maintenance Modal -->
     <div id="maintenanceModal" class="maintenance-modal">
@@ -1991,6 +2112,14 @@
             sound.preload = 'auto';
         });
 
+        // BANNED WORDS LIST - Updated as requested
+        const BANNED_WORDS = [
+            'fuck', 'shit', 'bitch', 'asshole', 'cunt', 'nigger', 'nigga', 
+            'faggot', 'retard', 'whore', 'slut', 'bastard', 'pussy', 'dick',
+            'cock', 'porn', 'hack', 'cheat', 'scam', 'gay', 'i like guys',
+            'ilikeguys', 'g4y', 'f4g', 'fag', 'queer', 'homosexual'
+        ];
+
         // Firebase Configuration
         const firebaseConfig = {
           apiKey: "AIzaSyDJ5tpQ5pVY2A8L55Eg5SxB_L02dIHWcWA",
@@ -2002,7 +2131,6 @@
           appId: "1:218577130374:web:e345bf0d4ee0a68d029207",
           measurementId: "G-BFSY9J2PQW"
         };
-
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -2088,6 +2216,11 @@
                 this.activityPingInterval = null;
                 this.lastActivityTime = Date.now();
                 
+                // Ban system
+                this.bannedUsers = new Map();
+                this.userValidationInterval = null;
+                this.chatBannedUsers = new Map();
+                
                 // Initialize app
                 this.init();
             }
@@ -2099,6 +2232,7 @@
                 this.updateFreeCoinsButton();
                 this.listenForBigWins();
                 this.startActivityPing();
+                this.startUserValidation();
                 
                 // Set default home page
                 this.loadGame('home');
@@ -2187,6 +2321,309 @@
                         }
                     }
                 }, 5000);
+            }
+
+            // USER VALIDATION SYSTEM (every 10 seconds)
+            startUserValidation() {
+                // Clear any existing interval
+                if (this.userValidationInterval) {
+                    clearInterval(this.userValidationInterval);
+                }
+                
+                // Check user account every 10 seconds
+                this.userValidationInterval = setInterval(async () => {
+                    await this.validateUserAccount();
+                }, 10000); // 10 seconds
+            }
+
+            async validateUserAccount() {
+                if (!this.userId || !this.username) return;
+                
+                try {
+                    // Check if user still exists in database
+                    const userSnapshot = await database.ref('users/' + this.userId).once('value');
+                    
+                    if (!userSnapshot.exists()) {
+                        // User account deleted - force logout
+                        this.showToast('Your account no longer exists', 'error');
+                        setTimeout(() => {
+                            this.logout();
+                            this.showBanModal('Account deleted', 'Your account has been removed from the system.');
+                        }, 1000);
+                        return;
+                    }
+                    
+                    // Check if user is banned
+                    const isBanned = await this.checkIfBanned(this.userId);
+                    if (isBanned) {
+                        this.showBanModal(isBanned.reason, isBanned.duration ? 'Temporary ban' : 'Permanent ban');
+                        return;
+                    }
+                    
+                    // Check if user is chat banned
+                    const isChatBanned = await this.checkIfChatBanned(this.userId);
+                    if (isChatBanned) {
+                        // Disable chat input
+                        const chatInput = document.getElementById('chatInput');
+                        if (chatInput) {
+                            chatInput.disabled = true;
+                            chatInput.placeholder = 'You are chat banned';
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error('Error validating user account:', error);
+                }
+            }
+
+            // CHAT FILTER SYSTEM
+            checkChatMessage(message) {
+                const lowerMsg = message.toLowerCase();
+                const normalizedMsg = lowerMsg.replace(/[^a-z0-9]/g, '');
+                
+                // Check for banned words (case-insensitive with pattern matching)
+                for (const word of BANNED_WORDS) {
+                    // Check direct match
+                    if (lowerMsg.includes(word)) {
+                        return { 
+                            banned: true, 
+                            reason: `Used banned word: ${word}`,
+                            banDuration: 30 * 60 * 1000, // 30 minutes
+                            type: 'account'
+                        };
+                    }
+                    
+                    // Check for leetspeak variations
+                    const leetPattern = word
+                        .replace(/a/gi, '[a4@]')
+                        .replace(/e/gi, '[e3]')
+                        .replace(/i/gi, '[i1!]')
+                        .replace(/o/gi, '[o0]')
+                        .replace(/s/gi, '[s5$]')
+                        .replace(/t/gi, '[t7]');
+                    
+                    const regex = new RegExp(leetPattern, 'gi');
+                    if (regex.test(message)) {
+                        return { 
+                            banned: true, 
+                            reason: `Used banned word variation: ${word}`,
+                            banDuration: 30 * 60 * 1000, // 30 minutes
+                            type: 'account'
+                        };
+                    }
+                }
+                
+                // Check for "i like guys" variations
+                const guysPatterns = [
+                    /i.*like.*guys/i,
+                    /i.*love.*guys/i,
+                    /guys.*are.*hot/i,
+                    /men.*are.*sexy/i
+                ];
+                
+                for (const pattern of guysPatterns) {
+                    if (pattern.test(message)) {
+                        return { 
+                            banned: true, 
+                            reason: 'Inappropriate content',
+                            banDuration: 30 * 60 * 1000, // 30 minutes
+                            type: 'account'
+                        };
+                    }
+                }
+                
+                // Check for spam patterns
+                if (/(.)\1{5,}/.test(message)) {
+                    return { 
+                        banned: true, 
+                        reason: 'Spam detected',
+                        banDuration: 1 * 60 * 60 * 1000, // 2 hours chat ban
+                        type: 'chat'
+                    };
+                }
+                
+                // Check for excessive caps
+                const capsCount = (message.match(/[A-Z]/g) || []).length;
+                if (capsCount > message.length * 12 && message.length > 10) {
+                    return { 
+                        banned: true, 
+                        reason: 'Excessive capitalization',
+                        banDuration: 2 * 60 * 60 * 1000, // 2 hours chat ban
+                        type: 'chat'
+                    };
+                }
+                
+                // Check for repeated messages
+                if (this.checkRepeatedMessages(message)) {
+                    return { 
+                        banned: true, 
+                        reason: 'Repeated messages',
+                        banDuration: 1 * 60 * 60 * 1000, // 2 hours chat ban
+                        type: 'chat'
+                    };
+                }
+                
+                return { banned: false };
+            }
+
+            checkRepeatedMessages(message) {
+                // Store last 5 messages in localStorage
+                const lastMessages = JSON.parse(localStorage.getItem('lastChatMessages') || '[]');
+                
+                // Check if message is similar to previous ones
+                const similarCount = lastMessages.filter(msg => 
+                    msg.toLowerCase() === message.toLowerCase() || 
+                    msg.includes(message) || 
+                    message.includes(msg)
+                ).length;
+                
+                // Update stored messages
+                lastMessages.push(message);
+                if (lastMessages.length > 5) {
+                    lastMessages.shift();
+                }
+                localStorage.setItem('lastChatMessages', JSON.stringify(lastMessages));
+                
+                return similarCount >= 3; // 3 similar messages trigger ban
+            }
+
+            // BAN SYSTEM
+            async banUser(userId, reason = 'Violation of chat rules', duration = null, type = 'account') {
+                try {
+                    const banData = {
+                        userId: userId,
+                        username: this.username,
+                        reason: reason,
+                        bannedAt: Date.now(),
+                        bannedBy: 'SYSTEM',
+                        duration: duration,
+                        expiresAt: duration ? Date.now() + duration : null,
+                        type: type // 'account' or 'chat'
+                    };
+                    
+                    // Save ban to database
+                    if (type === 'account') {
+                        await database.ref('bans/' + userId).set(banData);
+                        this.bannedUsers.set(userId, banData);
+                    } else {
+                        await database.ref('chatBans/' + userId).set(banData);
+                        this.chatBannedUsers.set(userId, banData);
+                    }
+                    
+                    // Force logout if it's the current user and it's an account ban
+                    if (userId === this.userId && type === 'account') {
+                        this.showToast(`You have been banned: ${reason}`, 'error');
+                        setTimeout(() => {
+                            this.showBanModal(reason, duration ? 'Temporary ban' : 'Permanent ban');
+                            this.logout();
+                        }, 2000);
+                    }
+                    
+                    // Remove from online users for account bans
+                    if (type === 'account') {
+                        database.ref('online/' + userId).remove();
+                    }
+                    
+                    // Add ban notification to chat
+                    const banType = type === 'account' ? 'banned' : 'chat banned';
+                    const durationText = duration ? 
+                        `for ${duration / (60 * 1000)} minutes` : 
+                        'permanently';
+                    
+                    this.addChatMessage('SYSTEM', 
+                        `User ${this.username} has been ${banType} ${durationText}. Reason: ${reason}`, 
+                        'text-red-400', true);
+                    
+                    console.log(`User ${userId} ${banType}: ${reason}`);
+                    
+                } catch (error) {
+                    console.error('Error banning user:', error);
+                }
+            }
+
+            async checkIfBanned(userId) {
+                try {
+                    // Check local cache first
+                    if (this.bannedUsers.has(userId)) {
+                        const ban = this.bannedUsers.get(userId);
+                        // Check if ban has expired
+                        if (ban.expiresAt && Date.now() > ban.expiresAt) {
+                            this.bannedUsers.delete(userId);
+                            await database.ref('bans/' + userId).remove();
+                            return false;
+                        }
+                        return ban;
+                    }
+                    
+                    // Check database
+                    const banSnapshot = await database.ref('bans/' + userId).once('value');
+                    if (banSnapshot.exists()) {
+                        const ban = banSnapshot.val();
+                        // Check if ban has expired
+                        if (ban.expiresAt && Date.now() > ban.expiresAt) {
+                            await database.ref('bans/' + userId).remove();
+                            return false;
+                        }
+                        this.bannedUsers.set(userId, ban);
+                        return ban;
+                    }
+                    
+                    return false;
+                } catch (error) {
+                    console.error('Error checking ban status:', error);
+                    return false;
+                }
+            }
+
+            async checkIfChatBanned(userId) {
+                try {
+                    // Check local cache first
+                    if (this.chatBannedUsers.has(userId)) {
+                        const ban = this.chatBannedUsers.get(userId);
+                        // Check if ban has expired
+                        if (ban.expiresAt && Date.now() > ban.expiresAt) {
+                            this.chatBannedUsers.delete(userId);
+                            await database.ref('chatBans/' + userId).remove();
+                            return false;
+                        }
+                        return ban;
+                    }
+                    
+                    // Check database
+                    const banSnapshot = await database.ref('chatBans/' + userId).once('value');
+                    if (banSnapshot.exists()) {
+                        const ban = banSnapshot.val();
+                        // Check if ban has expired
+                        if (ban.expiresAt && Date.now() > ban.expiresAt) {
+                            await database.ref('chatBans/' + userId).remove();
+                            return false;
+                        }
+                        this.chatBannedUsers.set(userId, ban);
+                        return ban;
+                    }
+                    
+                    return false;
+                } catch (error) {
+                    console.error('Error checking chat ban status:', error);
+                    return false;
+                }
+            }
+
+            showBanModal(reason, duration = 'Permanent') {
+                const banModal = document.getElementById('banModal');
+                const banReason = document.getElementById('banReason');
+                const banDuration = document.getElementById('banDuration');
+                
+                if (banModal && banReason && banDuration) {
+                    banReason.textContent = reason;
+                    banDuration.textContent = duration;
+                    banModal.classList.add('active');
+                    
+                    // Force logout after showing modal
+                    setTimeout(() => {
+                        this.logout();
+                    }, 5000);
+                }
             }
 
             // MAINTENANCE FUNCTIONS
@@ -2594,7 +3031,14 @@
                     try {
                         const user = JSON.parse(savedUser);
                         
-                        // SECURITY: Check session is still valid
+                        // SECURITY: Check if user is banned
+                        const isBanned = await this.checkIfBanned(user.userId);
+                        if (isBanned) {
+                            this.showBanModal(isBanned.reason, isBanned.duration ? 'Temporary ban' : 'Permanent ban');
+                            return;
+                        }
+                        
+                        // Check session is still valid
                         if (!this.validateSession(user.userId)) {
                             this.logout();
                             this.showToast('Session expired. Please login again.', 'warning');
@@ -2695,6 +3139,19 @@
                     return;
                 }
 
+                // Check for "Emerson" in username (case-insensitive)
+                const lowerUsername = username.toLowerCase();
+                if (lowerUsername.includes('emerson')) {
+                    // Check if email is the allowed one
+                    if (email !== '2031ews@stu.pcr3schools.org') {
+                        this.showToast('Username contains restricted content', 'error');
+                        // Auto-ban if someone tries to use Emerson name
+                        const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                        await this.banUser(userId, 'Attempted to use restricted name: Emerson', null, 'account');
+                        return;
+                    }
+                }
+
                 // Check if username already exists
                 const usernameSnapshot = await database.ref('users').orderByChild('username').equalTo(username).once('value');
                 if (usernameSnapshot.exists()) {
@@ -2793,6 +3250,13 @@
                     return;
                 }
 
+                // Check if user is banned
+                const isBanned = await this.checkIfBanned(userFound.userId);
+                if (isBanned) {
+                    this.showBanModal(isBanned.reason, isBanned.duration ? 'Temporary ban' : 'Permanent ban');
+                    return;
+                }
+
                 // Update session
                 await database.ref('sessions/' + userFound.userId).set({
                     userId: userFound.userId,
@@ -2822,6 +3286,7 @@
 
             logout() {
                 localStorage.removeItem('moonCasinoUser');
+                localStorage.removeItem('lastChatMessages');
                 
                 // Remove from online users
                 if (this.userId) {
@@ -2837,6 +3302,12 @@
                 if (this.activityPingInterval) {
                     clearInterval(this.activityPingInterval);
                     this.activityPingInterval = null;
+                }
+                
+                // Clear user validation
+                if (this.userValidationInterval) {
+                    clearInterval(this.userValidationInterval);
+                    this.userValidationInterval = null;
                 }
                 
                 // Remove balance listener
@@ -3230,6 +3701,62 @@
                 }
             }
 
+            // UPDATED sendChatMessage with chat filter
+            sendChatMessage(e) {
+                e.preventDefault();
+                
+                if (this.maintenanceMode) {
+                    this.showToast('Chat disabled during maintenance', 'warning');
+                    return;
+                }
+                
+                if (!this.userId) {
+                    this.showToast('Please login to chat', 'error');
+                    return;
+                }
+
+                // Check if user is chat banned
+                if (this.chatBannedUsers.has(this.userId)) {
+                    const ban = this.chatBannedUsers.get(this.userId);
+                    const remaining = ban.expiresAt - Date.now();
+                    const minutes = Math.floor(remaining / 60000);
+                    const seconds = Math.floor((remaining % 60000) / 1000);
+                    this.showToast(`You are chat banned for ${minutes}m ${seconds}s`, 'error');
+                    return;
+                }
+
+                const input = document.getElementById('chatInput');
+                if (input && input.value.trim()) {
+                    const msg = input.value.trim();
+                    
+                    // Check message against filter
+                    const filterResult = this.checkChatMessage(msg);
+                    
+                    if (filterResult.banned) {
+                        // Apply ban based on type
+                        if (filterResult.type === 'account') {
+                            this.banUser(this.userId, filterResult.reason, filterResult.banDuration, 'account');
+                            this.showToast(`You have been banned: ${filterResult.reason}`, 'error');
+                        } else {
+                            this.banUser(this.userId, filterResult.reason, filterResult.banDuration, 'chat');
+                            this.showToast(`You have been chat banned: ${filterResult.reason}`, 'error');
+                            
+                            // Disable chat input
+                            input.disabled = true;
+                            input.placeholder = 'You are chat banned';
+                        }
+                        
+                        // Clear input
+                        input.value = '';
+                        return;
+                    }
+                    
+                    this.addChatMessage(this.username, msg, 'text-[#8b5cf6]');
+                    input.value = '';
+                    this.playSound('click');
+                }
+            }
+
             addBigWinNotification(username, amount, game) {
                 if (this.maintenanceMode) return;
                 
@@ -3258,28 +3785,6 @@
                 // Show global alert for 200k+ wins
                 if (amount >= 200000) {
                     this.showGlobalAlert(`${username} won ${amount.toLocaleString()} coins playing ${game}!`, 'purple');
-                }
-            }
-
-            sendChatMessage(e) {
-                e.preventDefault();
-                
-                if (this.maintenanceMode) {
-                    this.showToast('Chat disabled during maintenance', 'warning');
-                    return;
-                }
-                
-                if (!this.userId) {
-                    this.showToast('Please login to chat', 'error');
-                    return;
-                }
-
-                const input = document.getElementById('chatInput');
-                if (input && input.value.trim()) {
-                    const msg = input.value.trim();
-                    this.addChatMessage(this.username, msg, 'text-[#8b5cf6]');
-                    input.value = '';
-                    this.playSound('click');
                 }
             }
 
