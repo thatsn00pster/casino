@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for moonsite on 2025-12-10T23:09:37Z
+# fly.toml app configuration file generated for moonsitebeta on 2025-12-11T21:28:49Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'moonsite'
+app = 'moonsitebeta'
 primary_region = 'ord'
 
 [build]
